@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EIP 712 Sign OffChain Vote</title>
+</head>
+<body>
+    <h1>EIP 712 Sign OffChain Vote</h1>
+    <h2>Messages:</h2>
+    <p id="messages"></p>
+
+    <h2>Input fields</h2>
+    <form id="eip712form">
+        <label for="addrContract">Contract Address: </label> <br>
+        <input type="text" id="addrContract" name="addrContract" size="40"> <br>
+        
+        <label for="propId">Proposal Id:</label>
+        <input type="text" id="propId" name="propId" size="5" > <br>
+        
+        Vote:
+        <input type="radio" id="voteTrue" name="support" value=1>
+        <label for="voteTrue">Yes</label>
+        <input type="radio" id="voteFalse" name="support" value="0">
+        <label for="voteFalse">No</label><br>
+
+        <label for="justification">Justification:</label><br>
+        <textarea id="justification" name="justification" cols="40" rows="5"></textarea><br>
+
+        <input type="submit" value="Sign"/>
+    </form>
+
+    <h2>Output fields</h2>
+
+    <form id="eip712result">        
+        <label for="signR">r:</label><br>
+        <textarea id="signR" name="signR" cols="70" rows="2"></textarea><br>
+
+        <label for="signS">s:</label><br>
+        <textarea id="signS" name="signS" cols="70" rows="2"></textarea><br>
+        
+        <label for="signV">v:</label><br>
+        <textarea id="signV" name="signV" cols="70" rows="2"></textarea><br>
+
+        <button id="btnValidate" >Validate Signature</button>
+        <div id="divMsgValidate"></div>
+        <br>
+        <input type="submit" value="Send Signature"/><br>
+        <div id="divMsgTx"></div>
+    </form>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="application/javascript"></script>
+    <script type="text/javascript" src ="src/utils.js"></script>
+    <script type = "text/javascript" src="src/eip712sign.js"></script>
+    <script type="text/javascript" src ="src/index.js"></script>
+</body>
+</html>
