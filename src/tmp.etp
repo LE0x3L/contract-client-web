@@ -1,1 +1,0 @@
-// state.ethProvider = new ethers.providers.JsonRpcProvider( "https://eth-rinkeby.alchemyapi.io/v2/5D_cWjE6Nu_YLNCwym2i21coY3SY9vtV" );
