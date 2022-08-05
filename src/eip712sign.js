@@ -81,34 +81,30 @@ function SignVoteEIP712() {
   const method = 'eth_signTypedData_v4'
   console.log('CLICKED, SENDING PERSONAL SIGN REQ ', method, ' from', from, msgParams)
 
-  web3 = new Web3(window.ethereum);
-
-  web3.currentProvider.sendAsync({
+  ethereum
+    .request({
     method,
     params,
-    from,
-  }, async function (err, result) {
-    if (err) return console.dir(err)
-    if (result.error) {
-      alert(result.error.message)
-    }
-    if (result.error) return console.error('ERROR', result)
-
-    console.log('TYPED SIGNED:' + JSON.stringify(result.result))
-
+    from
+  })
+  .then( (resolve) => {
+    logMsg('SIGNED: ' + resolve );
     //getting r s v from a signature
-    const signature = result.result.substring(2);
+    const signature = resolve.substring(2);
     const r = "0x" + signature.substring(0, 64);
     const s = "0x" + signature.substring(64, 128);
     const v = parseInt(signature.substring(128, 130), 16);
     console.log("r:", r);
     console.log("s:", s);
     console.log("v:", v);
-    $('#eip712Signature').val( result.result );
+    $('#eip712Signature').val( resolve );
     $('#signR').val( r );
     $('#signS').val( s );
     $('#signV').val( v );
-  }) 
+  })
+  .catch((error) => {
+    logMsg("ERROR: " + error.message );
+  });
 }
 
 async function SendSignVote() {
