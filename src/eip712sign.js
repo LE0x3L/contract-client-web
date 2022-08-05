@@ -26,12 +26,11 @@ async function connectWeb3() {
       logMsg( 'Signer wallet: ' + appVar.signerWallet );
     } )
     .catch( ( error ) => {
-      if ( error.code === 4001 ) {
-        // EIP-1193 userRejectedRequest error
+      console.log( error );
+      if ( error.code === 4001 )
         logMsg( 'Please connect to MetaMask.' );
-      } else {
-        logMsg( "ERROR: " + error.message );
-      }
+      else
+        logMsg( "ERROR... " + error.message );
     } );
   } else {
     logMsg( "No Metamask detected" );
@@ -104,7 +103,8 @@ function SignVoteEIP712() {
     $( '#signV' ).val( v );
   } )
   .catch( ( error ) => {
-    logMsg( "ERROR: " + error.message );
+    console.log( error );
+    logMsg( "ERROR... " + error.message );
   } );
 }
 
@@ -124,32 +124,46 @@ async function SendSignVote() {
   
   const daoCLH = new ethers.Contract( houseAddr, contractData.abi, appVar.payeerWallet );
 
-  try {
-    console.log( await daoCLH.arrProposals( propId ) );
-  } catch (err) {
-      logMsg( "ERROR ... " + err.error.reason );
-      // return
-  }
+  // Validate the propId
+  await daoCLH
+  .arrProposals( propId )
+  .then( ( resolve ) => {
+    console.log( resolve );
+  } )
+  .catch( async ( error ) => {
+    console.log( error );
+    logMsg( "ERROR... " + error.error.message );
+    // return
+  } );
 
-  let responseTx;
-  try {
-    responseTx = await daoCLH.VotePropOffChain( appVar.signerWallet, propId, support, justification, signR, signS, signV );
-  } catch (err) {
-      logMsg( "ERROR ... " + err.error.reason );
-      return
-  }
+  await daoCLH
+  .VotePropOffChain(
+    appVar.signerWallet,
+    propId,
+    support,
+    justification,
+    signR,
+    signS,
+    signV
+  )
+  .then( async ( resolve ) => {
+    console.log( resolve );
+    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/"+resolve.hash);
 
-  console.log( responseTx )
-  logMsg( "Wait confirmation ... https://goerli.etherscan.io/tx/"+responseTx.hash);
-
-  const resultTx = await responseTx.wait();
-  console.log( resultTx );
-  logMsg( "Successful!!! ... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+    const resultTx = await resolve.wait();
+    console.log( resultTx );
+    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+  } )
+  .catch( ( error ) => {
+    console.log( error );
+    logMsg( "ERROR... " + error.error.reason );
+    return
+  } );
 }
 
 async function ValidateSignVote() {
   logMsg( "Validating..." );
-  
+
   $( "form#eip712result :input" ).removeClass( "is-invalid" )
   $( "form#eip712result :input" ).removeClass( "is-valid" )
 
@@ -163,13 +177,28 @@ async function ValidateSignVote() {
   
   const apiCLH = new ethers.Contract( appVar.addrApiCLH, contractData.abi, appVar.ethProvider );
 
-  const resVal = await apiCLH.ValidateSingOffChainVote( houseAddr, appVar.signerWallet, propId, support, justification, eip712Signature)
-  console.log(resVal);
-
-  if ( resVal )
-    $( "form#eip712result :input" ).addClass( "is-valid" )
-  else
-    $( "form#eip712result :input" ).addClass( "is-invalid" )
+  apiCLH.ValidateSingOffChainVote(
+    houseAddr,
+    appVar.signerWallet,
+    propId,
+    support,
+    justification,
+    eip712Signature
+  )
+  .then( async ( resolve ) => {
+    console.log( resolve );
+    if ( resolve ){
+      logMsg( "Validating... Is valid!!" );
+      $( "form#eip712result :input" ).addClass( "is-valid" );
+    }
+    else
+      $( "form#eip712result :input" ).addClass( "is-invalid" );
+  } )
+  .catch( ( error ) => {
+    console.log( error );
+    logMsg( "ERROR... " + error.error.reason );
+    return
+  } );
 }
 
 function SignInviEIP712( _acceptance ) {
@@ -205,7 +234,7 @@ function SignInviEIP712( _acceptance ) {
       signerWallet: appVar.signerWallet,
       acceptance: !!_acceptance
     }
-  } )
+  } );
 
   const params = [ appVar.signerWallet, msgParams ]
   const method = 'eth_signTypedData_v4'
@@ -222,7 +251,8 @@ function SignInviEIP712( _acceptance ) {
     $( '#signInvit' ).val( resolve );
   } )
   .catch( ( error ) => {
-    logMsg( "ERROR: " + error.message );
+    console.log( error );
+    logMsg( "ERROR... " + error.message );
   } );
 }
 
@@ -240,13 +270,21 @@ async function ValiSignInvt() {
   
   const apiCLH = new ethers.Contract( appVar.addrApiCLH, contractData.abi, appVar.ethProvider );
 
-  const resVal = await apiCLH.ValiSignInvt( houseAddr, appVar.signerWallet, acceptance, signInvit )
-  console.log(resVal);
-
-  if ( resVal )
-    $( "#signInvit" ).addClass( "is-valid" )
-  else
-    $( "#signInvit" ).addClass( "is-invalid" )
+  apiCLH.ValiSignInvt( houseAddr, appVar.signerWallet, acceptance, signInvit )
+  .then( async ( resolve ) => {
+    console.log( resolve );
+    if ( resolve ){
+      logMsg( "Validating... Is valid!!" );
+      $( "#signInvit" ).addClass( "is-valid" );
+    }
+    else
+      $( "#signInvit" ).addClass( "is-invalid" );
+  } )
+  .catch( ( error ) => {
+    console.log( error );
+    logMsg( "ERROR... " + error.error.reason );
+    return
+  } );
 }
 
 async function SendSignInvt() {
@@ -257,20 +295,18 @@ async function SendSignInvt() {
   const contractData = await $.getJSON( "./abis/CLHouse.json" ); 
   const daoCLH = new ethers.Contract( houseAddr, contractData.abi, appVar.payeerWallet );
 
-  let responseTx;
+  daoCLH.AcceptRejectInvitation( acceptance, appVar.signerWallet, signInvit )
+  .then( async ( resolve ) => {
+    console.log( resolve );
+    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/"+resolve.hash);
 
-  try {
-    responseTx = await daoCLH.AcceptRejectInvitation( acceptance, appVar.signerWallet, signInvit );
-  } catch (err) {
-      logMsg( "ERROR ... " + err.error.reason );
-      return
-      // console.log(err); // prints ethers error message containing the json rpc response as it is (along with error stacks from node if sent)
-  }
-
-  console.log( responseTx )
-  logMsg( "Wait confirmation ... https://goerli.etherscan.io/tx/"+responseTx.hash);
-
-  const resultTx = await responseTx.wait();
-  console.log( resultTx );
-  logMsg( "Successful!!! ... Tx : " + resultTx.transactionHash );
+    const resultTx = await resolve.wait();
+    console.log( resultTx );
+    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+  } )
+  .catch( ( error ) => {
+    console.log( error );
+    logMsg( "ERROR... " + error.error.reason );
+    return
+  } );
 }
