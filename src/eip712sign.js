@@ -1,4 +1,11 @@
-var state = { ethProvider: null,  chainId: null, accounts: null, signer: null };
+var state = {
+  addrApiCLH: "0xBc3E3f9D718f5fDd020FC556f49060c82189E0bB",
+  ethProvider: null,
+  chainId: null,
+  accounts: null,
+  signer: null,
+  acceptance: null
+};
 
 
 async function connectWeb3() {
@@ -29,7 +36,7 @@ async function connectWeb3() {
   }
 }
 
-function signDataV4() {
+function SignVoteEIP712() {
   const { chainId, accounts } = state;
   const voter = ethers.utils.getAddress( accounts[0] );
   const verifyingContract = ethers.utils.getAddress( document.getElementById("addrContract").value );
@@ -105,6 +112,7 @@ function signDataV4() {
 }
 
 async function SendSignVote() {
+  logMsg("Sending ...");
   const voter = ethers.utils.getAddress( state.accounts[0] );
   const propId = +document.getElementById("propId").value;
   const support = !!+$('input[name=support]:checked', '#eip712form').val();
@@ -113,39 +121,34 @@ async function SendSignVote() {
   const signS = document.getElementById("signS").value;
   const signV = document.getElementById("signV").value;
 
-  const contractAddress = ethers.utils.getAddress( document.getElementById("addrContract").value );
+  const houseAddr = ethers.utils.getAddress( document.getElementById("addrContract").value );
   const contractData = await $.getJSON("./abis/CLHouse.json");
 
   // console.log(contractData);
   
-  const daoCLH = new ethers.Contract(contractAddress, contractData.abi, state.signer );
+  const daoCLH = new ethers.Contract( houseAddr, contractData.abi, state.signer );
 
-  $('#divMsgTx').empty()
+  try {
+    console.log( await daoCLH.arrProposals( propId ) );
+  } catch (err) {
+      logMsg("ERROR ... "+err.error.reason);
+      // return
+  }
 
-  // const tokenBalance = await nftContractReadonly.balanceOf(signer.getAddress(),tokenId);
+  let responseTx;
+  try {
+    responseTx = await daoCLH.VotePropOffChain( voter, propId, support, justification, signR, signS, signV );
+  } catch (err) {
+      logMsg("ERROR ... "+err.error.reason);
+      return
+  }
 
-  // console.log( await daoCLH.HOUSE_NAME() );
-  console.log( await daoCLH.arrProposals( propId ) );
-
-  const responseTx = await daoCLH.VotePropOffChain( voter, propId, support, justification, signR, signS, signV );
-
-  $('<p>',{
-    html: 'Sending vote...'
-  }).appendTo('#divMsgTx');
+  console.log( responseTx )
+  logMsg("Wait confirmation ... https://goerli.etherscan.io/tx/"+responseTx.hash);
 
   const resultTx = await responseTx.wait();
   console.log( resultTx );
-
-  $('<p>',{
-    html: 'successful'
-  }).appendTo('#divMsgTx');
-
-  $('<a>',{
-    text: 'See Tx',
-    target: "_blank",
-    href: 'https://rinkeby.etherscan.io/tx/' + resultTx.transactionHash,
-    id: 'linkTx'
-  }).appendTo('#divMsgTx');
+  logMsg("Successful!!! ... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
 }
 
 async function ValidateSignVote() {
@@ -158,18 +161,125 @@ async function ValidateSignVote() {
   const support = !!+$('input[name=support]:checked', '#eip712form').val();
   const justification = document.getElementById("justification").value;
   const eip712Signature = document.getElementById("eip712Signature").value;
-  const contractAddress = ethers.utils.getAddress( document.getElementById("addrContract").value );
+  const houseAddr = ethers.utils.getAddress( document.getElementById("addrContract").value );
   const contractData = await $.getJSON("./abis/ApiCLHouse.json");
-  const addrApiCLH = "0x7D42c58A8a9dE412Fc70fDA4688C493fa01ef60a";
   // console.log(contractData);
   
-  const apiCLH = new ethers.Contract(addrApiCLH, contractData.abi, state.ethProvider );
+  const apiCLH = new ethers.Contract( state.addrApiCLH, contractData.abi, state.ethProvider );
 
-  const resVal = await apiCLH.ValidateSingOffChainVote(contractAddress, voter, propId, support, justification, eip712Signature)
+  const resVal = await apiCLH.ValidateSingOffChainVote( houseAddr, voter, propId, support, justification, eip712Signature)
   console.log(resVal);
 
   if ( resVal )
     $("form#eip712result :input").addClass("is-valid")
   else
     $("form#eip712result :input").addClass("is-invalid")
+}
+
+function SignInviEIP712( _acceptance ) {
+  const { chainId, accounts } = state;
+  const signerWallet = ethers.utils.getAddress( accounts[0] );
+  const verifyingContract = ethers.utils.getAddress( document.getElementById("adrCLHinv").value );
+
+  state.acceptance = _acceptance;
+
+  $("#signInvit").val("")
+  $("#signInvit").removeClass("is-invalid")
+  $("#signInvit").removeClass("is-valid")
+
+  const msgParams = JSON.stringify({types:
+    {
+      EIP712Domain:[
+        {name:"name",type:"string"},
+        {name:"version",type:"string"},
+        {name:"chainId",type:"uint256"},
+        {name:"verifyingContract",type:"address"}
+      ],
+      strOffChainInvitation:[
+        {name:"signerWallet",type:"address"},
+        {name:"acceptance",type:"bool"}
+      ]
+    },
+    primaryType:"strOffChainInvitation",
+    domain:{name:"CLHouse",version:"0.0.10",chainId:chainId,verifyingContract:verifyingContract},
+    message:{
+      signerWallet: signerWallet,
+      acceptance: !!_acceptance
+    }
+  })
+
+  const from = signerWallet;
+
+  const params = [ from, msgParams ]
+  console.dir( params )
+  const method = 'eth_signTypedData_v4'
+  console.log('CLICKED, SENDING PERSONAL SIGN REQ ', method, ' from', from, msgParams)
+
+  web3 = new Web3(window.ethereum);
+
+  web3.currentProvider.sendAsync({
+    method,
+    params,
+    from,
+  }, async function (err, result) {
+    if (err) return console.dir(err)
+    if (result.error) {
+      alert(result.error.message)
+    }
+    if (result.error) return console.error('ERROR', result)
+
+    console.log('TYPED SIGNED:' + JSON.stringify(result.result))
+
+    $('#signInvit').val( result.result );
+  }) 
+}
+
+async function ValiSignInvt() {
+  // $('#divMsgTx').empty()
+  $("#signInvit").removeClass("is-invalid")
+  $("#signInvit").removeClass("is-valid")
+
+  const signerWallet = ethers.utils.getAddress( state.accounts[0] );
+  const acceptance = !!state.acceptance
+  const signInvit = document.getElementById("signInvit").value;
+  const houseAddr = ethers.utils.getAddress( document.getElementById("adrCLHinv").value );
+  const contractData = await $.getJSON("./abis/ApiCLHouse.json");
+  // console.log(contractData);
+  
+  const apiCLH = new ethers.Contract( state.addrApiCLH, contractData.abi, state.ethProvider );
+
+  const resVal = await apiCLH.ValiSignInvt( houseAddr, signerWallet, acceptance, signInvit )
+  console.log(resVal);
+
+  if ( resVal )
+    $("#signInvit").addClass("is-valid")
+  else
+    $("#signInvit").addClass("is-invalid")
+}
+
+async function SendSignInvt() {
+  logMsg("Sending ...");
+  const signerWallet = ethers.utils.getAddress( state.accounts[0] );
+  const acceptance = !!state.acceptance
+  const signInvit = document.getElementById("signInvit").value;
+  const houseAddr = ethers.utils.getAddress( document.getElementById("adrCLHinv").value );
+  const contractData = await $.getJSON("./abis/CLHouse.json"); 
+  const daoCLH = new ethers.Contract( houseAddr, contractData.abi, state.signer );
+
+  let responseTx;
+  
+  try {
+    responseTx = await daoCLH.AcceptRejectInvitation( acceptance, signerWallet, signInvit );
+  } catch (err) {
+      logMsg("ERROR ... "+err.error.reason);
+      return
+      // console.log(err); // prints ethers error message containing the json rpc response as it is (along with error stacks from node if sent)
+  }
+
+  console.log( responseTx )
+  logMsg("Wait confirmation ... https://goerli.etherscan.io/tx/"+responseTx.hash);
+
+  const resultTx = await responseTx.wait();
+  console.log( resultTx );
+  logMsg("Successful!!! ... Tx : " + resultTx.transactionHash );
 }
