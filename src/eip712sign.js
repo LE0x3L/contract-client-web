@@ -177,6 +177,7 @@ async function ValidateSignVote() {
 }
 
 function SignInviEIP712( _acceptance ) {
+  logMsg("signing...");
   const { chainId, accounts } = appVar;
   const signerWallet = ethers.utils.getAddress( accounts[0] );
   const verifyingContract = ethers.utils.getAddress( document.getElementById("adrCLHinv").value );
@@ -215,23 +216,14 @@ function SignInviEIP712( _acceptance ) {
   const method = 'eth_signTypedData_v4'
   console.log('CLICKED, SENDING PERSONAL SIGN REQ ', method, ' from', from, msgParams)
 
-  web3 = new Web3(window.ethereum);
-
-  web3.currentProvider.sendAsync({
-    method,
-    params,
-    from,
-  }, async function (err, result) {
-    if (err) return console.dir(err)
-    if (result.error) {
-      alert(result.error.message)
-    }
-    if (result.error) return console.error('ERROR', result)
-
-    console.log('TYPED SIGNED:' + JSON.stringify(result.result))
-
-    $('#signInvit').val( result.result );
-  }) 
+  appVar.ethProvider.send( method, params )
+  .then( (resolve) => {
+    logMsg('SIGNED: ' + resolve );
+    $('#signInvit').val( resolve );
+  })
+  .catch((error) => {
+    logMsg("ERROR: " + error.message );
+  });
 }
 
 async function ValiSignInvt() {
