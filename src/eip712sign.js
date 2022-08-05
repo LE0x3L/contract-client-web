@@ -3,6 +3,7 @@ var state = { ethProvider: null,  chainId: null, accounts: null, signer: null };
 
 async function connectWeb3() {
   if (window.ethereum) {
+    logMsg("Connecting...");
     state.ethProvider = new ethers.providers.Web3Provider(window.ethereum)
     state.chainId = await ethereum.request({ method: 'net_version' })
 
@@ -13,7 +14,7 @@ async function connectWeb3() {
     .request({ method: 'eth_requestAccounts' })
     .then( (resolve) => {
       state.accounts = resolve 
-      logMsg('Connected to MetaMask: ' + state.accounts )
+      logMsg('Connected Account: ' + state.accounts )
     })
     .catch((error) => {
       if (error.code === 4001) {
@@ -37,9 +38,9 @@ function signDataV4() {
   const justification = document.getElementById("justification").value;
   // const justification = String("acepto");
 
-  $('#signR').val( '' );
-  $('#signS').val( '' );
-  $('#signV').val( '' );
+  $("form#eip712result :input").val("")
+  $("form#eip712result :input").removeClass("is-invalid")
+  $("form#eip712result :input").removeClass("is-valid")
 
   const msgParams = JSON.stringify({types:
     {
@@ -96,6 +97,7 @@ function signDataV4() {
     console.log("r:", r);
     console.log("s:", s);
     console.log("v:", v);
+    $('#eip712Signature').val( result.result );
     $('#signR').val( r );
     $('#signS').val( s );
     $('#signV').val( v );
@@ -103,7 +105,7 @@ function signDataV4() {
 }
 
 async function SendSignVote() {
-  const voter = ethers.utils.getAddress( accounts[0] );
+  const voter = ethers.utils.getAddress( state.accounts[0] );
   const propId = +document.getElementById("propId").value;
   const support = !!+$('input[name=support]:checked', '#eip712form').val();
   const justification = document.getElementById("justification").value;
@@ -116,7 +118,7 @@ async function SendSignVote() {
 
   // console.log(contractData);
   
-  const daoCLH = new ethers.Contract(contractAddress, contractData.abi, signer );
+  const daoCLH = new ethers.Contract(contractAddress, contractData.abi, state.signer );
 
   $('#divMsgTx').empty()
 
@@ -144,4 +146,30 @@ async function SendSignVote() {
     href: 'https://rinkeby.etherscan.io/tx/' + resultTx.transactionHash,
     id: 'linkTx'
   }).appendTo('#divMsgTx');
+}
+
+async function ValidateSignVote() {
+  // $('#divMsgTx').empty()
+  $("form#eip712result :input").removeClass("is-invalid")
+  $("form#eip712result :input").removeClass("is-valid")
+
+  const voter = ethers.utils.getAddress( state.accounts[0] );
+  const propId = +document.getElementById("propId").value;
+  const support = !!+$('input[name=support]:checked', '#eip712form').val();
+  const justification = document.getElementById("justification").value;
+  const eip712Signature = document.getElementById("eip712Signature").value;
+  const contractAddress = ethers.utils.getAddress( document.getElementById("addrContract").value );
+  const contractData = await $.getJSON("./abis/ApiCLHouse.json");
+  const addrApiCLH = "0x7D42c58A8a9dE412Fc70fDA4688C493fa01ef60a";
+  // console.log(contractData);
+  
+  const apiCLH = new ethers.Contract(addrApiCLH, contractData.abi, state.ethProvider );
+
+  const resVal = await apiCLH.ValidateSingOffChainVote(contractAddress, voter, propId, support, justification, eip712Signature)
+  console.log(resVal);
+
+  if ( resVal )
+    $("form#eip712result :input").addClass("is-valid")
+  else
+    $("form#eip712result :input").addClass("is-invalid")
 }
