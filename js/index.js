@@ -12,23 +12,14 @@ $("#lnkMetamask").click( (event) => {
   connectWeb3();
 });
 
-$('#eip712form').submit( (event) => {
-  event.preventDefault();
-  $('#divResValidate').empty()
-  SignVoteEIP712();
-});
+$("#btnSignOCVote").click( SignOCVote );
+$("#btnValidOCVote").click( ValidOCVote );
+$("#btnSendOCVote").click( SendOCVote );
 
-$('#eip712result').submit( (event) => {
-  event.preventDefault();
-  SendSignVote();
-});
-
-
-$("#btnValidate").click( ()=> { ValidateSignVote() } );
-$("#btnInvAcp").click( ()=> { SignInviEIP712( true ) } );
-$("#btnInvRjc").click( ()=> { SignInviEIP712( false ) } );
-$("#btnValiSignInvt").click( ()=> { ValiSignInvt() } );
-$("#btnSendSignInvt").click( ()=> { SendSignInvt() } );
+$("#btnInvAcp").click( ()=> { SignOCInvit( true ) } );
+$("#btnInvRjc").click( ()=> { SignOCInvit( false ) } );
+$("#btnValidOCInvit").click( ValidOCInvit );
+$("#btnSendOCInvit").click( SendOCInvit );
 
 // $("#btnValidate").click( ()=> {        
 //   $.ajax({
