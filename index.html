@@ -9,7 +9,11 @@
     
 
     <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous">
 
     <style>
       .bd-placeholder-img {
@@ -35,8 +39,15 @@
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">CL Contract Web UI</a>
-      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <button 
+        class="navbar-toggler position-absolute d-md-none collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu"
+        aria-controls="sidebarMenu"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="form-control form-control-dark w-100" id="messages"></div>
       <div class="navbar-nav">
@@ -58,9 +69,33 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#AcceptRejectInvit">
+                <a class="nav-link" href="#newCLH">
+                  <span data-feather="home"></span>
+                  Create House
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#newMember">
+                  <span data-feather="user-plus"></span>
+                  Invite Member
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#delMember">
+                  <span data-feather="user-minus"></span>
+                  Remove Member
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#AcceptInvit">
                   <span data-feather="user-check"></span>
-                  Accept/Reject Invitation
+                  Accept Invitation
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#requestJoin">
+                  <span data-feather="git-pull-request"></span>
+                  Request to Join
                 </a>
               </li>
               <li class="nav-item">
@@ -122,6 +157,7 @@
             </div> -->
           </div>
 
+          <!-- General Fields -->
           <div class="row">
 
             <div class="col-xl-8 offset-xl-2">
@@ -152,12 +188,223 @@
           
           <br>
 
-          <div class="row g-3">
+          <!-- Create House -->
+          <div id="newCLH" class="row g-3">
 
             <div class="col-lg-12">
 
               <div class="alert alert-info" role="alert">
-                <h2 class="alert-heading" id="AcceptRejectInvit">Accept Reject Invitation</h2>
+                <h2 class="alert-heading">Create CL House</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>User fields</legend>
+
+              <div class="form-floating mb-3">
+                <input id="iptHouseName" type="text" class="form-control">
+                <label for="iptHouseName">House name</label>
+              </div>
+
+              Private:
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptHousePrivate" id="clhIsPriv" class="form-check-input" type="radio" value="1">
+                <label class="form-check-label" for="clhIsPriv">Yes</label>
+              </div>
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptHousePrivate" id="clhNotPriv" class="form-check-input" type="radio" value="0">
+                <label class="form-check-label" for="clhNotPriv">No</label>
+              </div>
+              
+              <br>
+
+              <select id="sltGov" class="form-select mb-3" aria-label="Governance">
+                <option selected>Select Governance Type</option>
+                <option value="1">Dictatorship</option>
+                <option value="2">Committee</option>
+                <option value="3">Simple Majority</option>
+              </select>
+
+              <div class="form-floating mb-3">
+                <input id="iptGovRuleMaxManagerMembers" type="text" class="form-control">
+                <label for="iptGovRuleMaxManagerMembers">max Managers</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptGovRuleMaxActiveMembers" type="text" class="form-control">
+                <label for="iptGovRuleMaxActiveMembers">max Members</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptGovRuleApprovPercentage" type="text" class="form-control">
+                <label for="iptGovRuleApprovPercentage">min Quorum Percentage</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <textarea id="txtManagerWallets" class="form-control" style="height: 100px"></textarea>
+                <label for="txtManagerWallets">WhiteList Wallets</label>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSignOCVote" type="button" class="btn btn-outline-success">Sign Creation</button>
+              </div>
+
+            </div>
+
+            <div class="col-lg-12">
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptSignOCCreation" disabled>
+                <label for="iptSignOCCreation">Signature</label>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnValidOCCreation" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
+                <button id="btnSendOCCreation"  class="btn btn-outline-danger" type="button" >Send</button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <br>
+
+          <!-- New Member -->
+          <div id="newMember" class="row g-3">
+
+            <div class="col-lg-12">
+
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Proposal to Invite a New Member</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>User fields</legend>
+
+              <div class="form-floating mb-3">
+                <input id="iptNewMmrAddr" type="text" class="form-control">
+                <label for="iptNewMmrAddr">User Wallet</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptNewMmrName" type="text" class="form-control">
+                <label for="iptNewMmrName">User Name</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptNewMmrDescrip" type="text" class="form-control">
+                <label for="iptNewMmrDescrip">Proposal Description</label>
+              </div>
+
+              Is Manager:
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptNewMmrIsManager" id="newMmrIsManager" class="form-check-input" type="radio" value="1">
+                <label class="form-check-label" for="newMmrIsManager">Yes</label>
+              </div>
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptNewMmrIsManager" id="newMmrNotManager" class="form-check-input" type="radio" value="0">
+                <label class="form-check-label" for="newMmrNotManager">No</label>
+              </div>
+
+              <legend>Background fields</legend>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptNewMmrDelay">
+                <label for="iptNewMmrDelay">Delay Time (in Sec)</label>                  
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSignOCNewMember" type="button" class="btn btn-outline-success">Sign New Member</button>
+              </div>
+
+            </div>
+
+            <div class="col-lg-12">
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptSignOCNewMember" disabled>
+                <label for="iptSignOCNewMember">Signature</label>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnValidOCNewMember" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
+                <button id="btnSendOCNewMember"  class="btn btn-outline-danger" type="button" >Send</button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <br>
+
+          <!-- Del Member -->
+          <div id="delMember" class="row g-3">
+
+            <div class="col-lg-12">
+
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Proposal to Remove a Member</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>User fields</legend>
+
+              <div class="form-floating mb-3">
+                <input id="iptDelMmrAddr" type="text" class="form-control">
+                <label for="iptDelMmrAddr">User Wallet</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptDelMmrDescrip" type="text" class="form-control">
+                <label for="iptDelMmrDescrip">Proposal Description</label>
+              </div>
+
+              <legend>Background fields</legend>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptDelMmrDelay">
+                <label for="iptDelMmrDelay">Delay Time (in Sec)</label>                  
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSignOCDelMember" type="button" class="btn btn-outline-success">Sign Remove Member</button>
+              </div>
+
+            </div>
+
+            <div class="col-lg-12">
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptSignOCDelMember" disabled>
+                <label for="iptSignOCDelMember">Signature</label>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnValidOCDelMember" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
+                <button id="btnSendOCDelMember"  class="btn btn-outline-danger" type="button" >Send</button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <br>
+
+          <!-- Accept/Reject Invitation -->
+          <div id="AcceptInvit" class="row g-3">
+
+            <div class="col-lg-12">
+
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Accept/Reject Invitation</h2>
                 <hr>
               </div>
 
@@ -186,15 +433,65 @@
             </div>
 
           </div>
-
+          
           <br>
 
-          <div class="row g-3">
+          <!-- Request to Join -->
+          <div id="requestJoin" class="row g-3">
 
             <div class="col-lg-12">
 
               <div class="alert alert-info" role="alert">
-                <h2 id="voteproposal" class="alert-heading">Vote Proposal</h2>
+                <h2 class="alert-heading">Request to join</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>User fields</legend>
+
+              <div class="form-floating mb-3">
+                <input id="iptReqJoinName" type="text" class="form-control">
+                <label for="iptReqJoinName">User Name</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input id="iptReqJoinDescrip" type="text" class="form-control">
+                <label for="iptReqJoinDescrip">Proposal Description</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSignOCReqJoin" type="button" class="btn btn-outline-success">Sign Request To Join</button>
+              </div>
+
+            </div>
+
+            <div class="col-lg-12">
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptSignOCDelMember" disabled>
+                <label for="iptSignOCReqJoin">Signature</label>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnValidOCReqJoin" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
+                <button id="btnSendOCReqJoin"  class="btn btn-outline-danger" type="button" >Send</button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <br>
+
+          <!-- Vote Proposal -->
+          <div id="voteproposal" class="row g-3">
+
+            <div class="col-lg-12">
+
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Vote Proposal</h2>
                 <hr>
               </div>
 
@@ -254,10 +551,16 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" 
-            integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-            crossorigin="anonymous"></script>
+    <script 
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous">
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" 
+      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+      crossorigin="anonymous">
+    </script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
@@ -265,3 +568,4 @@
     <script type="text/javascript" src="js/index.js"></script>
   </body>
 </html>
+
