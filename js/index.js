@@ -12,14 +12,15 @@ $("#lnkMetamask").click( (event) => {
   connectWeb3();
 });
 
-$("#btnSignOCVote").click( SignOCVote );
-$("#btnValidOCVote").click( ValidOCVote );
-$("#btnSendOCVote").click( SendOCVote );
+$("#btnSignOCVote").click( SVSOCVote );
+// $("#btnValidOCVote").click( ValidOCVote );
+// $("#btnSendOCVote").click( SendOCVote );
 
-$("#btnInvAcp").click( ()=> { SignOCInvit( true ) } );
-$("#btnInvRjc").click( ()=> { SignOCInvit( false ) } );
-$("#btnValidOCInvit").click( ValidOCInvit );
-$("#btnSendOCInvit").click( SendOCInvit );
+$("#btnInvAcp").click( ()=> { SVSOCInvit( true ) } );
+$("#btnInvRjc").click( ()=> { SVSOCInvit( false ) } );
+
+$("#btnSignOCNewMember").click( SignOCNewMember );
+$("#btnValidOCNewMember").click( ValidOCNewMember );
 
 // $("#btnValidate").click( ()=> {        
 //   $.ajax({

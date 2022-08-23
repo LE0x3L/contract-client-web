@@ -1,5 +1,5 @@
 var appVar = {
-  addrApiCLH: "0x4CD0618b8a80716d4d459F606648E208bb8A946A",
+  addrApiCLH: "0x16eC1E0ad4e8b212cD3cC94152f19a52ec5FAa98",
   domainName: "CLHouse",
   domainVersion: "0.0.10",
   payeerPKey: null,
@@ -7,17 +7,24 @@ var appVar = {
   chainId: null,
   signerWallet: null,
   payeerWallet: null,
-  acceptance: null,
-  addrCLH: null,
+  metamaskWallet: null,
   apiCLH: null
 };
 
+// 0x5eebf3DD83E7d3Db3b81f8cBf57675b51c8b790F
 
 async function connectWeb3() {
+  // https://docs.metamask.io/guide/rpc-api.html
+  $("#txtPayeerPKey").removeClass( "is-invalid" );
+  $("#txtSignerWallet").val( "" )
+  $("#txtPayeerWallet").val( "" )
+
   if( $("#txtPayeerPKey").val().length == 66 || $("#txtPayeerPKey").val().length == 64 )
-    appVar.payeerPKey=$("#txtPayeerPKey").val()
+    appVar.payeerPKey=$("#txtPayeerPKey").val();
   else {
     logMsg( "ERROR... Invalid length Private Key" );
+    $("#txtPayeerPKey").addClass( "is-invalid" );
+    $('html, body').animate({ scrollTop: $("#txtPayeerPKey").offset().top - 70}, 1500);
     return
   }
 
@@ -25,20 +32,21 @@ async function connectWeb3() {
     logMsg( "Connecting to MetaMask..." );
 
     appVar.chainId = await ethereum.request( { method: 'net_version' } )
+    // appVar.chainId = 1337
     
-    // if( appVar.chainId != 5 ) {
-    //   try {
-    //     await window.ethereum.request({
-    //       method: 'wallet_switchEthereumChain',
-    //       params: [{ chainId: "0x5" }]
-    //     });      
-    //     appVar.chainId = await ethereum.request( { method: 'net_version' } )
-    //   } catch( error ) {
-    //     logMsg( "ERROR... Invalid Network" );
-    //     console.log(error);
-    //     return
-    //   }
-    // }
+    if( appVar.chainId != 5 ) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: "0x5" }]
+        });      
+        appVar.chainId = await ethereum.request( { method: 'net_version' } )
+      } catch( error ) {
+        logMsg( "ERROR... Invalid Network" );
+        console.log(error);
+        return
+      }
+    }
 
     appVar.ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
@@ -66,6 +74,8 @@ async function connectWeb3() {
     .request( { method: 'eth_requestAccounts' } )
     .then( ( resolve ) => {
       appVar.signerWallet = ethers.utils.getAddress( resolve[0] )
+      appVar.metamaskWallet = appVar.ethProvider.getSigner( resolve[0] )
+      console.log( appVar.signerWallet );
       $("#txtSignerWallet").val( appVar.signerWallet )
       logMsg( 'Signer wallet: ' + appVar.signerWallet );
     } )
@@ -83,12 +93,148 @@ async function connectWeb3() {
   }
 }
 
-function SignOCVote() {
-  logMsg( "Signing OCVote..." );
-  const propId = $( "#iptPropIdOCVote" ).val();
-  const support = $( 'input[name=iptSupportOCVote]:checked' ).val();
-  const justification = $( "#txtJustOCVote" ).val();
+// Sing, Validate and Send Off Chain Vote
+async function SVSOCVote() {
+  try {
+    const propId = +$( "#iptPropIdOCVote" ).val();
+    const support = !!+$( 'input[name=iptSupportOCVote]:checked' ).val();
+    const justification = $( "#txtJustOCVote" ).val();
 
+    const houseAddress = await GetCLHAddress();
+
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCVote:[
+          {name:"propId",type:"uint256"},
+          {name:"support",type:"bool"},
+          {name:"justification", type:"string"}
+        ]
+      },
+      primaryType:"strOCVote",
+      domain:{
+        name: appVar.domainName,
+        version: appVar.domainVersion,
+        chainId: appVar.chainId,
+        verifyingContract: houseAddress
+      },
+      message:{
+        propId: propId,
+        support: support,
+        justification: justification
+      }
+    } );
+
+    const eip712Signature =  await EIP712Sing( msgParams, "OCVote" );
+
+    const eip712Signer = await appVar.apiCLH.SignerOCVote(
+      propId,
+      support,
+      justification,
+      houseAddress,
+      eip712Signature
+    );
+    console.log( "Signer: " + eip712Signer )
+
+    if ( eip712Signer != appVar.signerWallet ) {
+      $( "#iptSignOCVote" ).addClass( "is-invalid" );
+      logMsg( "Error... The signature is invalid" )
+      return
+    }
+
+    $( "#iptSignOCVote" ).addClass( "is-valid" );
+
+    const daoCLH = await InstantiateOCCLH( houseAddress );
+
+    // Validate the propId
+    const proposal = await daoCLH.arrProposals( propId );
+    console.log( proposal );
+
+    const ethTx = await daoCLH.VotePropOffChain(
+      propId,
+      support,
+      justification,
+      eip712Signature
+    );
+
+    console.log( ethTx );
+    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/" + ethTx.hash);
+    
+    const resultTx = await ethTx.wait();
+    console.log( resultTx );
+    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+}
+
+// Sing, Validate and Send Off Chain Invitation acceptance
+async function SVSOCInvit( _acceptance ) {
+  try {
+    const houseAddress = await GetCLHAddress();
+
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCInvit:[
+          {name:"acceptance",type:"bool"}
+        ]
+      },
+      primaryType:"strOCInvit",
+      domain:{
+        name: appVar.domainName,
+        version: appVar.domainVersion,
+        chainId: appVar.chainId,
+        verifyingContract: houseAddress
+      },
+      message:{
+        acceptance: !!_acceptance
+      }
+    } );
+
+    const eip712Signature =  await EIP712Sing( msgParams, "OCInvit" );
+
+    const eip712Signer = await appVar.apiCLH.SignerOCInvit(
+      _acceptance,
+      houseAddress,
+      eip712Signature
+    ); 
+    console.log( "Signer: " + eip712Signer )
+
+    if ( eip712Signer != appVar.signerWallet ){
+      $( "#iptSignOCInvit" ).addClass( "is-invalid" );
+      logMsg( "Error... The signature is invalid" )
+      return
+    }
+      
+    $( "#iptSignOCInvit" ).addClass( "is-valid" );
+
+    const daoCLH = await InstantiateOCCLH( houseAddress );
+    const ethTx = await daoCLH.AcceptRejectInvitation( _acceptance, eip712Signature )
+    console.log( ethTx );
+    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/" + ethTx.hash);
+    
+    const resultTx = await ethTx.wait();
+    console.log( resultTx );
+    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+}
+
+function SignOCNewMember() {
   try {
     appVar.addrCLH = ethers.utils.getAddress( $( "#txtAddrCLHouse" ).val() );
   } catch (error) {
@@ -96,10 +242,6 @@ function SignOCVote() {
     logMsg( "ERROR... Invalid CLHouse address" );
     return
   }
-
-  $( "#iptSignOCVote" ).val( "" )
-  $( "#iptSignOCVote" ).removeClass( "is-invalid" )
-  $( "#iptSignOCVote" ).removeClass( "is-valid" )
 
   const msgParams = JSON.stringify( {types:
     {
@@ -109,13 +251,15 @@ function SignOCVote() {
         {name:"chainId",type:"uint256"},
         {name:"verifyingContract",type:"address"}
       ],
-      strOCVote:[
-        {name:"propId",type:"uint256"},
-        {name:"support",type:"bool"},
-        {name:"justification", type:"string"}
+      strOCNewMember:[
+        {name:"_walletAddr",type:"address"},
+        {name:"_name",type:"string"},
+        {name:"_description",type:"string"},
+        {name:"_isManager",type:"bool"},
+        {name:"_delayTime",type:"uint256"}
       ]
     },
-    primaryType:"strOCVote",
+    primaryType:"strOCNewMember",
     domain:{
       name: appVar.domainName,
       version: appVar.domainVersion,
@@ -123,228 +267,43 @@ function SignOCVote() {
       verifyingContract: appVar.addrCLH
     },
     message:{
-      propId: +propId,
-      support: !!+support,
-      justification: justification
+      _walletAddr: ethers.utils.getAddress( $("#iptNewMmrAddr").val() ),
+      _name: $("#iptNewMmrName").val(),
+      _description: $("#iptNewMmrDescrip").val(),
+      _isManager: !!+$( 'input[name=iptNewMmrIsManager]:checked' ).val(),
+      _delayTime: +$("#iptNewMmrDelay").val()
     }
-  } )
-
-  const params = [ appVar.signerWallet, msgParams ]
-  const method = 'eth_signTypedData_v4'
-  console.log( 'SIGN REQ ', method, ' params', params)
-
-  ethereum
-  .request( {
-    method,
-    params
-  } )
-  .then( ( resolve ) => {
-    logMsg( 'SIGNED: ' + resolve );
-    $( '#iptSignOCVote' ).val( resolve );
-    //getting r s v from a signature
-    // const signature = resolve.substring(2);
-    // const r = "0x" + signature.substring(0, 64);
-    // const s = "0x" + signature.substring(64, 128);
-    // const v = parseInt(signature.substring(128, 130), 16);
-    // console.log( "r:", r);
-    // console.log( "s:", s);
-    // console.log( "v:", v);
-    // $( '#signR' ).val( r );
-    // $( '#signS' ).val( s );
-    // $( '#signV' ).val( v );
-  } )
-  .catch( ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.message );
   } );
+
+  EIP712Sing( msgParams, "OCNewMember" );
 }
 
-async function ValidOCVote() {
-  logMsg( "Validating OCVote..." );
+function ValidOCNewMember() {
+  logMsg( "Validating Signature..." );
 
-  $( "#iptSignOCVote" ).removeClass( "is-invalid" );
-  $( "#iptSignOCVote" ).removeClass( "is-valid" );
+  $( "#iptSignOCNewMember" ).removeClass( "is-invalid" )
+  $( "#iptSignOCNewMember" ).removeClass( "is-valid" )
 
-  const propId = $( "#iptPropIdOCVote" ).val();
-  const support = $( 'input[name=iptSupportOCVote]:checked' ).val();
-  const justification = $( "#txtJustOCVote" ).val();
-  const eip712Signature = $( "#iptSignOCVote" ).val();
+  const eip712Signature = $( "#iptSignOCNewMember" ).val();
 
-  appVar.apiCLH.ValidOCVote(
+  appVar.apiCLH.ValidOCNewMember(
     appVar.addrCLH,
-    propId,
-    support,
-    justification,
+    ethers.utils.getAddress( $("#iptNewMmrAddr").val() ),
+    $("#iptNewMmrName").val(),
+    $("#iptNewMmrDescrip").val(),
+    !!+$( 'input[name=iptNewMmrIsManager]:checked' ).val(),
+    +$("#iptNewMmrDelay").val(),
     eip712Signature,
     appVar.signerWallet
   )
-  .then( async ( resolve ) => {
-    console.log( resolve );
-    if ( resolve ){
-      $( "#iptSignOCVote" ).addClass( "is-valid" );
-      logMsg( "Validating... Is valid!!" );
-    }
-    else{
-      $( "#iptSignOCVote" ).addClass( "is-invalid" );
-      logMsg( "Validating... Is invalid!!" );
-    }
-  } )
-  .catch( ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.error.reason );
-    return
-  } );
-}
-
-async function SendOCVote() {
-  logMsg( "Sending OCVote..." );
-  const propId = $( "#iptPropIdOCVote" ).val();
-  const support = $( 'input[name=iptSupportOCVote]:checked' ).val();
-  const justification = $( "#txtJustOCVote" ).val();
-  const eip712Signature = $( "#iptSignOCVote" ).val();
-
-  const contractData = await $.getJSON( "./abis/CLHouse.json" );
-
-  // console.log(contractData);
-  
-  const daoCLH = new ethers.Contract( appVar.addrCLH, contractData.abi, appVar.payeerWallet );
-
-  // Validate the propId
-  await daoCLH
-  .arrProposals( propId )
   .then( ( resolve ) => {
     console.log( resolve );
-  } )
-  .catch( async ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.error.message );
-    // return
-  } );
-
-  await daoCLH
-  .VotePropOffChain(
-    propId,
-    support,
-    justification,
-    eip712Signature
-  )
-  .then( async ( resolve ) => {
-    console.log( resolve );
-    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/"+resolve.hash);
-
-    const resultTx = await resolve.wait();
-    console.log( resultTx );
-    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
-  } )
-  .catch( ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.error.reason );
-    return
-  } );
-}
-
-function SignOCInvit( _acceptance ) {
-  logMsg( "Signing OCInvit..." );
-  
-  appVar.acceptance = _acceptance;
-
-  try {
-    appVar.addrCLH = ethers.utils.getAddress( $( "#txtAddrCLHouse" ).val() );
-  } catch (error) {
-    console.log(error);
-    logMsg( "ERROR... Invalid CLHouse address" );
-    return
-  }
-
-  $( "#iptSignOCInvit" ).val( "" )
-  $( "#iptSignOCInvit" ).removeClass( "is-invalid" )
-  $( "#iptSignOCInvit" ).removeClass( "is-valid" )
-
-  const msgParams = JSON.stringify( {types:
-    {
-      EIP712Domain:[
-        {name:"name",type:"string"},
-        {name:"version",type:"string"},
-        {name:"chainId",type:"uint256"},
-        {name:"verifyingContract",type:"address"}
-      ],
-      strOCInvitation:[
-        {name:"acceptance",type:"bool"}
-      ]
-    },
-    primaryType:"strOCInvitation",
-    domain:{
-      name: appVar.domainName,
-      version: appVar.domainVersion,
-      chainId: appVar.chainId,
-      verifyingContract: appVar.addrCLH
-    },
-    message:{
-      acceptance: !!_acceptance
-    }
-  } );
-
-  const params = [ appVar.signerWallet, msgParams ]
-  const method = 'eth_signTypedData_v4'
-  console.log( 'SIGN REQ ', method, ' params: ', msgParams)
-
-  // appVar.ethProvider.send( method, params ) // ethersJS version
-  ethereum
-  .request( {
-    method,
-    params
-  } )
-  .then( ( resolve ) => {
-    logMsg( 'SIGNED: ' + resolve );
-    $( '#iptSignOCInvit' ).val( resolve );
-  } )
-  .catch( ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.message );
-  } );
-}
-
-async function ValidOCInvit() {
-  logMsg( "Validating..." );
-
-  $( "#iptSignOCInvit" ).removeClass( "is-invalid" )
-  $( "#iptSignOCInvit" ).removeClass( "is-valid" )
-
-  const acceptance = !!appVar.acceptance
-  const eip712Signature = $( "#iptSignOCInvit" ).val();
-
-  appVar.apiCLH.ValiSignInvt( appVar.addrCLH, acceptance, eip712Signature, appVar.signerWallet )
-  .then( async ( resolve ) => {
-    console.log( resolve );
     if ( resolve ){
-      logMsg( "Validating... Is valid!!" );
-      $( "#iptSignOCInvit" ).addClass( "is-valid" );
+      logMsg( "Validating Signature... Is valid!!" );
+      $( "#iptSignOCNewMember" ).addClass( "is-valid" );
     }
     else
-      $( "#iptSignOCInvit" ).addClass( "is-invalid" );
-  } )
-  .catch( ( error ) => {
-    console.log( error );
-    logMsg( "ERROR... " + error.error.reason );
-    return
-  } );
-}
-
-async function SendOCInvit() {
-  logMsg( "Sending ..." );
-  const acceptance = !!appVar.acceptance
-  const eip712Signature = $( "#iptSignOCInvit" ).val();
-  const contractData = await $.getJSON( "./abis/CLHouse.json" ); 
-  const daoCLH = new ethers.Contract( appVar.addrCLH, contractData.abi, appVar.payeerWallet );
-
-  daoCLH.AcceptRejectInvitation( acceptance, eip712Signature )
-  .then( async ( resolve ) => {
-    console.log( resolve );
-    logMsg( "Wait confirmation... https://goerli.etherscan.io/tx/" + resolve.hash);
-
-    const resultTx = await resolve.wait();
-    console.log( resultTx );
-    logMsg( "Successful!!!... https://goerli.etherscan.io/tx/" + resultTx.transactionHash );
+      $( "#iptSignOCNewMember" ).addClass( "is-invalid" );
   } )
   .catch( ( error ) => {
     console.log( error );
