@@ -314,12 +314,13 @@
               <legend>Background fields</legend>
               
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="iptNewMmrDelay">
+                <input id="iptNewMmrDelay" type="text" class="form-control">
                 <label for="iptNewMmrDelay">Delay Time (in Sec)</label>                  
               </div>
-              
+
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnSignOCNewMember" type="button" class="btn btn-outline-success">Sign New Member</button>
+                <button id="btnSendOffChainNewMember" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
+                <button id="btnSendOnChainNewMember" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
 
             </div>
@@ -329,11 +330,6 @@
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCNewMember" disabled>
                 <label for="iptSignOCNewMember">Signature</label>
-              </div>
-
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnValidOCNewMember" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
-                <button id="btnSendOCNewMember"  class="btn btn-outline-danger" type="button" >Send</button>
               </div>
 
             </div>
@@ -421,11 +417,6 @@
                 <input name="iptAcceptOCInvit" id="RejectOCInvit" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="RejectOCInvit">No</label>
               </div>
-
-              <!-- <div class="form-floating mb-3">
-                <button id="btnSendOffChainInvit" type="button" class="btn btn-warning btn-lg mb-3">Send Off Chain</button>
-                <button id="btnSendOnChainInvit" type="button"class="btn btn-success btn-lg mb-3">Send On Chain</button>
-              </div> -->
 
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button id="btnSendOffChainInvit" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>

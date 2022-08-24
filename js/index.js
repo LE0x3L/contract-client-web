@@ -14,15 +14,18 @@ $("#lnkMetamask").click( (event) => {
   connectWeb3();
 });
 
-$("#btnSignOCVote").click( SVSOCVote );
-// $("#btnValidOCVote").click( ValidOCVote );
-// $("#btnSendOCVote").click( SendOCVote );
-
 $("#btnSendOnChainInvit").click( () => { SendOCInvit( true ) } );
 $("#btnSendOffChainInvit").click( () => { SendOCInvit( false ) } );
 
-$("#btnSignOCNewMember").click( SignOCNewMember );
-$("#btnValidOCNewMember").click( ValidOCNewMember );
+$("#btnSendOnChainNewMember").click( () => { SendOCNewMember( true ) } );
+$("#btnSendOffChainNewMember").click( () => { SendOCNewMember( false ) } );
+
+// $("#btnSignOCVote").click( SVSOCVote );
+// $("#btnValidOCVote").click( ValidOCVote );
+// $("#btnSendOCVote").click( SendOCVote );
+
+// $("#btnSignOCNewMember").click( SignOCNewMember );
+// $("#btnValidOCNewMember").click( ValidOCNewMember );
 
 // console.log( await connectWeb3() )
 // connectWeb3();
