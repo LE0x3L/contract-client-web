@@ -1,11 +1,13 @@
-(function () {
+(async function () {
   'use strict'
 
   feather.replace({ 'aria-hidden': 'true' })
 
+  const w3 = await connectWeb3();
+  console.log( w3 )
+
 })()
 
-connectWeb3();
 
 $("#lnkMetamask").click( (event) => {
   event.preventDefault();
@@ -16,11 +18,14 @@ $("#btnSignOCVote").click( SVSOCVote );
 // $("#btnValidOCVote").click( ValidOCVote );
 // $("#btnSendOCVote").click( SendOCVote );
 
-$("#btnInvAcp").click( ()=> { SVSOCInvit( true ) } );
-$("#btnInvRjc").click( ()=> { SVSOCInvit( false ) } );
+$("#btnSendOnChainInvit").click( () => { SendOCInvit( true ) } );
+$("#btnSendOffChainInvit").click( () => { SendOCInvit( false ) } );
 
 $("#btnSignOCNewMember").click( SignOCNewMember );
 $("#btnValidOCNewMember").click( ValidOCNewMember );
+
+// console.log( await connectWeb3() )
+// connectWeb3();
 
 // $("#btnValidate").click( ()=> {        
 //   $.ajax({

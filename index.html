@@ -412,9 +412,24 @@
 
             <div class="col-lg-6 offset-md-3">
 
-              <div class="form-floating mb-3">
-                <button id="btnInvAcp" type="button" class="btn btn-success btn-lg">Accept Invitation</button>
-                <button id="btnInvRjc" type="button"class="btn btn-danger btn-lg">Reject Invitation</button>
+              Accept Invitation: 
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptAcceptOCInvit" id="AcceptOCInvit" class="form-check-input" type="radio" value="1">
+                <label class="form-check-label" for="AcceptOCInvit">Yes</label>
+              </div>
+              <div class="form-check form-check-inline mb-3">
+                <input name="iptAcceptOCInvit" id="RejectOCInvit" class="form-check-input" type="radio" value="0">
+                <label class="form-check-label" for="RejectOCInvit">No</label>
+              </div>
+
+              <!-- <div class="form-floating mb-3">
+                <button id="btnSendOffChainInvit" type="button" class="btn btn-warning btn-lg mb-3">Send Off Chain</button>
+                <button id="btnSendOnChainInvit" type="button"class="btn btn-success btn-lg mb-3">Send On Chain</button>
+              </div> -->
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSendOffChainInvit" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
+                <button id="btnSendOnChainInvit" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
 
             </div>
