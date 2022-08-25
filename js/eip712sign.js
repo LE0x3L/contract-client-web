@@ -482,3 +482,132 @@ async function SendOCDelMember( _onChain = false ) {
     ShowError( error );
   }
 }
+
+// Send (Sing & Validate) On/Off Chain Proposal to Request to Join
+async function SendOCReqJoin( _onChain = false ) {
+  try {
+    const OCFunction = "OCReqJoin"
+    console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    $( "#iptPropId"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    $( "#iptReqJoinName" ).removeClass( "is-invalid" )
+    $( "#iptReqJoinDescrip" ).removeClass( "is-invalid" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3: " , w3 );
+
+    if( 0 === $( "#iptReqJoinName" ).val().length  ) {
+      $( "#iptReqJoinName" ).addClass( "is-invalid" );
+      throw new Error( "Provide an user Name" );
+    }
+    const reqUserName = $( "#iptReqJoinName" ).val()
+    console.log( "reqUserName:" , reqUserName );
+
+    if( 0 === $( "#iptReqJoinDescrip" ).val().length  ) {
+      $( "#iptReqJoinDescrip" ).addClass( "is-invalid" );
+      throw new Error( "Provide a proposal description" );
+    }
+    const propDescription = $( "#iptReqJoinDescrip" ).val()
+    console.log( "propDescription:" , propDescription );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress: " , houseAddress );
+
+    const apiCLH = await InstantiateCLHApi( addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+    console.log( "payeerWallet: " , payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCRequest:[
+          {name:"name",type:"string"},
+          {name:"description",type:"string"}
+        ]
+      },
+      primaryType:"strOCRequest",
+      domain:{
+        name: eip712Domain.name,
+        version: eip712Domain.version,
+        chainId: w3.chainId,
+        verifyingContract: houseAddress
+      },
+      message:{
+        name: reqUserName,
+        description: propDescription
+      }
+    } );
+    console.log( "msgParams:" , msgParams );
+
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    console.log( 'Signature: ' , eip712Signature );
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCRequest(
+      reqUserName,
+      propDescription,
+      houseAddress,
+      eip712Signature
+    ); 
+    console.log( "Signer:" , eip712Signer );
+
+    if ( !_onChain ) {
+      $( "#iptSign"+OCFunction ).val( eip712Signature );
+      if( eip712Signer != w3.signerWallet ){
+        $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
+        logMsg( "Error... The signature can't be verified" )
+        return
+      }
+      else
+        $( "#iptSign"+OCFunction ).addClass( "is-valid" );
+    }
+
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+
+    const ethTx = await daoCLH.PropRequestToJoin(
+      reqUserName,
+      propDescription,
+      eip712Signature
+    );
+    console.log( "ethTx", ethTx );
+    logMsg( "Sended, Wait confirmation... " );
+    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx )
+
+    const propId = resultTx.events[0].args["propId"]
+    console.log( "propId:" , propId );
+    $( "#iptPropId"+OCFunction ).val( propId )
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+}
