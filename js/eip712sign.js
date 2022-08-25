@@ -192,7 +192,7 @@ async function SendOCInvit( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Proposal a new member
+// Send (Sing & Validate) On/Off Chain Proposal to add new member
 async function SendOCNewMember( _onChain = false ) {
   try {
     const OCFunction = "OCNewMember"
@@ -325,6 +325,142 @@ async function SendOCNewMember( _onChain = false ) {
     .attr(
       'href',
       'https://goerli.etherscan.io/tx/' + ethTx.hash
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx )
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+}
+
+// Send (Sing & Validate) On/Off Chain Proposal to remove a member
+async function SendOCDelMember( _onChain = false ) {
+  try {
+    const OCFunction = "OCDelMember"
+    console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    $( "#iptSign"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    $( "#iptDelMmrAddr" ).removeClass( "is-invalid" )
+    $( "#iptDelMmrDescrip" ).removeClass( "is-invalid" )
+    $( "#iptDelMmrDelay" ).removeClass( "is-invalid" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3: " , w3 );
+
+    if( 42 !== $( "#iptDelMmrAddr" ).val().length  ) {
+      $( "#iptDelMmrAddr" ).addClass( "is-invalid" );
+      throw new Error( "Invalig Address length" );
+    }
+    const delUserWallet = await ethers.utils.getAddress( $( "#iptDelMmrAddr" ).val() )
+    console.log( "delUserWallet:" , delUserWallet );
+
+    if( 0 === $( "#iptDelMmrDescrip" ).val().length  ) {
+      $( "#iptDelMmrDescrip" ).addClass( "is-invalid" );
+      throw new Error( "Provide a proposal description" );
+    }
+    const propDescription = $( "#iptDelMmrDescrip" ).val()
+    console.log( "propDescription:" , propDescription );
+
+    if( 0 === $( "#iptDelMmrDelay" ).val().length || isNaN( $( "#iptDelMmrDelay" ).val() ) ) {
+      $( "#iptDelMmrDelay" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid delay Time" );
+    }
+    const propDelayTime = +$( "#iptDelMmrDelay" ).val()
+    console.log( "propDelayTime:" , propDelayTime );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress: " , houseAddress );
+
+    const apiCLH = await InstantiateCLHApi( addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+    console.log( "payeerWallet: " , payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCDelMember:[
+          {name:"walletAddr",type:"address"},
+          {name:"description",type:"string"},
+          {name:"delayTime",type:"uint256"}
+        ]
+      },
+      primaryType:"strOCDelMember",
+      domain:{
+        name: eip712Domain.name,
+        version: eip712Domain.version,
+        chainId: w3.chainId,
+        verifyingContract: houseAddress
+      },
+      message:{
+        walletAddr: delUserWallet,
+        description: propDescription,
+        delayTime: propDelayTime
+      }
+    } );
+    console.log( "msgParams:" , msgParams );
+
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    console.log( 'Signature: ' , eip712Signature );
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCDelMember(
+      delUserWallet,
+      propDescription,
+      propDelayTime,
+      houseAddress,
+      eip712Signature
+    ); 
+    console.log( "Signer:" , eip712Signer );
+
+    if ( !_onChain ) {
+      $( "#iptSign"+OCFunction ).val( eip712Signature );
+      if( eip712Signer != w3.signerWallet ){
+        $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
+        logMsg( "Error... The signature can't be verified" )
+        return
+      }
+      else
+        $( "#iptSign"+OCFunction ).addClass( "is-valid" );
+    }
+
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+
+    const ethTx = await daoCLH.PropRemoveMember(
+      delUserWallet,
+      propDescription,
+      propDelayTime,
+      eip712Signature
+    );
+    console.log( "ethTx", ethTx );
+    logMsg( "Sended, Wait confirmation... " );
+    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
     )
     .attr('target',"_blank")
     .text( ethTx.hash );

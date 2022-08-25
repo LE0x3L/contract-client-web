@@ -20,6 +20,9 @@ $("#btnSendOffChainInvit").click( () => { SendOCInvit( false ) } );
 $("#btnSendOnChainNewMember").click( () => { SendOCNewMember( true ) } );
 $("#btnSendOffChainNewMember").click( () => { SendOCNewMember( false ) } );
 
+$("#btnSendOnChainDelMember").click( () => { SendOCDelMember( true ) } );
+$("#btnSendOffChainDelMember").click( () => { SendOCDelMember( false ) } );
+
 // $("#btnSignOCVote").click( SVSOCVote );
 // $("#btnValidOCVote").click( ValidOCVote );
 // $("#btnSendOCVote").click( SendOCVote );
