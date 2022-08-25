@@ -26,6 +26,9 @@ $("#btnSendOffChainDelMember").click( () => { SendOCDelMember( false ) } );
 $("#btnSendOnChainReqJoin").click( () => { SendOCReqJoin( true ) } );
 $("#btnSendOffChainReqJoin").click( () => { SendOCReqJoin( false ) } );
 
+$("#btnSendOnChainVote").click( () => { SendOCVote( true ) } );
+$("#btnSendOffChainVote").click( () => { SendOCVote( false ) } );
+
 // $("#btnSignOCVote").click( SVSOCVote );
 // $("#btnValidOCVote").click( ValidOCVote );
 // $("#btnSendOCVote").click( SendOCVote );
