@@ -204,51 +204,52 @@
               <legend>User fields</legend>
 
               <div class="form-floating mb-3">
-                <input id="iptHouseName" type="text" class="form-control">
-                <label for="iptHouseName">House name</label>
+                <input id="iptNameNewCLH" type="text" class="form-control">
+                <label for="iptNameNewCLH">House name</label>
               </div>
 
               Private:
               <div class="form-check form-check-inline mb-3">
-                <input name="iptHousePrivate" id="clhIsPriv" class="form-check-input" type="radio" value="1">
+                <input name="ipPrivateNewCLH" id="clhIsPriv" class="form-check-input" type="radio" value="1">
                 <label class="form-check-label" for="clhIsPriv">Yes</label>
               </div>
               <div class="form-check form-check-inline mb-3">
-                <input name="iptHousePrivate" id="clhNotPriv" class="form-check-input" type="radio" value="0">
+                <input name="ipPrivateNewCLH" id="clhNotPriv" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="clhNotPriv">No</label>
               </div>
               
               <br>
 
-              <select id="sltGov" class="form-select mb-3" aria-label="Governance">
-                <option selected>Select Governance Type</option>
-                <option value="1">Dictatorship</option>
-                <option value="2">Committee</option>
-                <option value="3">Simple Majority</option>
+              <select id="sltGovNewCLH" class="form-select mb-3" aria-label="Governance">
+                <option value="0"selected>Select Governance Type</option>
+                <option value="__GOV_DICTATORSHIP__">Dictatorship</option>
+                <option value="__GOV_COMMITTEE__">Committee</option>
+                <option value="__GOV_SIMPLE_MAJORITY__">Simple Majority</option>
               </select>
 
               <div class="form-floating mb-3">
-                <input id="iptGovRuleMaxManagerMembers" type="text" class="form-control">
-                <label for="iptGovRuleMaxManagerMembers">max Managers</label>
+                <input id="iptMaxManagerNewCLH" type="text" class="form-control">
+                <label for="iptMaxManagerNewCLH">max Managers</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptGovRuleMaxActiveMembers" type="text" class="form-control">
-                <label for="iptGovRuleMaxActiveMembers">max Members</label>
+                <input id="iptMaxMembersNewCLH" type="text" class="form-control">
+                <label for="iptMaxMembersNewCLH">max Members</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptGovRuleApprovPercentage" type="text" class="form-control">
-                <label for="iptGovRuleApprovPercentage">min Quorum Percentage</label>
+                <input id="iptApprovPercentNewCLH" type="text" class="form-control">
+                <label for="iptApprovPercentNewCLH">min Quorum Percentage</label>
               </div>
 
               <div class="form-floating mb-3">
-                <textarea id="txtManagerWallets" class="form-control" style="height: 100px"></textarea>
-                <label for="txtManagerWallets">WhiteList Wallets</label>
+                <textarea id="txtWhiteListNewCLH" class="form-control" style="height: 100px"></textarea>
+                <label for="txtWhiteListNewCLH">WhiteList Wallets</label>
               </div>
 
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnSignOCNewCLH" type="button" class="btn btn-outline-success">Sign Creation</button>
+                <button id="btnSendOffChainNewCLH" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
+                <button id="btnSendOnChainNewCLH" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
 
             </div>
@@ -256,13 +257,13 @@
             <div class="col-lg-12">
 
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="iptSignOCCreation" disabled>
-                <label for="iptSignOCCreation">Signature</label>
+                <input id="iptSignOCNewCLH" type="text" class="form-control" disabled>
+                <label for="iptSignOCNewCLH">Signature</label>
               </div>
 
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnValidOCCreation" class="btn btn-outline-warning me-md-2" type="button">Validate</button>
-                <button id="btnSendOCCreation"  class="btn btn-outline-danger" type="button" >Send</button>
+              <div class="form-floating mb-3">
+                <input id="iptAddrOCNewCLH" type="text" class="form-control" disabled>
+                <label for="iptAddrOCNewCLH">New House Address</label>
               </div>
 
             </div>

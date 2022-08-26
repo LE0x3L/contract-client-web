@@ -1,4 +1,5 @@
 const addrApiCLH = "0x16eC1E0ad4e8b212cD3cC94152f19a52ec5FAa98"
+const addrCLFactory = "0x8B7e0862AA2821ACA9ebBAdb1226eA07Ed89c1B0"
 const eip712Domain = {
   name: "CLHouse",
   version: "0.0.10",
@@ -214,7 +215,7 @@ async function SendOCNewMember( _onChain = false ) {
       houseAddress,
       eip712Signature
     ); 
-    console.log( "Signer: " , eip712Signer );
+    console.log( "Signer:" , eip712Signer );
 
     if ( !_onChain ) {
       $( "#iptSign"+OCFunction ).val( eip712Signature );
@@ -659,6 +660,197 @@ async function SendOCVote( _onChain = false ) {
     .attr('target',"_blank")
     .text( "View on block explorer" );
     $( "#messages" ).append( linkTx )
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+}
+
+// Send (Sing & Validate) On/Off Chain Vote to Proposal
+async function SendOCNewCLH( _onChain = false ) {
+  try {
+    const OCFunction = "OCNewCLH"
+    console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    $( "#iptAddr"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    $( "#iptNameNewCLH" ).removeClass( "is-invalid" )
+    $( "#sltGovNewCLH" ).removeClass( "is-invalid" )
+    $( "#iptMaxManagerNewCLH" ).removeClass( "is-invalid" )
+    $( "#iptMaxMembersNewCLH" ).removeClass( "is-invalid" )
+    $( "#iptApprovPercentNewCLH" ).removeClass( "is-invalid" )
+    $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    if( 0 === $( "#iptNameNewCLH" ).val().length  ) {
+      $( "#iptNameNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Provide a House name" );
+    }
+    const newHouseName = $( "#iptNameNewCLH" ).val();
+    console.log( "newHouseName:" , newHouseName );
+
+    if( 'undefined' === typeof $( 'input[name=ipPrivateNewCLH]:checked' ).val() )
+      throw new Error( "Select Private Yes/No" );
+    const newHousePrivate = !!+$( 'input[name=ipPrivateNewCLH]:checked' ).val()
+    console.log( "newHousePrivate:" , newHousePrivate );
+
+    if( "0" === $('#sltGovNewCLH').find(":selected").val() ) {
+      $( "#sltGovNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Select a Governance type" );
+    }
+    console.log( "selectGov:" , $( "#sltGovNewCLH" ).val() );
+    const newHouseGov = ethers.utils.id( $( "#sltGovNewCLH" ).val() )
+    console.log( "newHouseGov:" , newHouseGov );
+
+    if( 0 === $( "#iptMaxManagerNewCLH" ).val().length || isNaN( $( "#iptMaxManagerNewCLH" ).val() ) ) {
+      $( "#iptMaxManagerNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid Max Manager number" );
+    }
+    const newHouseMaxManager = +$( "#iptMaxManagerNewCLH" ).val()
+    console.log( "newHouseMaxManager:" , newHouseMaxManager );
+
+    if( 0 === $( "#iptMaxMembersNewCLH" ).val().length || isNaN( $( "#iptMaxMembersNewCLH" ).val() ) ) {
+      $( "#iptMaxMembersNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid Max member number" );
+    }
+    const newHouseMaxMembers = +$( "#iptMaxMembersNewCLH" ).val()
+    console.log( "newHouseMaxMembers:" , newHouseMaxMembers );
+
+    if( 0 === $( "#iptApprovPercentNewCLH" ).val().length || 
+      isNaN( $( "#iptApprovPercentNewCLH" ).val() ) ||
+      +$( "#iptApprovPercentNewCLH" ).val() > 100
+    ) {
+      $( "#iptApprovPercentNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid min Quorum Percentaje" );
+    }
+    const newHouseMinPercent = +$( "#iptApprovPercentNewCLH" ).val()
+    console.log( "newHouseMinPercent:" , newHouseMinPercent );
+
+    let newHouseWhiteList = [ ethers.constants.AddressZero ]
+    if( 0 !== $( "#txtWhiteListNewCLH" ).val().length ){
+      $( "#txtWhiteListNewCLH" ).addClass( "is-invalid" )
+      newHouseWhiteList = $( "#txtWhiteListNewCLH" ).val().split( "\n" )
+      newHouseWhiteList = newHouseWhiteList.map( ( v ) => { return ethers.utils.getAddress( v ) } )
+      $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
+    }
+    console.log( "newHouseWhiteList: " , newHouseWhiteList );
+    
+    const factoryAddress = await ethers.utils.getAddress( addrCLFactory );;
+    console.log( "factoryAddress:" , factoryAddress );
+
+    const apiCLH = await InstantiateCLHApi( addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+    console.log( "payeerWallet:" , payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCNewCLH:[
+          {name:"houseName", type:"string"},
+          {name:"housePrivate",type:"bool"},
+          {name:"gov",type:"bytes32"},
+          {name:"govRuleMaxManagerMembers",type:"uint8"},
+          {name:"govRuleMaxActiveMembers",type:"uint8"},
+          {name:"govRuleApprovPercentage",type:"uint8"},
+          {name:"whiteListWallets",type:"address"}
+        ]
+      },
+      primaryType:"strOCNewCLH",
+      domain:{
+        name: eip712Domain.name,
+        version: eip712Domain.version,
+        chainId: w3.chainId,
+        verifyingContract: factoryAddress
+      },
+      message:{
+        houseName: newHouseName,
+        housePrivate: newHousePrivate,
+        gov: newHouseGov,
+        govRuleMaxManagerMembers: newHouseMaxManager,
+        govRuleMaxActiveMembers: newHouseMaxMembers,
+        govRuleApprovPercentage: newHouseMinPercent,
+        whiteListWallets: newHouseWhiteList[0]
+      }
+    } );
+    console.log( "msgParams:" , msgParams );
+
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    console.log( 'Signature:' , eip712Signature );
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewCLH(
+      newHouseName,
+      newHousePrivate,
+      newHouseGov,
+      newHouseMaxManager,
+      newHouseMaxMembers,
+      newHouseMinPercent,
+      newHouseWhiteList[0],
+      factoryAddress,
+      eip712Signature
+    ); 
+    console.log( "Signer:" , eip712Signer );
+
+    if ( !_onChain ) {
+      $( "#iptSign"+OCFunction ).val( eip712Signature );
+      if( eip712Signer != w3.signerWallet ){
+        $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
+        logMsg( "Error... The signature can't be verified" )
+        return
+      }
+      else
+        $( "#iptSign"+OCFunction ).addClass( "is-valid" );
+    }
+
+    const CLFactory = await InstantiateCLF( factoryAddress, payeerWallet );
+    console.log( "CLFactory:", CLFactory );
+
+    const ethTx = await CLFactory.CreateCLH(
+      newHouseName,
+      newHousePrivate,
+      newHouseGov,
+      [ newHouseMaxManager, newHouseMaxMembers, newHouseMinPercent ],
+      newHouseWhiteList,
+      ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
+      eip712Signature
+    );
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sended, Wait confirmation... " );
+    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+
+    const AddrNewCLH = resultTx.events[3].args["houseAddr"]
+    console.log( "AddrNewCLH:" , AddrNewCLH );
+    $( "#iptAddr"+OCFunction ).val( AddrNewCLH );
   } catch( error ) {
     console.log( error );
     ShowError( error );

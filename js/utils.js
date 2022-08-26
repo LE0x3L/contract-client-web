@@ -156,3 +156,19 @@ function InstantiateCLHApi( _ApiAddress, _ethProvider ) {
     }
   });
 }
+
+function InstantiateCLF( _factoryAddress, _signer ) {
+  return new Promise( async ( resolve, reject ) => {
+    try {
+      const contractData = await $.getJSON( "./abis/CLFactory.json" );
+      resolve( new ethers.Contract(
+        _factoryAddress,
+        contractData.abi,
+        _signer
+      ) );
+    } catch (error) {
+      console.log(error);
+      reject( { "message": "Can't instance CLF" } );
+    }
+  });
+}
