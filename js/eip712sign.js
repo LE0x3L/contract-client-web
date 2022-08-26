@@ -117,6 +117,7 @@ async function SendOCNewMember( _onChain = false ) {
   try {
     const OCFunction = "OCNewMember"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    $( "#iptPropId"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
@@ -261,6 +262,10 @@ async function SendOCNewMember( _onChain = false ) {
     .attr('target',"_blank")
     .text( "View on block explorer" );
     $( "#messages" ).append( linkTx )
+
+    const propId = resultTx.events[0].args["propId"]
+    console.log( "propId:" , propId );
+    $( "#iptPropId"+OCFunction ).val( propId )
   } catch( error ) {
     console.log( error );
     ShowError( error );
@@ -272,6 +277,7 @@ async function SendOCDelMember( _onChain = false ) {
   try {
     const OCFunction = "OCDelMember"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    $( "#iptPropId"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
@@ -396,7 +402,11 @@ async function SendOCDelMember( _onChain = false ) {
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx )
+    $( "#messages" ).append( linkTx );
+
+    const propId = resultTx.events[0].args["propId"]
+    console.log( "propId:" , propId );
+    $( "#iptPropId"+OCFunction ).val( propId )
   } catch( error ) {
     console.log( error );
     ShowError( error );
