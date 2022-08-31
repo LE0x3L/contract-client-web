@@ -121,21 +121,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Invitations list
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#HouseUserList">
                   <span data-feather="file-text"></span>
                   User List
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Proposal List
                 </a>
               </li>
             </ul>
@@ -624,17 +612,46 @@
                 </div>
               </div>
 
-              <div class="d-grid gap-2 col-6 mx-auto">
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetInfoCLH" class="btn btn-outline-info" type="button">Reload CLH Info</button>
               </div>
-
             </div>
           </div>
 
+          <div id="HouseUserList">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">House User List</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <table id="tblusrList" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Wallet</th>
+                    <th scope="col">Rol</th>
+                    <!-- <th scope="col">Balance</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-12">
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <button id="btnGetUserListCLH" class="btn btn-outline-info" type="button">Reload User list</button>
+              </div>
+            </div>
+            <br>
+            <br>
+            <br>
+          </div>
         </main>
-
       </div>
-
     </div>
 
     <script 

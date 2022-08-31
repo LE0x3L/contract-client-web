@@ -23,6 +23,7 @@ function ShowError( error ) {
 function connectWeb3() {
   return new Promise( async ( resolve, reject ) => {
     try {
+      const localNet = true
       $("#txtSignerWallet").val( "" )
 
       if ( typeof window.ethereum === 'undefined' )
@@ -31,13 +32,13 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
-      if( 5 != await ethereum.request( { method: 'net_version' } ) )
+      if( !localNet && 5 != await ethereum.request( { method: 'net_version' } ) )
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: "0x5" }]
         });
 
-      const chainId = await ethereum.request( { method: 'net_version' } )
+      const chainId = localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
       console.log( "chainId: " + chainId )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )

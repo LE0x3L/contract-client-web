@@ -32,3 +32,4 @@ $("#btnSendOnChainVote").click( () => { SendOCVote( true ) } );
 $("#btnSendOffChainVote").click( () => { SendOCVote( false ) } );
 
 $("#btnGetInfoCLH").click( ShowCLHouseProperties );
+$("#btnGetUserListCLH").click( ShowCLHouseUserList );

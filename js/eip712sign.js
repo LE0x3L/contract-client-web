@@ -1,4 +1,4 @@
-const addrApiCLH = "0x16eC1E0ad4e8b212cD3cC94152f19a52ec5FAa98"
+const addrApiCLH = "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87"
 const addrCLFactory = "0x8B7e0862AA2821ACA9ebBAdb1226eA07Ed89c1B0"
 const eip712Domain = {
   name: "CLHouse",
@@ -8,7 +8,7 @@ let dictGovModel = {};
 dictGovModel[ String( ethers.utils.id( "__GOV_DICTATORSHIP__" ) ) ] = "Dictatorship";
 dictGovModel[ String( ethers.utils.id( "__GOV_COMMITTEE__" ) ) ] = "Committee";
 dictGovModel[ String( ethers.utils.id( "__GOV_SIMPLE_MAJORITY__" ) ) ] = "Simple Majority";
-// }
+
 // 0x5eebf3DD83E7d3Db3b81f8cBf57675b51c8b790F CLH
 $("#txtPayeerPKey").val( "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194"); //BRW#99
 
@@ -901,5 +901,43 @@ async function ShowCLHouseProperties() {
   } catch( error ) {
     console.log( error );
     ShowError( error );    
+  }
+}
+
+async function ShowCLHouseUserList() {
+  try {
+    $( "tbody", "#tblusrList").html( "" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+
+    const apiCLH = await InstantiateCLHApi( addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
+
+    const usersListCLH = await apiCLH.GetHouseUserList( houseAddress ); 
+    console.log( "usersListCLH:" , usersListCLH );
+
+    let tblusr = $( "tbody", "#tblusrList")
+
+    for( var i = 0 ; i < usersListCLH.length ; i++ ) {
+      let tbltr = $( '<tr>' )
+      .append(
+        $('<th>').attr( "scope", "col" ).text( usersListCLH[ i ].name )
+      )
+      .append(
+        $('<td>').text( usersListCLH[ i ].walletAddr )
+      )
+      .append(
+        $('<td>').text( usersListCLH[ i ].isManager?"Manager":"Member" )
+      )
+
+      tblusr.append( tbltr )
+    }
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
   }
 }
