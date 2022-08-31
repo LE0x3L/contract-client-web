@@ -4,10 +4,15 @@ const eip712Domain = {
   name: "CLHouse",
   version: "0.0.10",
 }
+let dictGovModel = {};
+dictGovModel[ String( ethers.utils.id( "__GOV_DICTATORSHIP__" ) ) ] = "Dictatorship";
+dictGovModel[ String( ethers.utils.id( "__GOV_COMMITTEE__" ) ) ] = "Committee";
+dictGovModel[ String( ethers.utils.id( "__GOV_SIMPLE_MAJORITY__" ) ) ] = "Simple Majority";
+// }
 // 0x5eebf3DD83E7d3Db3b81f8cBf57675b51c8b790F CLH
-// 840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194 BRW#99
+$("#txtPayeerPKey").val( "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194"); //BRW#99
 
-// Send (Sing & Validate) On/Off Chain Invitation acceptance
+// Send (Sign & Validate) On/Off Chain Invitation acceptance
 async function SendOCInvit( _onChain = false ) {
   try {
     const OCFunction = "OCInvit"
@@ -56,7 +61,7 @@ async function SendOCInvit( _onChain = false ) {
     } );
     console.log( "msgParams: " , msgParams );
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
 
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCInvit(
@@ -112,7 +117,7 @@ async function SendOCInvit( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Proposal to add new member
+// Send (Sign & Validate) On/Off Chain Proposal to add new member
 async function SendOCNewMember( _onChain = false ) {
   try {
     const OCFunction = "OCNewMember"
@@ -205,7 +210,7 @@ async function SendOCNewMember( _onChain = false ) {
     } );
     console.log( "msgParams:" , msgParams );
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewMember(
       newUserWallet,
@@ -272,7 +277,7 @@ async function SendOCNewMember( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Proposal to remove a member
+// Send (Sign & Validate) On/Off Chain Proposal to remove a member
 async function SendOCDelMember( _onChain = false ) {
   try {
     const OCFunction = "OCDelMember"
@@ -348,7 +353,7 @@ async function SendOCDelMember( _onChain = false ) {
     } );
     console.log( "msgParams:" , msgParams );
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCDelMember(
       delUserWallet,
@@ -413,7 +418,7 @@ async function SendOCDelMember( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Proposal to Request to Join
+// Send (Sign & Validate) On/Off Chain Proposal to Request to Join
 async function SendOCReqJoin( _onChain = false ) {
   try {
     const OCFunction = "OCReqJoin"
@@ -479,7 +484,7 @@ async function SendOCReqJoin( _onChain = false ) {
     } );
     console.log( "msgParams:" , msgParams );
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCRequest(
       reqUserName,
@@ -542,7 +547,7 @@ async function SendOCReqJoin( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Vote to Proposal
+// Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCVote( _onChain = false ) {
   try {
     const OCFunction = "OCVote"
@@ -615,8 +620,9 @@ async function SendOCVote( _onChain = false ) {
     console.log( "msgParams:" , msgParams );
 
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature:' , eip712Signature );
+    
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCVote(
       votePropId,
       voteSupport,
@@ -676,7 +682,7 @@ async function SendOCVote( _onChain = false ) {
   }
 }
 
-// Send (Sing & Validate) On/Off Chain Vote to Proposal
+// Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCNewCLH( _onChain = false ) {
   try {
     const OCFunction = "OCNewCLH"
@@ -795,7 +801,7 @@ async function SendOCNewCLH( _onChain = false ) {
     } );
     console.log( "msgParams:" , msgParams );
 
-    const eip712Signature = _onChain ? "0x00" : await EIP712Sing( w3.signerWallet, msgParams );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature:' , eip712Signature );
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewCLH(
       newHouseName,
@@ -864,5 +870,36 @@ async function SendOCNewCLH( _onChain = false ) {
   } catch( error ) {
     console.log( error );
     ShowError( error );
+  }
+}
+
+async function ShowCLHouseProperties() {
+  try {
+    $("[id^=clhPrp]").val( "" );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+
+    const apiCLH = await InstantiateCLHApi( addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
+
+    const propertiesCLH = await apiCLH.GetHouseProperties( houseAddress ); 
+    console.log( "propertiesCLH:" , propertiesCLH );
+
+    $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
+    $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
+    $("#clhPrpMembers").val( propertiesCLH.numActiveMembers-propertiesCLH.numManagerMembers );
+    $("#clhPrpManagers").val( propertiesCLH.numManagerMembers );
+    $("#clhPrpUsers").val( propertiesCLH.numActiveMembers );
+    $("#clhPrpGovModel").val( dictGovModel[ propertiesCLH.HOUSE_GOVERNANCE_MODEL ] );
+    $("#clhPrpGovMaxUsers").val( propertiesCLH.govRuleMaxActiveMembers );
+    $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagerMembers );
+    $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
   }
 }

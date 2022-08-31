@@ -58,9 +58,9 @@ function connectWeb3() {
   });
 }
 
-function EIP712Sing( _signerWallet, _msgParams, _OCFunction ){
+function EIP712Sign( _signerWallet, _msgParams, _OCFunction ){
   return new Promise( ( resolve, reject ) => { 
-    logMsg( "Signing ..." );
+    logMsg( "Signing..." );
     const params = [ _signerWallet, _msgParams ]
     const method = 'eth_signTypedData_v4'
     console.log( 'SIGN REQ ', method, ' params: ', _msgParams );

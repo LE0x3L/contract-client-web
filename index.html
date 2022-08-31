@@ -106,38 +106,39 @@
               </li>
             </ul>
 
-            <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Saved reports</span>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>House Info</span>
               <a class="link-secondary" href="#" aria-label="Add a new report">
-                <span data-feather="plus-circle"></span>
+                <!-- <span data-feather="plus-circle"></span> -->
               </a>
             </h6>
+
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#HouseProperties">
                   <span data-feather="file-text"></span>
-                  Current month
+                  House Properties
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Last quarter
+                  Invitations list
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Social engagement
+                  User List
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Year-end sale
+                  Proposal List
                 </a>
               </li>
-            </ul> -->
+            </ul>
           </div>
         </nav>
 
@@ -549,6 +550,85 @@
 
             </div>
 
+          </div>
+
+          <div id="HouseProperties">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">House Properties</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="mb-3 row">
+                <label for="clhPrpName" class="col-sm-6 col-form-label form-control-sm text-end"><b>Name :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpName" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpPrivate" class="col-sm-6 col-form-label form-control-sm text-end"><b>Private :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpPrivate" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpMembers" class="col-sm-6 col-form-label form-control-sm text-end"><b>Members :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpMembers" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpManagers" class="col-sm-6 col-form-label form-control-sm text-end"><b>Managers :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpManagers" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpUsers" class="col-sm-6 col-form-label form-control-sm text-end"><b>Total Users :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpUsers" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpGovModel" class="col-sm-6 col-form-label form-control-sm text-end"><b>Gov Model :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpGovModel" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpGovMaxUsers" class="col-sm-6 col-form-label form-control-sm text-end"><b>Gov Max Users :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpGovMaxUsers" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpGovMaxManagers" class="col-sm-6 col-form-label form-control-sm text-end"><b>Gov Max Managers :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpGovMaxManagers" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="clhPrpGovMinApproval" class="col-sm-6 col-form-label form-control-sm text-end"><b>Gov Min Approval(%) :</b></label>
+                <div class="col-sm-6">
+                  <input id="clhPrpGovMinApproval" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <button id="btnGetInfoCLH" class="btn btn-outline-info" type="button">Reload CLH Info</button>
+              </div>
+
+            </div>
           </div>
 
         </main>
