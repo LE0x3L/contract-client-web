@@ -1015,7 +1015,7 @@ async function ShowCLFCLHList() {
     //   .append( $('<td>').text( dateTime.toUTCString() ) )
       
     //   tblprp.append( tbltr )
-    }
+    // }
   } catch( error ) {
     console.log( error );
     ShowError( error );    
