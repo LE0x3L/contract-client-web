@@ -8,6 +8,7 @@ let dictGovModel = {};
 dictGovModel[ String( ethers.utils.id( "__GOV_DICTATORSHIP__" ) ) ] = "Dictatorship";
 dictGovModel[ String( ethers.utils.id( "__GOV_COMMITTEE__" ) ) ] = "Committee";
 dictGovModel[ String( ethers.utils.id( "__GOV_SIMPLE_MAJORITY__" ) ) ] = "Simple Majority";
+const proposalType = [ "new User", "remove User", "requestJoin", "changeGovRules", "transferEth", "transferERC20", "swapERC20", "sellERC20", "buyERC20" ]
 
 // 0x5eebf3DD83E7d3Db3b81f8cBf57675b51c8b790F CLH
 $("#txtPayeerPKey").val( "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194"); //BRW#99
@@ -413,7 +414,7 @@ async function SendOCDelMember( _onChain = false ) {
     console.log( "propId:" , propId );
     $( "#iptPropId"+OCFunction ).val( propId )
   } catch( error ) {
-    console.log( error );
+    console.log( error.error.data.message );
     ShowError( error );
   }
 }
@@ -939,5 +940,46 @@ async function ShowCLHouseUserList() {
   } catch( error ) {
     console.log( error );
     ShowError( error );
+  }
+}
+
+// Get and show Proposal list in the house
+async function ShowCLHouseProposalList() {
+  try {
+    $( "tbody", "#tblprpList").html( "" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+
+    const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+    console.log( "daoCLH:", daoCLH );
+
+    const proposalListCLH = await daoCLH.GetProposalList( ); 
+    console.log( "proposalListCLH:" , proposalListCLH );
+
+    let tblprp = $( "tbody", "#tblprpList")
+
+    for( var i = 0 ; i < proposalListCLH.length ; i++ ) {
+      let dateTime = new Date( 1000*proposalListCLH[ i ].deadline )
+
+      let tbltr = $( '<tr>' )
+      .append( $('<th>').attr( "scope", "col" ).text( i ) )
+      .append( $('<td>').text( proposalListCLH[ i ].proponent ) )
+      .append( $('<td>').text( proposalType[ proposalListCLH[ i ].typeProposal ] ) )
+      .append( $('<td>').text( proposalListCLH[ i ].description ) )
+      .append( $('<td>').text( proposalListCLH[ i ].numVotes ) )
+      .append( $('<td>').text( proposalListCLH[ i ].numVotes - proposalListCLH[ i ].againstVotes ) )
+      .append( $('<td>').text( proposalListCLH[ i ].againstVotes ) )
+      .append( $('<td>').text( proposalListCLH[ i ].executed?"Yes":"No" ) )
+      .append( $('<td>').text( dateTime.toUTCString() ) )
+      
+      tblprp.append( tbltr )
+    }
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
   }
 }

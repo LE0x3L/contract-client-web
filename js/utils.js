@@ -6,7 +6,9 @@ function logMsg( msg2log ) {
 function ShowError( error ) {
   console.trace();
   if ( undefined != error.error ){
-    if ( undefined != error.error.reason )
+    if ( undefined != error.error.data.message )
+      logMsg( "ERROR... " + error.error.message );
+    else if ( undefined != error.error.reason )
       logMsg( "ERROR... " + error.error.reason );
     else if ( undefined != error.error.message )
       logMsg( "ERROR... " + error.error.message );
@@ -23,7 +25,7 @@ function ShowError( error ) {
 function connectWeb3() {
   return new Promise( async ( resolve, reject ) => {
     try {
-      const localNet = true
+      const localNet = false
       $("#txtSignerWallet").val( "" )
 
       if ( typeof window.ethereum === 'undefined' )
