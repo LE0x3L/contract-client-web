@@ -28,7 +28,7 @@ function connectWeb3() {
   return new Promise( async ( resolve, reject ) => {
     try {
       $("#txtSignerWallet").val( "" )
-      let chainId = clcfg.localNet ? "0x539" : "0x5";
+      let chainId = localNet ? "0x539" : "0x5";
 
       if ( typeof window.ethereum === 'undefined' )
         throw new Error( "No Metamask detected" );
@@ -42,7 +42,7 @@ function connectWeb3() {
           params: [{ chainId: chainId }]
         });
 
-      chainId = clcfg.localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
+      chainId = localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
       console.log( "chainId: " + chainId )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
