@@ -6,8 +6,8 @@ function logMsg( msg2log ) {
 function ShowError( error ) {
   console.trace();
   if ( undefined != error.error ){
-    if ( undefined != error.error.data.message )
-      logMsg( "ERROR... " + error.error.message );
+    if ( undefined != error.error.data && undefined != error.error.data.message )
+      logMsg( "ERROR... " + error.error.data.message );
     else if ( undefined != error.error.reason )
       logMsg( "ERROR... " + error.error.reason );
     else if ( undefined != error.error.message )
@@ -15,6 +15,8 @@ function ShowError( error ) {
     else
       logMsg( "ERROR... see console" );
   }
+  else if( undefined != error.data && undefined != error.data.message )
+    logMsg( "ERROR... " + error.data.message );
   else if( undefined != error.message )
     logMsg( "ERROR... " + error.message );
   else
@@ -25,8 +27,8 @@ function ShowError( error ) {
 function connectWeb3() {
   return new Promise( async ( resolve, reject ) => {
     try {
-      const localNet = false
       $("#txtSignerWallet").val( "" )
+      let chainId = clcfg.localNet ? "0x539" : "0x5";
 
       if ( typeof window.ethereum === 'undefined' )
         throw new Error( "No Metamask detected" );
@@ -34,18 +36,24 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
-      if( !localNet && 5 != await ethereum.request( { method: 'net_version' } ) )
+      if( chainId != await ethereum.request( { method: 'net_version' } ) )
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: "0x5" }]
+          params: [{ chainId: chainId }]
         });
 
-      const chainId = localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
+      chainId = clcfg.localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
       console.log( "chainId: " + chainId )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
       logMsg( "signerWallet: " + signerWallet[0] )
       $("#txtSignerWallet").val( signerWallet[0] )
+
+      let lstTimeStamp = await ethProvider.getBlock( await ethProvider.getBlockNumber() ) 
+      console.log( "lstTimeStamp", lstTimeStamp )
+      lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp).toUTCString()
+      console.log( "lstTimeStamp", lstTimeStamp )
+      $("#lstTimeStamp").text( lstTimeStamp )
 
       resolve( { 
         "ethProvider" : ethProvider,
