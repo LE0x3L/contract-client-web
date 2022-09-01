@@ -136,18 +136,28 @@
               </li>
               
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#HouseProposalList">
                   <span data-feather="file-text"></span>
                   Proposal List
                 </a>
               </li>
 
-              <!-- <li class="nav-item">
-                <a class="nav-link" href="#">
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>CLFactory</span>
+              <a class="link-secondary" href="#" aria-label="Add a new report">
+                <!-- <span data-feather="plus-circle"></span> -->
+              </a>
+            </h6>
+
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#CLFHousesList">
                   <span data-feather="file-text"></span>
-                  Invitations list
+                  Houses list
                 </a>
-              </li> -->
+              </li>
             </ul>
           </div>
         </nav>
@@ -664,13 +674,10 @@
             </div>
 
             <div class="col-md-12">
-              <div class="d-grid gap-2 col-6 mx-auto">
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetUserListCLH" class="btn btn-outline-info" type="button">Reload User list</button>
               </div>
             </div>
-            <br>
-            <br>
-            <br>
           </div>
 
           <div id="HouseProposalList">
@@ -702,14 +709,50 @@
             </div>
 
             <div class="col-md-12">
-              <div class="d-grid gap-2 col-6 mx-auto">
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetProposalListCLH" class="btn btn-outline-info" type="button">Reload Proposal list</button>
               </div>
             </div>
-            <br>
-            <br>
-            <br>
           </div>
+
+          <div id="CLFHousesList">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">CLF House List</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <table id="tblclfclhList" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Address</th>
+                    <!-- <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Votes</th>
+                    <th scope="col">Yes</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Executed</th>
+                    <th scope="col">Deadline</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-12">
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
+                <button id="btnGetCLFCLHList" class="btn btn-outline-info" type="button">Reload Houses list</button>
+              </div>
+            </div>
+          </div>
+
+          <br>
+          <br>
+          <br>
         </main>
       </div>
     </div>

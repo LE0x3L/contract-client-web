@@ -980,3 +980,44 @@ async function ShowCLHouseProposalList() {
     ShowError( error );    
   }
 }
+
+// Get and show Proposal list in the house
+async function ShowCLFCLHList() {
+  try {
+    $( "tbody", "#tblclfclhList").html( "" )
+
+    // const w3 = await connectWeb3();
+    // console.log( "w3:" , w3 );
+
+    // const houseAddress = await GetCLHAddress();
+    // console.log( "houseAddress:" , houseAddress );
+
+    // const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+    // console.log( "daoCLH:", daoCLH );
+
+    // const proposalListCLH = await daoCLH.GetProposalList( ); 
+    // console.log( "proposalListCLH:" , proposalListCLH );
+
+    // let tblprp = $( "tbody", "#tblclfclhList")
+
+    // for( var i = 0 ; i < proposalListCLH.length ; i++ ) {
+    //   let dateTime = new Date( 1000*proposalListCLH[ i ].deadline )
+
+    //   let tbltr = $( '<tr>' )
+    //   .append( $('<th>').attr( "scope", "col" ).text( i ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].proponent ) )
+    //   .append( $('<td>').text( proposalType[ proposalListCLH[ i ].typeProposal ] ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].description ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].numVotes ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].numVotes - proposalListCLH[ i ].againstVotes ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].againstVotes ) )
+    //   .append( $('<td>').text( proposalListCLH[ i ].executed?"Yes":"No" ) )
+    //   .append( $('<td>').text( dateTime.toUTCString() ) )
+      
+    //   tblprp.append( tbltr )
+    }
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
+  }
+}
