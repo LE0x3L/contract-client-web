@@ -28,7 +28,6 @@ function connectWeb3() {
   return new Promise( async ( resolve, reject ) => {
     try {
       $("#txtSignerWallet").val( "" )
-      let chainId = localNet ? "0x539" : "0x5";
 
       if ( typeof window.ethereum === 'undefined' )
         throw new Error( "No Metamask detected" );
@@ -36,24 +35,28 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
-      // if( chainId != await ethereum.request( { method: 'net_version' } ) )
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chainId }]
+        params: [{ chainId: appcfg.domEIP712IdChain }]
       });
 
-      chainId = localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
-      console.log( "chainId: " + chainId )
+      chainId = await ethereum.request( { method: 'net_version' } )
+      console.log( "chainId:", chainId )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
       logMsg( "signerWallet: " + signerWallet[0] )
       $("#txtSignerWallet").val( signerWallet[0] )
 
-      let lstTimeStamp = await ethProvider.getBlock( await ethProvider.getBlockNumber() ) 
-      console.log( "lstTimeStamp", lstTimeStamp )
-      lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp).toUTCString()
-      console.log( "lstTimeStamp", lstTimeStamp )
-      $("#lstTimeStamp").text( lstTimeStamp )
+      await ethProvider.getBlockNumber()
+      .then( async ( resolve ) => { 
+        console.log( 'getBlockNumber', resolve )
+        let lstTimeStamp = await ethProvider.getBlock( resolve ) 
+        console.log( "lstTimeStamp", lstTimeStamp )
+        lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp).toUTCString()
+        console.log( "lstTimeStamp", lstTimeStamp )
+        $("#lstTimeStamp").text( lstTimeStamp )
+      } )
+      .catch( ( error ) => { console.log( 'getBlockNumber FAIL' , error ) } )
 
       resolve( { 
         "ethProvider" : ethProvider,

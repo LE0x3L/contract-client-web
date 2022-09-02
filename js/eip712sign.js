@@ -5,10 +5,10 @@ dictGovModel[ String( ethers.utils.id( "__GOV_SIMPLE_MAJORITY__" ) ) ] = "Simple
 const proposalType = [ "new User", "remove User", "requestJoin", "changeGovRules", "transferEth", "transferERC20", "swapERC20", "sellERC20", "buyERC20" ]
 
 if( 0 == $("#txtPayeerPKey").val().length )
-  $("#txtPayeerPKey").val( clcfg.pKeyPayeer );
+  $("#txtPayeerPKey").val( appcfg.pKeyPayeer );
 
 // if( 0 == $("#txtAddrCLHouse").val().length )
-//   $("#txtAddrCLHouse").val( clcfg.defaultCLH );
+//   $("#txtAddrCLHouse").val( appcfg.defaultCLH );
 
 // Send (Sign & Validate) On/Off Chain Invitation acceptance
 async function SendOCInvit( _onChain = false ) {
@@ -27,7 +27,7 @@ async function SendOCInvit( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress: " , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -48,9 +48,9 @@ async function SendOCInvit( _onChain = false ) {
       },
       primaryType:"strOCInvit",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
       message:{
@@ -168,7 +168,7 @@ async function SendOCNewMember( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress: " , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -193,9 +193,9 @@ async function SendOCNewMember( _onChain = false ) {
       },
       primaryType:"strOCNewMember",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
       message:{
@@ -315,7 +315,7 @@ async function SendOCDelMember( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress: " , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -338,9 +338,9 @@ async function SendOCDelMember( _onChain = false ) {
       },
       primaryType:"strOCDelMember",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
       message:{
@@ -448,7 +448,7 @@ async function SendOCReqJoin( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress: " , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -470,9 +470,9 @@ async function SendOCReqJoin( _onChain = false ) {
       },
       primaryType:"strOCRequest",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
       message:{
@@ -581,7 +581,7 @@ async function SendOCVote( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -604,9 +604,9 @@ async function SendOCVote( _onChain = false ) {
       },
       primaryType:"strOCVote",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
       message:{
@@ -752,10 +752,10 @@ async function SendOCNewCLH( _onChain = false ) {
     }
     console.log( "newHouseWhiteList: " , newHouseWhiteList );
     
-    const factoryAddress = await ethers.utils.getAddress( clcfg.addrCLFactory );;
+    const factoryAddress = await ethers.utils.getAddress( appcfg.addrCLFactory );;
     console.log( "factoryAddress:" , factoryAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
@@ -782,9 +782,9 @@ async function SendOCNewCLH( _onChain = false ) {
       },
       primaryType:"strOCNewCLH",
       domain:{
-        name: clcfg.clDomainEIP712.name,
-        version: clcfg.clDomainEIP712.version,
-        chainId: w3.chainId,
+        name: appcfg.clDomainEIP712.name,
+        version: appcfg.clDomainEIP712.version,
+        chainId: appcfg.domEIP712IdChain,
         verifyingContract: factoryAddress
       },
       message:{
@@ -881,7 +881,7 @@ async function ShowCLHouseProperties() {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const propertiesCLH = await apiCLH.GetHouseProperties( houseAddress ); 
@@ -912,7 +912,7 @@ async function ShowCLHouseUserList() {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( clcfg.addrApiCLH, w3.ethProvider );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
     const usersListCLH = await apiCLH.GetHouseUserList( houseAddress ); 
@@ -989,7 +989,7 @@ async function ShowCLFCLHList() {
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
 
-    const factoryAddress = await ethers.utils.getAddress( clcfg.addrCLFactory );;
+    const factoryAddress = await ethers.utils.getAddress( appcfg.addrCLFactory );;
     console.log( "factoryAddress:" , factoryAddress );
 
     const payeerWallet = await GetPayeer( w3.ethProvider );

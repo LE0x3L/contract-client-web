@@ -1,25 +1,23 @@
-const localNet = false;
+const develNet = false;
 
-const devcfg = {
+const cfgLocalNet = {
     addrApiCLH : "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87",
     addrCLFactory : "0xe0aA552A10d7EC8760Fc6c246D391E698a82dDf9",
     defaultCLH : "0x321824B9e41754539061F1d5110d8e77f6F2D467",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
-    clDomainEIP712 : {
-      name: "CLHouse",
-      version: "0.0.10",
-    }
+    domEIP712Name: "CLHouse",
+    domEIP712Version: "0.0.10",
+    domEIP712IdChain: "0x539",
 };
 
-const prdcfg = {
+const cfgTestNet = {
     addrApiCLH : "0x2A52BDCF5c029028bf61c3fB20D5a0dFe560EF61",
     addrCLFactory : "0x5153fb835508dAe6B17f9239673843F3a117854e",
     defaultCLH : "0x648CB63237Ad666Ea54A66411C6a79D929346C74",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
-    clDomainEIP712 : {
-      name: "CLHouse",
-      version: "0.0.10",
-    }
+    domEIP712Name: "CLHouse",
+    domEIP712Version: "0.0.10",
+    domEIP712IdChain: "0x5",
 };
 
-const clcfg = localNet ? devcfg : prdcfg;
+const appcfg = develNet ? cfgLocalNet : cfgTestNet;
