@@ -36,11 +36,11 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
-      if( chainId != await ethereum.request( { method: 'net_version' } ) )
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: chainId }]
-        });
+      // if( chainId != await ethereum.request( { method: 'net_version' } ) )
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainId }]
+      });
 
       chainId = localNet ? 1337 : await ethereum.request( { method: 'net_version' } )
       console.log( "chainId: " + chainId )
@@ -60,7 +60,6 @@ function connectWeb3() {
         "chainId" : +chainId,
         "signerWallet" : ethers.utils.getAddress( signerWallet[0] )
       })
-
     } catch( error ) {
       console.log( error );
       ShowError( error );
