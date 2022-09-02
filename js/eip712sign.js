@@ -981,41 +981,35 @@ async function ShowCLHouseProposalList() {
   }
 }
 
-// Get and show Proposal list in the house
+// Get and show House list in the house
 async function ShowCLFCLHList() {
   try {
     $( "tbody", "#tblclfclhList").html( "" )
 
-    // const w3 = await connectWeb3();
-    // console.log( "w3:" , w3 );
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
 
-    // const houseAddress = await GetCLHAddress();
-    // console.log( "houseAddress:" , houseAddress );
+    const factoryAddress = await ethers.utils.getAddress( clcfg.addrCLFactory );;
+    console.log( "factoryAddress:" , factoryAddress );
 
-    // const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
-    // console.log( "daoCLH:", daoCLH );
+    const payeerWallet = await GetPayeer( w3.ethProvider );
+    console.log( "payeerWallet:" , payeerWallet );
 
-    // const proposalListCLH = await daoCLH.GetProposalList( ); 
-    // console.log( "proposalListCLH:" , proposalListCLH );
+    const CLFactory = await InstantiateCLF( factoryAddress, w3.ethProvider );
+    console.log( "CLFactory:", CLFactory );
 
-    // let tblprp = $( "tbody", "#tblclfclhList")
+    const clhList = await CLFactory.GetHouseList();
+    console.log( "clhList:", clhList );
 
-    // for( var i = 0 ; i < proposalListCLH.length ; i++ ) {
-    //   let dateTime = new Date( 1000*proposalListCLH[ i ].deadline )
+    let tblprp = $( "tbody", "#tblclfclhList")
 
-    //   let tbltr = $( '<tr>' )
-    //   .append( $('<th>').attr( "scope", "col" ).text( i ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].proponent ) )
-    //   .append( $('<td>').text( proposalType[ proposalListCLH[ i ].typeProposal ] ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].description ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].numVotes ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].numVotes - proposalListCLH[ i ].againstVotes ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].againstVotes ) )
-    //   .append( $('<td>').text( proposalListCLH[ i ].executed?"Yes":"No" ) )
-    //   .append( $('<td>').text( dateTime.toUTCString() ) )
+    for( var i = 0 ; i < clhList.length ; i++ ) {
+      let tbltr = $( '<tr>' )
+      .append( $('<th>').attr( "scope", "col" ).text( i ) )
+      .append( $('<td>').text( clhList[ i ] ) )
       
-    //   tblprp.append( tbltr )
-    // }
+      tblprp.append( tbltr )
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );    
