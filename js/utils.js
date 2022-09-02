@@ -185,3 +185,17 @@ function InstantiateCLF( _factoryAddress, _signer ) {
     }
   });
 }
+
+function BtnLoading( idBtn, txtBtn="Loading..." ) {
+  let btnOldTxt = $( idBtn ).text()
+  $( idBtn ).attr( 'oldText', btnOldTxt )
+  $( idBtn ).attr( 'disabled', true )
+  let spinHtml = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '
+  $( idBtn ).html( spinHtml + txtBtn )
+}
+
+function BtnNormal( idBtn ) {
+  let btnOldTxt = $( idBtn ).attr( 'oldText' )
+  $( idBtn ).attr( 'disabled', false )
+  $( idBtn ).html( btnOldTxt )
+}

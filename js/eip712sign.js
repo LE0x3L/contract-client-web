@@ -12,6 +12,7 @@ if( 0 == $("#txtPayeerPKey").val().length )
 
 // Send (Sign & Validate) On/Off Chain Invitation acceptance
 async function SendOCInvit( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit", "Sendind..." )
   try {
     const OCFunction = "OCInvit"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -48,8 +49,8 @@ async function SendOCInvit( _onChain = false ) {
       },
       primaryType:"strOCInvit",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
@@ -113,10 +114,12 @@ async function SendOCInvit( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit" )
 }
 
 // Send (Sign & Validate) On/Off Chain Proposal to add new member
 async function SendOCNewMember( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainNewMember" : "#btnSendOffChainNewMember", "Sendind..." )
   try {
     const OCFunction = "OCNewMember"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -193,8 +196,8 @@ async function SendOCNewMember( _onChain = false ) {
       },
       primaryType:"strOCNewMember",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
@@ -273,10 +276,12 @@ async function SendOCNewMember( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainNewMember" : "#btnSendOffChainNewMember" )
 }
 
 // Send (Sign & Validate) On/Off Chain Proposal to remove a member
 async function SendOCDelMember( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainDelMember" : "#btnSendOffChainDelMember", "Sendind..." )
   try {
     const OCFunction = "OCDelMember"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -338,8 +343,8 @@ async function SendOCDelMember( _onChain = false ) {
       },
       primaryType:"strOCDelMember",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
@@ -414,10 +419,12 @@ async function SendOCDelMember( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainDelMember" : "#btnSendOffChainDelMember" )
 }
 
 // Send (Sign & Validate) On/Off Chain Proposal to Request to Join
 async function SendOCReqJoin( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainReqJoin" : "#btnSendOffChainReqJoin", "Sendind..." )
   try {
     const OCFunction = "OCReqJoin"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -470,8 +477,8 @@ async function SendOCReqJoin( _onChain = false ) {
       },
       primaryType:"strOCRequest",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
@@ -543,10 +550,12 @@ async function SendOCReqJoin( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainReqJoin" : "#btnSendOffChainReqJoin" )
 }
 
 // Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCVote( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainVote" : "#btnSendOffChainVote", "Sendind..." )
   try {
     const OCFunction = "OCVote"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -604,8 +613,8 @@ async function SendOCVote( _onChain = false ) {
       },
       primaryType:"strOCVote",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: houseAddress
       },
@@ -678,10 +687,13 @@ async function SendOCVote( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainVote" : "#btnSendOffChainVote" )
+
 }
 
 // Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCNewCLH( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainNewCLH" : "#btnSendOffChainNewCLH", "Sendind..." )
   try {
     const OCFunction = "OCNewCLH"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
@@ -782,8 +794,8 @@ async function SendOCNewCLH( _onChain = false ) {
       },
       primaryType:"strOCNewCLH",
       domain:{
-        name: appcfg.clDomainEIP712.name,
-        version: appcfg.clDomainEIP712.version,
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
         chainId: appcfg.domEIP712IdChain,
         verifyingContract: factoryAddress
       },
@@ -869,9 +881,11 @@ async function SendOCNewCLH( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( _onChain ? "#btnSendOnChainNewCLH" : "#btnSendOffChainNewCLH" )
 }
 
 async function ShowCLHouseProperties() {
+  BtnLoading( "#btnGetInfoCLH" )
   try {
     $("[id^=clhPrp]").val( "" );
 
@@ -900,9 +914,11 @@ async function ShowCLHouseProperties() {
     console.log( error );
     ShowError( error );    
   }
+  BtnNormal( "#btnGetInfoCLH" );
 }
 
 async function ShowCLHouseUserList() {
+  BtnLoading( "#btnGetUserListCLH" )
   try {
     $( "tbody", "#tblusrList").html( "" )
 
@@ -938,10 +954,12 @@ async function ShowCLHouseUserList() {
     console.log( error );
     ShowError( error );
   }
+  BtnNormal( "#btnGetUserListCLH" );
 }
 
 // Get and show Proposal list in the house
 async function ShowCLHouseProposalList() {
+  BtnLoading( "#btnGetProposalListCLH" )
   try {
     $( "tbody", "#tblprpList").html( "" )
 
@@ -979,10 +997,12 @@ async function ShowCLHouseProposalList() {
     console.log( error );
     ShowError( error );    
   }
+  BtnNormal( "#btnGetProposalListCLH" );
 }
 
 // Get and show House list in the house
 async function ShowCLFCLHList() {
+  BtnLoading( "#btnGetCLFCLHList" )
   try {
     $( "tbody", "#tblclfclhList").html( "" )
 
@@ -1014,4 +1034,5 @@ async function ShowCLFCLHList() {
     console.log( error );
     ShowError( error );    
   }
+  BtnNormal( "#btnGetCLFCLHList" );
 }
