@@ -6,7 +6,6 @@
     <meta name="description" content="CL web UI to test contract interactions">
     <meta name="author" content="LeoUrrego">
     <title>CL Contract Web UI </title>
-    
 
     <!-- Bootstrap core CSS -->
     <link
@@ -31,12 +30,10 @@
       }
     </style>
 
-    
     <!-- Custom styles for this template -->
     <link href="./css/dashboard.css" rel="stylesheet">
   </head>
   <body>
-
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">CL Contract Web UI</a>
       <button 
@@ -75,40 +72,46 @@
                   Dashboard
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#newCLH">
                   <span data-feather="home"></span>
                   Create House
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#newMember">
                   <span data-feather="user-plus"></span>
                   Invite Member
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#delMember">
                   <span data-feather="user-minus"></span>
                   Remove Member
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#AcceptInvit">
                   <span data-feather="user-check"></span>
                   Accept Invitation
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#requestJoin">
                   <span data-feather="git-pull-request"></span>
                   Request to Join
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#voteproposal">
                   <span data-feather="edit"></span>
-                  Vote proposal
+                  Vote Proposal
                 </a>
               </li>
             </ul>
@@ -141,7 +144,6 @@
                   Proposal List
                 </a>
               </li>
-
             </ul>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
@@ -155,7 +157,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="#CLFHousesList">
                   <span data-feather="file-text"></span>
-                  Houses list
+                  House list
                 </a>
               </li>
             </ul>
@@ -163,7 +165,6 @@
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Dashboard</h1>
             <!-- <div class="btn-toolbar mb-2 mb-md-0">
@@ -180,17 +181,15 @@
 
           <!-- General Fields -->
           <div class="row">
-
             <div class="col-xl-8 offset-xl-2">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="txtAddrCLHouse">
-                <label for="txtAddrCLHouse">CLHouse address</label>
+                <label for="txtAddrCLHouse">CLHouse Address</label>
               </div>
 
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="txtPayeerPKey">
-                <label for="txtPayeerPKey">Payeer Private Key </label>
+                <label for="txtPayeerPKey">Payeer Private Key</label>
               </div>
 
               <div class="form-floating mb-3">
@@ -202,38 +201,35 @@
                 <input type="text" class="form-control" id="txtPayeerWallet" disabled>
                 <label for="txtPayeerWallet">Payeer Wallet address</label>
               </div>
-
             </div>
-
           </div>
           
           <br>
 
           <!-- Create House -->
           <div id="newCLH" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Create CL House</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-md-6 offset-md-3">
-              <legend>User fields</legend>
+              <legend>Visible Fields (UI)</legend>
 
               <div class="form-floating mb-3">
                 <input id="iptNameNewCLH" type="text" class="form-control">
-                <label for="iptNameNewCLH">House name</label>
+                <label for="iptNameNewCLH">House Name</label>
               </div>
 
               Private:
+
               <div class="form-check form-check-inline mb-3">
                 <input name="ipPrivateNewCLH" id="clhIsPriv" class="form-check-input" type="radio" value="1">
                 <label class="form-check-label" for="clhIsPriv">Yes</label>
               </div>
+
               <div class="form-check form-check-inline mb-3">
                 <input name="ipPrivateNewCLH" id="clhNotPriv" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="clhNotPriv">No</label>
@@ -255,7 +251,7 @@
 
               <div class="form-floating mb-3">
                 <input id="iptMaxMembersNewCLH" type="text" class="form-control">
-                <label for="iptMaxMembersNewCLH">max Members</label>
+                <label for="iptMaxMembersNewCLH">max Users</label>
               </div>
 
               <div class="form-floating mb-3">
@@ -272,11 +268,9 @@
                 <button id="btnSendOffChainNewCLH" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
                 <button id="btnSendOnChainNewCLH" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
-
             </div>
 
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input id="iptSignOCNewCLH" type="text" class="form-control" disabled>
                 <label for="iptSignOCNewCLH">Signature</label>
@@ -286,27 +280,22 @@
                 <input id="iptAddrOCNewCLH" type="text" class="form-control" disabled>
                 <label for="iptAddrOCNewCLH">New House Address</label>
               </div>
-
             </div>
-
           </div>
 
           <br>
 
           <!-- New Member -->
           <div id="newMember" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
-                <h2 class="alert-heading">Proposal to Invite a New Member</h2>
+                <h2 class="alert-heading">Proposal to Add a New User (Manager or Member)</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-md-6 offset-md-3">
-              <legend>User fields</legend>
+              <legend>Visible Fields (UI)</legend>
 
               <div class="form-floating mb-3">
                 <input id="iptNewMmrAddr" type="text" class="form-control">
@@ -328,13 +317,14 @@
                 <input name="iptNewMmrIsManager" id="newMmrIsManager" class="form-check-input" type="radio" value="1">
                 <label class="form-check-label" for="newMmrIsManager">Yes</label>
               </div>
+
               <div class="form-check form-check-inline mb-3">
                 <input name="iptNewMmrIsManager" id="newMmrNotManager" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="newMmrNotManager">No</label>
               </div>
 
-              <legend>Background fields</legend>
-              
+              <legend>Backend Function</legend>
+
               <div class="form-floating mb-3">
                 <input id="iptNewMmrDelay" type="text" class="form-control">
                 <label for="iptNewMmrDelay">Delay Time (in Sec)</label>                  
@@ -344,11 +334,9 @@
                 <button id="btnSendOffChainNewMember" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
                 <button id="btnSendOnChainNewMember" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
-
             </div>
 
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCNewMember" disabled>
                 <label for="iptSignOCNewMember">Signature</label>
@@ -358,27 +346,22 @@
                 <input id="iptPropIdOCNewMember" type="text" class="form-control" disabled>
                 <label for="iptPropIdOCNewMember">PropId</label>
               </div>
-
             </div>
-
           </div>
 
           <br>
 
-          <!-- Del Member -->
+          <!-- Del User -->
           <div id="delMember" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
-                <h2 class="alert-heading">Proposal to Remove a Member</h2>
+                <h2 class="alert-heading">Proposal to Remove an User</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-md-6 offset-md-3">
-              <legend>User fields</legend>
+              <legend>Visible Fields (UI)</legend>
 
               <div class="form-floating mb-3">
                 <input id="iptDelMmrAddr" type="text" class="form-control">
@@ -390,7 +373,7 @@
                 <label for="iptDelMmrDescrip">Proposal Description</label>
               </div>
 
-              <legend>Background fields</legend>
+              <legend>Backend Function</legend>
               
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptDelMmrDelay">
@@ -405,7 +388,6 @@
             </div>
 
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCDelMember" disabled>
                 <label for="iptSignOCDelMember">Signature</label>
@@ -415,32 +397,28 @@
                 <input id="iptPropIdOCDelMember" type="text" class="form-control" disabled>
                 <label for="iptPropIdOCDelMember">PropId</label>
               </div>
-
             </div>
-
           </div>
 
           <br>
 
           <!-- Accept/Reject Invitation -->
           <div id="AcceptInvit" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Accept/Reject Invitation</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-lg-6 offset-md-3">
+              Accept Invitation:
 
-              Accept Invitation: 
               <div class="form-check form-check-inline mb-3">
                 <input name="iptAcceptOCInvit" id="AcceptOCInvit" class="form-check-input" type="radio" value="1">
                 <label class="form-check-label" for="AcceptOCInvit">Yes</label>
               </div>
+
               <div class="form-check form-check-inline mb-3">
                 <input name="iptAcceptOCInvit" id="RejectOCInvit" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="RejectOCInvit">No</label>
@@ -450,36 +428,29 @@
                 <button id="btnSendOffChainInvit" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
                 <button id="btnSendOnChainInvit" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
-
             </div>
             
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCInvit" disabled>
                 <label for="iptSignOCInvit">Signature</label>
               </div>
-
             </div>
-
           </div>
           
           <br>
 
           <!-- Request to Join -->
           <div id="requestJoin" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Request to join</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-md-6 offset-md-3">
-              <legend>User fields</legend>
+              <legend>Visible Fields (UI)</legend>
 
               <div class="form-floating mb-3">
                 <input id="iptReqJoinName" type="text" class="form-control">
@@ -495,11 +466,9 @@
                 <button id="btnSendOffChainReqJoin" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
                 <button id="btnSendOnChainReqJoin" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
-
             </div>
 
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCReqJoin" disabled>
                 <label for="iptSignOCReqJoin">Signature</label>
@@ -509,18 +478,14 @@
                 <input type="text" class="form-control" id="iptPropIdOCReqJoin" disabled>
                 <label for="iptPropIdOCReqJoin">PropId</label>
               </div>
-
             </div>
-
           </div>
 
           <br>
 
           <!-- Vote Proposal -->
           <div id="voteproposal" class="row g-3">
-
             <div class="col-lg-12">
-
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Vote Proposal</h2>
                 <hr>
@@ -529,9 +494,10 @@
             </div>
 
             <div class="col-md-8 offset-md-2">
-              <legend>User fields</legend>
+              <legend>Visible Fields (UI)</legend>
 
-              Vote:  
+              Vote:
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="iptSupportOCVote" id="voteTrue" value="1">
                 <label class="form-check-label" for="voteTrue">Accept</label>
@@ -547,7 +513,7 @@
                 <label for="txtJustOCVote">Justification Or Comments</label>
               </div>
 
-              <legend>Background fields</legend>
+              <legend>Backend Function</legend>
               
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptPropIdOCVote">
@@ -558,18 +524,14 @@
                 <button id="btnSendOffChainVote" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
                 <button id="btnSendOnChainVote" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
-
             </div>
 
             <div class="col-lg-12">
-
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="iptSignOCVote" disabled>
                 <label for="iptSignOCVote">Signature</label>
               </div>
-
             </div>
-
           </div>
 
           <div id="HouseProperties">
@@ -665,7 +627,6 @@
                     <th scope="col">Name</th>
                     <th scope="col">Wallet</th>
                     <th scope="col">Role</th>
-                    <!-- <th scope="col">Balance</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -718,7 +679,7 @@
           <div id="CLFHousesList">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
-                <h2 class="alert-heading">CLF House List</h2>
+                <h2 class="alert-heading">CLFactory House List</h2>
                 <hr>
               </div>
             </div>

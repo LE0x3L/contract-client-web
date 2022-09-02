@@ -88,7 +88,7 @@ async function SendOCInvit( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = jQuery('<a>')
     .attr(
       'href',
@@ -244,7 +244,7 @@ async function SendOCNewMember( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = jQuery('<a>')
     .attr(
       'href',
@@ -383,7 +383,7 @@ async function SendOCDelMember( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
@@ -512,7 +512,7 @@ async function SendOCReqJoin( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
@@ -651,7 +651,7 @@ async function SendOCVote( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx:", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
@@ -838,7 +838,7 @@ async function SendOCNewCLH( _onChain = false ) {
       eip712Signature
     );
     console.log( "ethTx:", ethTx );
-    logMsg( "Sent, Wait confirmation... " );
+    logMsg( "Sent, Waiting confirmation... " );
     let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
