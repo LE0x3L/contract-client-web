@@ -35,3 +35,4 @@ $("#btnGetInfoCLH").click( ShowCLHouseProperties );
 $("#btnGetUserListCLH").click( ShowCLHouseUserList );
 $("#btnGetProposalListCLH").click( ShowCLHouseProposalList );
 $("#btnGetCLFCLHList").click( ShowCLFCLHList );
+$("#btnGetInvitationListCLH").click( ShowCLHouseInvitationList );

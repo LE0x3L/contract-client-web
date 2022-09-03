@@ -1036,3 +1036,53 @@ async function ShowCLFCLHList() {
   }
   BtnNormal( "#btnGetCLFCLHList" );
 }
+
+// Get and show Invitation list in the house
+async function ShowCLHouseInvitationList() {
+  BtnLoading( "#btnGetInvitationListCLH" )
+  try {
+    $( "tbody", "#tblinvList").html( "" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+
+    const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+    console.log( "daoCLH:", daoCLH );
+
+    const arrProposal = await daoCLH.GetProposalList( ); 
+    console.log( "arrProposal:" , arrProposal );
+
+    const arrDataNewUser = await daoCLH.GetArrDataPropAddMember(); 
+    console.log( "arrDataNewUser:" , arrDataNewUser );
+
+    let tblprp = $( "tbody", "#tblinvList")
+
+    for( var i = 0 ; i < arrDataNewUser.length ; i++ ) {
+      let propId = await daoCLH.mapInvitationMember( arrDataNewUser[ i ].walletAddr );
+      console.log( "propId:" , propId );
+
+      // if( propId && w3.timestamp < +arrProposal[ propId ].deadline) {
+      if( 0 != propId ) {
+        // console.log( "timestamp", w3.timestamp , +arrProposal[ propId ].deadline )
+        let dateTime = new Date( 1000*arrProposal[ propId ].deadline )
+        
+        let tbltr = $( '<tr>' )
+        .append( $('<th>').attr( "scope", "col" ).text( propId ) )
+        .append( $('<td>').text( arrDataNewUser[ i ].name ) )
+        .append( $('<td>').text( arrDataNewUser[ i ].walletAddr ) )
+        .append( $('<td>').text( arrDataNewUser[ i ].isManager?"Manager":"Member" ) )
+        .append( $('<td>').text( w3.timestamp > +arrProposal[ propId ].deadline?"Yes":"No" ) )
+        .append( $('<td>').text( dateTime.toUTCString() ) );
+        
+        tblprp.append( tbltr )
+      }
+    }
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
+  }
+  BtnNormal( "#btnGetInvitationListCLH" );
+}

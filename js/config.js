@@ -1,4 +1,4 @@
-const develNet = false;
+const develNet = true;
 
 const cfgLocalNet = {
     addrApiCLH : "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87",

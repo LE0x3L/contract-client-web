@@ -47,12 +47,14 @@ function connectWeb3() {
       logMsg( "signerWallet: " + signerWallet[0] )
       $("#txtSignerWallet").val( signerWallet[0] )
 
+      let blockTimestamp;
       await ethProvider.getBlockNumber()
       .then( async ( resolve ) => { 
         console.log( 'getBlockNumber', resolve )
         let lstTimeStamp = await ethProvider.getBlock( resolve ) 
         console.log( "lstTimeStamp", lstTimeStamp )
-        lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp).toUTCString()
+        blockTimestamp = lstTimeStamp.timestamp
+        lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp ).toUTCString()
         console.log( "lstTimeStamp", lstTimeStamp )
         $("#lstTimeStamp").text( lstTimeStamp )
       } )
@@ -61,7 +63,8 @@ function connectWeb3() {
       resolve( { 
         "ethProvider" : ethProvider,
         "chainId" : +chainId,
-        "signerWallet" : ethers.utils.getAddress( signerWallet[0] )
+        "signerWallet" : ethers.utils.getAddress( signerWallet[0] ),
+        "timestamp": blockTimestamp
       })
     } catch( error ) {
       console.log( error );
