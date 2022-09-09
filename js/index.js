@@ -19,11 +19,11 @@ $("#btnSendOffChainNewCLH").click( () => { SendOCNewCLH( false ) } );
 $("#btnSendOnChainInvit").click( () => { SendOCInvit( true ) } );
 $("#btnSendOffChainInvit").click( () => { SendOCInvit( false ) } );
 
-$("#btnSendOnChainNewMember").click( () => { SendOCNewMember( true ) } );
-$("#btnSendOffChainNewMember").click( () => { SendOCNewMember( false ) } );
+$("#btnSendOnChainNewUser").click( () => { SendOCNewUser( true ) } );
+$("#btnSendOffChainNewUser").click( () => { SendOCNewUser( false ) } );
 
-$("#btnSendOnChainDelMember").click( () => { SendOCDelMember( true ) } );
-$("#btnSendOffChainDelMember").click( () => { SendOCDelMember( false ) } );
+$("#btnSendOnChainDelUser").click( () => { SendOCDelUser( true ) } );
+$("#btnSendOffChainDelUser").click( () => { SendOCDelUser( false ) } );
 
 $("#btnSendOnChainReqJoin").click( () => { SendOCReqJoin( true ) } );
 $("#btnSendOffChainReqJoin").click( () => { SendOCReqJoin( false ) } );

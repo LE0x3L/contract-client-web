@@ -160,7 +160,7 @@ function InstantiateCLH( _houseAddress, _signer ) {
 function InstantiateCLHApi( _ApiAddress, _ethProvider ) {
   return new Promise( async ( resolve, reject ) => {
     try {
-      const contractData = await $.getJSON( "./abis/ApiCLHouse.json" );
+      const contractData = await $.getJSON( "./abis/CLHouseApi.json" );
       resolve( new ethers.Contract(
         _ApiAddress,
         contractData.abi,

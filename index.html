@@ -81,16 +81,16 @@
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="#newMember">
+                <a class="nav-link" href="#newUser">
                   <span data-feather="user-plus"></span>
-                  Invite Member
+                  Invite User
                 </a>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="#delMember">
+                <a class="nav-link" href="#delUser">
                   <span data-feather="user-minus"></span>
-                  Remove Member
+                  Remove User
                 </a>
               </li>
 
@@ -250,8 +250,8 @@
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptMaxMembersNewCLH" type="text" class="form-control">
-                <label for="iptMaxMembersNewCLH">max Users</label>
+                <input id="iptMaxUsersNewCLH" type="text" class="form-control">
+                <label for="iptMaxUsersNewCLH">max Users</label>
               </div>
 
               <div class="form-floating mb-3">
@@ -285,11 +285,11 @@
 
           <br>
 
-          <!-- New Member -->
-          <div id="newMember" class="row g-3">
+          <!-- New User -->
+          <div id="newUser" class="row g-3">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
-                <h2 class="alert-heading">Proposal to Add a New User (Manager or Member)</h2>
+                <h2 class="alert-heading">Proposal to Add a New User (Manager or User)</h2>
                 <hr>
               </div>
             </div>
@@ -298,53 +298,53 @@
               <legend>Visible Fields (UI)</legend>
 
               <div class="form-floating mb-3">
-                <input id="iptNewMmrAddr" type="text" class="form-control">
-                <label for="iptNewMmrAddr">User Wallet</label>
+                <input id="iptNewUsrAddr" type="text" class="form-control">
+                <label for="iptNewUsrAddr">User Wallet</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptNewMmrName" type="text" class="form-control">
-                <label for="iptNewMmrName">User Name</label>
+                <input id="iptNewUsrName" type="text" class="form-control">
+                <label for="iptNewUsrName">User Name</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptNewMmrDescrip" type="text" class="form-control">
-                <label for="iptNewMmrDescrip">Proposal Description</label>
+                <input id="iptNewUsrDescrip" type="text" class="form-control">
+                <label for="iptNewUsrDescrip">Proposal Description</label>
               </div>
 
               Is Manager:
               <div class="form-check form-check-inline mb-3">
-                <input name="iptNewMmrIsManager" id="newMmrIsManager" class="form-check-input" type="radio" value="1">
-                <label class="form-check-label" for="newMmrIsManager">Yes</label>
+                <input name="iptNewUsrIsManager" id="newUsrIsManager" class="form-check-input" type="radio" value="1">
+                <label class="form-check-label" for="newUsrIsManager">Yes</label>
               </div>
 
               <div class="form-check form-check-inline mb-3">
-                <input name="iptNewMmrIsManager" id="newMmrNotManager" class="form-check-input" type="radio" value="0">
-                <label class="form-check-label" for="newMmrNotManager">No</label>
+                <input name="iptNewUsrIsManager" id="newUsrNotManager" class="form-check-input" type="radio" value="0">
+                <label class="form-check-label" for="newUsrNotManager">No</label>
               </div>
 
               <legend>Backend Function</legend>
 
               <div class="form-floating mb-3">
-                <input id="iptNewMmrDelay" type="text" class="form-control">
-                <label for="iptNewMmrDelay">Delay Time (in Sec)</label>                  
+                <input id="iptNewUsrDelay" type="text" class="form-control">
+                <label for="iptNewUsrDelay">Delay Time (in Sec)</label>                  
               </div>
 
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnSendOffChainNewMember" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
-                <button id="btnSendOnChainNewMember" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+                <button id="btnSendOffChainNewUser" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
+                <button id="btnSendOnChainNewUser" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
             </div>
 
             <div class="col-lg-12">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="iptSignOCNewMember" disabled>
-                <label for="iptSignOCNewMember">Signature</label>
+                <input type="text" class="form-control" id="iptSignOCNewUser" disabled>
+                <label for="iptSignOCNewUser">Signature</label>
               </div>
               
               <div class="form-floating mb-3">
-                <input id="iptPropIdOCNewMember" type="text" class="form-control" disabled>
-                <label for="iptPropIdOCNewMember">PropId</label>
+                <input id="iptPropIdOCNewUser" type="text" class="form-control" disabled>
+                <label for="iptPropIdOCNewUser">PropId</label>
               </div>
             </div>
           </div>
@@ -352,7 +352,7 @@
           <br>
 
           <!-- Del User -->
-          <div id="delMember" class="row g-3">
+          <div id="delUser" class="row g-3">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Proposal to Remove an User</h2>
@@ -381,21 +381,21 @@
               </div>
               
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="btnSendOffChainDelMember" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
-                <button id="btnSendOnChainDelMember" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+                <button id="btnSendOffChainDelUser" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
+                <button id="btnSendOnChainDelUser" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
 
             </div>
 
             <div class="col-lg-12">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="iptSignOCDelMember" disabled>
-                <label for="iptSignOCDelMember">Signature</label>
+                <input type="text" class="form-control" id="iptSignOCDelUser" disabled>
+                <label for="iptSignOCDelUser">Signature</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input id="iptPropIdOCDelMember" type="text" class="form-control" disabled>
-                <label for="iptPropIdOCDelMember">PropId</label>
+                <input id="iptPropIdOCDelUser" type="text" class="form-control" disabled>
+                <label for="iptPropIdOCDelUser">PropId</label>
               </div>
             </div>
           </div>

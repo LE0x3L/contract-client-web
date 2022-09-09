@@ -117,55 +117,55 @@ async function SendOCInvit( _onChain = false ) {
   BtnNormal( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit" )
 }
 
-// Send (Sign & Validate) On/Off Chain Proposal to add new member
-async function SendOCNewMember( _onChain = false ) {
-  BtnLoading( _onChain ? "#btnSendOnChainNewMember" : "#btnSendOffChainNewMember", "Sendind..." )
+// Send (Sign & Validate) On/Off Chain Proposal to add new User
+async function SendOCNewUser( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainNewUser" : "#btnSendOffChainNewUser", "Sendind..." )
   try {
-    const OCFunction = "OCNewMember"
+    const OCFunction = "OCNewUser"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
     $( "#iptPropId"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
-    $( "#iptNewMmrAddr" ).removeClass( "is-invalid" )
-    $( "#iptNewMmrName" ).removeClass( "is-invalid" )
-    $( "#iptNewMmrDescrip" ).removeClass( "is-invalid" )
-    $( "#iptNewMmrDelay" ).removeClass( "is-invalid" )
+    $( "#iptNewUsrAddr" ).removeClass( "is-invalid" )
+    $( "#iptNewUsrName" ).removeClass( "is-invalid" )
+    $( "#iptNewUsrDescrip" ).removeClass( "is-invalid" )
+    $( "#iptNewUsrDelay" ).removeClass( "is-invalid" )
 
     const w3 = await connectWeb3();
     console.log( "w3: " , w3 );
 
-    if( 42 !== $( "#iptNewMmrAddr" ).val().length  ) {
-      $( "#iptNewMmrAddr" ).addClass( "is-invalid" );
+    if( 42 !== $( "#iptNewUsrAddr" ).val().length  ) {
+      $( "#iptNewUsrAddr" ).addClass( "is-invalid" );
       throw new Error( "Invalig Address length" );
     }
-    const newUserWallet = await ethers.utils.getAddress( $( "#iptNewMmrAddr" ).val() )
+    const newUserWallet = await ethers.utils.getAddress( $( "#iptNewUsrAddr" ).val() )
     console.log( "newUserWallet:" , newUserWallet );
 
-    if( 0 === $( "#iptNewMmrName" ).val().length  ) {
-      $( "#iptNewMmrName" ).addClass( "is-invalid" );
+    if( 0 === $( "#iptNewUsrName" ).val().length  ) {
+      $( "#iptNewUsrName" ).addClass( "is-invalid" );
       throw new Error( "Provide an User Name" );
     }
-    const newUserName = $( "#iptNewMmrName" ).val()
+    const newUserName = $( "#iptNewUsrName" ).val()
     console.log( "newUserName:" , newUserName );
 
-    if( 0 === $( "#iptNewMmrDescrip" ).val().length  ) {
-      $( "#iptNewMmrDescrip" ).addClass( "is-invalid" );
+    if( 0 === $( "#iptNewUsrDescrip" ).val().length  ) {
+      $( "#iptNewUsrDescrip" ).addClass( "is-invalid" );
       throw new Error( "Provide a proposal description" );
     }
-    const newPropDescription = $( "#iptNewMmrDescrip" ).val()
+    const newPropDescription = $( "#iptNewUsrDescrip" ).val()
     console.log( "newPropDescription:" , newPropDescription );
 
-    if( 'undefined' === typeof $( 'input[name=iptNewMmrIsManager]:checked' ).val() )
+    if( 'undefined' === typeof $( 'input[name=iptNewUsrIsManager]:checked' ).val() )
       throw new Error( "Select Yes/No Is Manager" );
-    const newUserIsManager = !!+$( 'input[name=iptNewMmrIsManager]:checked' ).val()
+    const newUserIsManager = !!+$( 'input[name=iptNewUsrIsManager]:checked' ).val()
     console.log( "newUserIsManager:" , newUserIsManager );
 
-    if( 0 === $( "#iptNewMmrDelay" ).val().length || isNaN( $( "#iptNewMmrDelay" ).val() ) ) {
-      $( "#iptNewMmrDelay" ).addClass( "is-invalid" );
+    if( 0 === $( "#iptNewUsrDelay" ).val().length || isNaN( $( "#iptNewUsrDelay" ).val() ) ) {
+      $( "#iptNewUsrDelay" ).addClass( "is-invalid" );
       throw new Error( "Provide a valid delay Time" );
     }
-    const newPropDelayTime = +$( "#iptNewMmrDelay" ).val()
+    const newPropDelayTime = +$( "#iptNewUsrDelay" ).val()
     console.log( "newPropDelayTime:" , newPropDelayTime );
 
     const houseAddress = await GetCLHAddress();
@@ -186,7 +186,7 @@ async function SendOCNewMember( _onChain = false ) {
           {name:"chainId",type:"uint256"},
           {name:"verifyingContract",type:"address"}
         ],
-        strOCNewMember:[
+        strOCNewUser:[
           {name:"walletAddr",type:"address"},
           {name:"name",type:"string"},
           {name:"description",type:"string"},
@@ -194,7 +194,7 @@ async function SendOCNewMember( _onChain = false ) {
           {name:"delayTime",type:"uint256"}
         ]
       },
-      primaryType:"strOCNewMember",
+      primaryType:"strOCNewUser",
       domain:{
         name: appcfg.domEIP712Name,
         version: appcfg.domEIP712Version,
@@ -213,7 +213,7 @@ async function SendOCNewMember( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
-    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewMember(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewUser(
       newUserWallet,
       newUserName,
       newPropDescription,
@@ -238,7 +238,7 @@ async function SendOCNewMember( _onChain = false ) {
     const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
     console.log( "daoCLH: ", daoCLH );
 
-    const ethTx = await daoCLH.PropInviteMember(
+    const ethTx = await daoCLH.PropInviteUser(
       newUserWallet,
       newUserName,
       newPropDescription,
@@ -276,14 +276,14 @@ async function SendOCNewMember( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
-  BtnNormal( _onChain ? "#btnSendOnChainNewMember" : "#btnSendOffChainNewMember" )
+  BtnNormal( _onChain ? "#btnSendOnChainNewUser" : "#btnSendOffChainNewUser" )
 }
 
-// Send (Sign & Validate) On/Off Chain Proposal to remove a member
-async function SendOCDelMember( _onChain = false ) {
-  BtnLoading( _onChain ? "#btnSendOnChainDelMember" : "#btnSendOffChainDelMember", "Sendind..." )
+// Send (Sign & Validate) On/Off Chain Proposal to remove a user
+async function SendOCDelUser( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainDelUser" : "#btnSendOffChainDelUser", "Sendind..." )
   try {
-    const OCFunction = "OCDelMember"
+    const OCFunction = "OCDelUser"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
     $( "#iptPropId"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).val( "" )
@@ -335,13 +335,13 @@ async function SendOCDelMember( _onChain = false ) {
           {name:"chainId",type:"uint256"},
           {name:"verifyingContract",type:"address"}
         ],
-        strOCDelMember:[
+        strOCDelUser:[
           {name:"walletAddr",type:"address"},
           {name:"description",type:"string"},
           {name:"delayTime",type:"uint256"}
         ]
       },
-      primaryType:"strOCDelMember",
+      primaryType:"strOCDelUser",
       domain:{
         name: appcfg.domEIP712Name,
         version: appcfg.domEIP712Version,
@@ -358,7 +358,7 @@ async function SendOCDelMember( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
-    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCDelMember(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCDelUser(
       delUserWallet,
       propDescription,
       propDelayTime,
@@ -381,7 +381,7 @@ async function SendOCDelMember( _onChain = false ) {
     const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
     console.log( "daoCLH:", daoCLH );
 
-    const ethTx = await daoCLH.PropRemoveMember(
+    const ethTx = await daoCLH.PropRemoveUser(
       delUserWallet,
       propDescription,
       propDelayTime,
@@ -419,7 +419,7 @@ async function SendOCDelMember( _onChain = false ) {
     console.log( error );
     ShowError( error );
   }
-  BtnNormal( _onChain ? "#btnSendOnChainDelMember" : "#btnSendOffChainDelMember" )
+  BtnNormal( _onChain ? "#btnSendOnChainDelUser" : "#btnSendOffChainDelUser" )
 }
 
 // Send (Sign & Validate) On/Off Chain Proposal to Request to Join
@@ -704,7 +704,7 @@ async function SendOCNewCLH( _onChain = false ) {
     $( "#iptNameNewCLH" ).removeClass( "is-invalid" )
     $( "#sltGovNewCLH" ).removeClass( "is-invalid" )
     $( "#iptMaxManagerNewCLH" ).removeClass( "is-invalid" )
-    $( "#iptMaxMembersNewCLH" ).removeClass( "is-invalid" )
+    $( "#iptMaxUsersNewCLH" ).removeClass( "is-invalid" )
     $( "#iptApprovPercentNewCLH" ).removeClass( "is-invalid" )
     $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
 
@@ -738,12 +738,12 @@ async function SendOCNewCLH( _onChain = false ) {
     const newHouseMaxManager = +$( "#iptMaxManagerNewCLH" ).val()
     console.log( "newHouseMaxManager:" , newHouseMaxManager );
 
-    if( 0 === $( "#iptMaxMembersNewCLH" ).val().length || isNaN( $( "#iptMaxMembersNewCLH" ).val() ) ) {
-      $( "#iptMaxMembersNewCLH" ).addClass( "is-invalid" );
-      throw new Error( "Provide a valid Max member number" );
+    if( 0 === $( "#iptMaxUsersNewCLH" ).val().length || isNaN( $( "#iptMaxUsersNewCLH" ).val() ) ) {
+      $( "#iptMaxUsersNewCLH" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid Max user number" );
     }
-    const newHouseMaxMembers = +$( "#iptMaxMembersNewCLH" ).val()
-    console.log( "newHouseMaxMembers:" , newHouseMaxMembers );
+    const newHouseMaxUsers = +$( "#iptMaxUsersNewCLH" ).val()
+    console.log( "newHouseMaxUsers:" , newHouseMaxUsers );
 
     if( 0 === $( "#iptApprovPercentNewCLH" ).val().length || 
       isNaN( $( "#iptApprovPercentNewCLH" ).val() ) ||
@@ -785,9 +785,9 @@ async function SendOCNewCLH( _onChain = false ) {
         strOCNewCLH:[
           {name:"houseName", type:"string"},
           {name:"housePrivate",type:"bool"},
-          {name:"gov",type:"bytes32"},
-          {name:"govRuleMaxManagerMembers",type:"uint8"},
-          {name:"govRuleMaxActiveMembers",type:"uint8"},
+          {name:"govModel",type:"bytes32"},
+          {name:"govRuleMaxUsers",type:"uint8"},
+          {name:"govRuleMaxManagers",type:"uint8"},
           {name:"govRuleApprovPercentage",type:"uint8"},
           {name:"whiteListWallets",type:"address"}
         ]
@@ -802,9 +802,9 @@ async function SendOCNewCLH( _onChain = false ) {
       message:{
         houseName: newHouseName,
         housePrivate: newHousePrivate,
-        gov: newHouseGov,
-        govRuleMaxManagerMembers: newHouseMaxManager,
-        govRuleMaxActiveMembers: newHouseMaxMembers,
+        govModel: newHouseGov,
+        govRuleMaxUsers: newHouseMaxUsers,
+        govRuleMaxManagers: newHouseMaxManager,
         govRuleApprovPercentage: newHouseMinPercent,
         whiteListWallets: newHouseWhiteList[0]
       }
@@ -818,7 +818,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHousePrivate,
       newHouseGov,
       newHouseMaxManager,
-      newHouseMaxMembers,
+      newHouseMaxUsers,
       newHouseMinPercent,
       newHouseWhiteList[0],
       factoryAddress,
@@ -844,7 +844,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseName,
       newHousePrivate,
       newHouseGov,
-      [ newHouseMaxManager, newHouseMaxMembers, newHouseMinPercent ],
+      [ newHouseMaxManager, newHouseMaxUsers, newHouseMinPercent ],
       newHouseWhiteList,
       ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
       eip712Signature
@@ -903,12 +903,12 @@ async function ShowCLHouseProperties() {
 
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
-    $("#clhPrpMembers").val( propertiesCLH.numActiveMembers-propertiesCLH.numManagerMembers );
-    $("#clhPrpManagers").val( propertiesCLH.numManagerMembers );
-    $("#clhPrpUsers").val( propertiesCLH.numActiveMembers );
+    $("#clhPrpMembers").val( propertiesCLH.numUsers-propertiesCLH.numManagers );
+    $("#clhPrpManagers").val( propertiesCLH.numManagers );
+    $("#clhPrpUsers").val( propertiesCLH.numUsers );
     $("#clhPrpGovModel").val( dictGovModel[ propertiesCLH.HOUSE_GOVERNANCE_MODEL ] );
-    $("#clhPrpGovMaxUsers").val( propertiesCLH.govRuleMaxActiveMembers );
-    $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagerMembers );
+    $("#clhPrpGovMaxUsers").val( propertiesCLH.govRuleMaxUsers );
+    $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagers );
     $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
   } catch( error ) {
     console.log( error );
@@ -945,7 +945,7 @@ async function ShowCLHouseUserList() {
         $('<td>').text( usersListCLH[ i ].walletAddr )
       )
       .append(
-        $('<td>').text( usersListCLH[ i ].isManager?"Manager":"Member" )
+        $('<td>').text( usersListCLH[ i ].isManager?"Manager":"User" )
       )
 
       tblusr.append( tbltr )
@@ -1052,16 +1052,16 @@ async function ShowCLHouseInvitationList() {
     const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
     console.log( "daoCLH:", daoCLH );
 
-    const arrProposal = await daoCLH.GetProposalList( ); 
+    const arrProposal = await daoCLH.GetProposalList();
     console.log( "arrProposal:" , arrProposal );
 
-    const arrDataNewUser = await daoCLH.GetArrDataPropAddMember(); 
+    const arrDataNewUser = await daoCLH.GetArrDataPropAddUser();
     console.log( "arrDataNewUser:" , arrDataNewUser );
 
     let tblprp = $( "tbody", "#tblinvList")
 
     for( var i = 0 ; i < arrDataNewUser.length ; i++ ) {
-      let propId = await daoCLH.mapInvitationMember( arrDataNewUser[ i ].walletAddr );
+      let propId = await daoCLH.mapInvitationUser( arrDataNewUser[ i ].walletAddr );
       console.log( "propId:" , propId );
 
       // if( propId && w3.timestamp < +arrProposal[ propId ].deadline) {
@@ -1073,7 +1073,7 @@ async function ShowCLHouseInvitationList() {
         .append( $('<th>').attr( "scope", "col" ).text( propId ) )
         .append( $('<td>').text( arrDataNewUser[ i ].name ) )
         .append( $('<td>').text( arrDataNewUser[ i ].walletAddr ) )
-        .append( $('<td>').text( arrDataNewUser[ i ].isManager?"Manager":"Member" ) )
+        .append( $('<td>').text( arrDataNewUser[ i ].isManager?"Manager":"User" ) )
         .append( $('<td>').text( w3.timestamp > +arrProposal[ propId ].deadline?"Yes":"No" ) )
         .append( $('<td>').text( dateTime.toUTCString() ) );
         
