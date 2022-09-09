@@ -817,8 +817,8 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseName,
       newHousePrivate,
       newHouseGov,
-      newHouseMaxManager,
       newHouseMaxUsers,
+      newHouseMaxManager,
       newHouseMinPercent,
       newHouseWhiteList[0],
       factoryAddress,
@@ -844,7 +844,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseName,
       newHousePrivate,
       newHouseGov,
-      [ newHouseMaxManager, newHouseMaxUsers, newHouseMinPercent ],
+      [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
       newHouseWhiteList,
       ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
       eip712Signature
