@@ -774,6 +774,11 @@ async function SendOCNewCLH( _onChain = false ) {
     console.log( "payeerWallet:" , payeerWallet );
     $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
 
+    logMsg( "Creating SAFE" );
+    const newHouseSafe = !develNet ? await gnosis.newSafe( w3.signerWallet, payeerWallet ) : ethers.constants.AddressZero
+    console.log( "newHouseSafe:" , newHouseSafe );
+    console.log( `https://gnosis-safe.io/app/gor:${newHouseSafe}/home` );
+
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -846,6 +851,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseGov,
       [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
       newHouseWhiteList,
+      newHouseSafe,
       ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
       eip712Signature
     );
@@ -888,6 +894,7 @@ async function ShowCLHouseProperties() {
   BtnLoading( "#btnGetInfoCLH" )
   try {
     $("[id^=clhPrp]").val( "" );
+    $("#clhPrpSafeAddress").html("");
 
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
@@ -898,8 +905,14 @@ async function ShowCLHouseProperties() {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
+    const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+    console.log( "daoCLH: " , daoCLH );
+
     const propertiesCLH = await apiCLH.GetHouseProperties( houseAddress ); 
     console.log( "propertiesCLH:" , propertiesCLH );
+
+    const CLHSAFE = await daoCLH.CLHSAFE()
+    console.log( "CLHSAFE:" , CLHSAFE );
 
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
@@ -910,6 +923,7 @@ async function ShowCLHouseProperties() {
     $("#clhPrpGovMaxUsers").val( propertiesCLH.govRuleMaxUsers );
     $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagers );
     $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
+    $("#clhPrpSafeAddress").html( `<a target="_blank" href="https://gnosis-safe.io/app/gor:${CLHSAFE}/home">${CLHSAFE}</a>` );
   } catch( error ) {
     console.log( error );
     ShowError( error );    

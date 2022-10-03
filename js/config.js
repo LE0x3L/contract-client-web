@@ -11,9 +11,9 @@ const cfgLocalNet = {
 };
 
 const cfgTestNet = {
-    addrApiCLH : "0x043599651F0EB45Cb275fE26DC789a302D001D4f",
-    addrCLFactory : "0xe6039f91dB2b88E608F9E7ab8117aBf6F94aD5a1",
-    defaultCLH : "0x67F2b94ff6a3F5b44135bb9F09373272240d4219",
+    addrApiCLH : "0x6b41bC24282E4BB8484B287854e75C8792ef7386",
+    addrCLFactory : "0xa2D38046fd49231E892F5653F239145779e9d924",
+    defaultCLH : "0xB30da0D62bFB50C1f4AC19233dAD4BD2fD580020",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
     domEIP712Version: "0.0.10",
