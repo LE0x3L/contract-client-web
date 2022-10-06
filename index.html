@@ -534,6 +534,43 @@
             </div>
           </div>
 
+          <!-- send ETH -->
+          <div id="sendETH" class="row g-3">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Send ETH</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-8 offset-md-2">
+              <legend>Visible Fields (UI)</legend>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptToOCTxETH">
+                <label for="iptToOCTxETH">To</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptValueOCTxETH">
+                <label for="iptValueOCTxETH">Value</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button>
+                <button id="btnSendOnChainTxETH" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptSignOCTxETH" disabled>
+                <label for="iptSignOCTxETH">Signature</label>
+              </div>
+            </div>
+          </div>
+
           <div id="HouseProperties">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">

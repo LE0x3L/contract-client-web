@@ -1100,3 +1100,47 @@ async function ShowCLHouseInvitationList() {
   }
   BtnNormal( "#btnGetInvitationListCLH" );
 }
+
+async function safeSendETH() {
+  $( "#iptToOCTxETH" ).removeClass( "is-invalid" )
+  $( "#iptValueOCTxETH" ).removeClass( "is-invalid" )
+
+  if( 42 !== $( "#iptToOCTxETH" ).val().length  ) {
+    $( "#iptToOCTxETH" ).addClass( "is-invalid" );
+    throw new Error( "Invalig Address length" );
+  }
+  const toWallet = await ethers.utils.getAddress( $( "#iptToOCTxETH" ).val() )
+  console.log( "toWallet:" , toWallet );
+
+  $( "#iptValueOCTxETH" ).val()
+  if( 0 === $( "#iptValueOCTxETH" ).val().length ||
+    isNaN( $( "#iptValueOCTxETH" ).val() ) ||
+    +$( "#iptValueOCTxETH" ).val() < 100
+  ) {
+    $( "#iptValueOCTxETH" ).addClass( "is-invalid" );
+    throw new Error( "Provide a valid value" );
+  }
+  const value2Tx = $( "#iptValueOCTxETH" ).val()
+
+  const w3 = await connectWeb3();
+  console.log( "w3:" , w3 );
+
+  const houseAddress = await GetCLHAddress();
+  console.log( "houseAddress:" , houseAddress );
+
+  const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+  console.log( "daoCLH: " , daoCLH );
+
+  const CLHSAFE = await daoCLH.CLHSAFE();
+  console.log( "CLHSAFE:" , CLHSAFE );
+
+  const payeerWallet = await GetPayeer( w3.ethProvider, true );
+  console.log( "payeerWallet:" , payeerWallet );
+
+  await gnosis.safeTx(
+    CLHSAFE,
+    toWallet,
+    value2Tx,
+    payeerWallet
+  );
+}
