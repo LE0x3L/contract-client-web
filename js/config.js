@@ -1,9 +1,8 @@
-const develNet = false;
+const develNet = true;
 
 const cfgLocalNet = {
-    addrApiCLH : "0x6951b5Bd815043E3F842c1b026b0Fa888Cc2DD85",
-    addrCLFactory : "0xe0aA552A10d7EC8760Fc6c246D391E698a82dDf9",
-    defaultCLH : "0x321824B9e41754539061F1d5110d8e77f6F2D467",
+    addrApiCLH : "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87",
+    addrCLFactory : "0x420b1099B9eF5baba6D92029594eF45E19A04A4A",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
     domEIP712Version: "0.0.10",
@@ -11,9 +10,8 @@ const cfgLocalNet = {
 };
 
 const cfgTestNet = {
-    addrApiCLH : "0x6b41bC24282E4BB8484B287854e75C8792ef7386",
-    addrCLFactory : "0xa2D38046fd49231E892F5653F239145779e9d924",
-    defaultCLH : "0xB30da0D62bFB50C1f4AC19233dAD4BD2fD580020",
+    addrApiCLH : "0xa0ccC5f57812E699929C53B2A5C536Da12CD54e3",
+    addrCLFactory : "0x6def2797169299C12EA7e24C042de739234e2d95",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
     domEIP712Version: "0.0.10",

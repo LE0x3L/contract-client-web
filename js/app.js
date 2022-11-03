@@ -7,9 +7,6 @@ const proposalType = [ "new User", "remove User", "requestJoin", "changeGovRules
 if( 0 == $("#txtPayeerPKey").val().length )
   $("#txtPayeerPKey").val( appcfg.pKeyPayeer );
 
-// if( 0 == $("#txtAddrCLHouse").val().length )
-//   $("#txtAddrCLHouse").val( appcfg.defaultCLH );
-
 // Send (Sign & Validate) On/Off Chain Invitation acceptance
 async function SendOCInvit( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit", "Sendind..." )
@@ -764,7 +761,7 @@ async function SendOCNewCLH( _onChain = false ) {
     }
     console.log( "newHouseWhiteList: " , newHouseWhiteList );
     
-    const factoryAddress = await ethers.utils.getAddress( appcfg.addrCLFactory );;
+    const factoryAddress = await ethers.utils.getAddress( appcfg.addrCLFactory );
     console.log( "factoryAddress:" , factoryAddress );
 
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
