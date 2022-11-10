@@ -189,6 +189,22 @@ function InstantiateCLF( _factoryAddress, _signer ) {
   });
 }
 
+function InstantiateCLB( _Address, _signer ) {
+  return new Promise( async ( resolve, reject ) => {
+    try {
+      const contractData = await $.getJSON( "./abis/CLBeacon.json" );
+      resolve( new ethers.Contract(
+        _Address,
+        contractData.abi,
+        _signer
+      ) );
+    } catch (error) {
+      console.log(error);
+      reject( { "message": "Can't instance CLB" } );
+    }
+  });
+}
+
 function BtnLoading( idBtn, txtBtn="Loading..." ) {
   let btnOldTxt = $( idBtn ).text()
   $( idBtn ).attr( 'oldText', btnOldTxt )

@@ -1141,3 +1141,79 @@ async function safeSendETH() {
     payeerWallet
   );
 }
+
+async function ShowCLBeaconProperties() {
+  BtnLoading( "#btnGetInfoCLB" )
+  try {
+    $("[id^=clbPrp]").val( "" );
+    $("#clbPrpImplementation").html("");
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const CLBCLH = await InstantiateCLB( appcfg.addrCLBeacon, w3.ethProvider );
+    console.log( "CLBCLH: " , CLBCLH );
+
+    const CLBAdmin = await CLBCLH.owner(); 
+    console.log( "CLBAdmin:" , CLBAdmin );
+
+    const CLBImplementation = await CLBCLH.implementation(); 
+    console.log( "CLBImplementation:" , CLBImplementation );
+
+    $("#clbPrpAdmin").val( CLBAdmin );
+    // $("#clbPrpImplementation").val( CLBImplementation );
+    $("#clbPrpImplementation").html( `<a target="_blank" href="https://goerli.etherscan.io/address/${CLBImplementation}#code">${CLBImplementation}</a>` );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
+  }
+  BtnNormal( "#btnGetInfoCLB" );
+}
+
+async function SetNewCLBeacon() {
+  BtnLoading( "#btnGetInfoCLB" )
+  try {
+    const newImplementation = await ethers.utils.getAddress( $( "#iptUpBeaconTo" ).val() );
+    console.log( "newImplementation:" , newImplementation );
+    
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const CLBCLH = await InstantiateCLB( appcfg.addrCLBeacon, payeerWallet );
+    console.log( "CLBCLH:", CLBCLH );
+
+    const ethTx = await CLBCLH.upgradeTo( newImplementation );
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
+  }
+  BtnNormal( "#btnGetInfoCLB" );
+}

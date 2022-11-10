@@ -161,6 +161,31 @@
                 </a>
               </li>
             </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>CLBeacon</span>
+              <a class="link-secondary" href="#" aria-label="Add a new report">
+                <!-- <span data-feather="plus-circle"></span> -->
+              </a>
+            </h6>
+
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#CLBeaconProperties">
+                  <span data-feather="file-text"></span>
+                  CLBeacon Properties
+                </a>
+              </li>
+            </ul>
+
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#updateCLBeacon">
+                  <span data-feather="file-text"></span>
+                  Update CLBeacon
+                </a>
+              </li>
+            </ul>
           </div>
         </nav>
 
@@ -775,6 +800,66 @@
             <div class="col-md-12">
               <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetCLFCLHList" class="btn btn-outline-info" type="button">Reload House List</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- CLBeacon -->
+          <div id="CLBeaconProperties">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Beacon Properties</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="mb-3 row">
+                <label for="clbPrpAdmin" class="col-sm-6 col-form-label form-control-sm text-end"><b>Admin :</b></label>
+                <div class="col-sm-6">
+                  <input id="clbPrpAdmin" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <!-- <div class="mb-3 row">
+                <label for="clbPrpImplementation" class="col-sm-6 col-form-label form-control-sm text-end"><b>Implementation :</b></label>
+                <div class="col-sm-6">
+                  <input id="clbPrpImplementation" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div> -->
+
+              <div class="mb-3 row">
+                <label for="clbPrpImplementation" class="col-sm-6 col-form-label form-control-sm text-end"><b>Implementation :</b></label>
+                <div class="col-sm-6" id="clbPrpImplementation">
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
+                <button id="btnGetInfoCLB" class="btn btn-outline-info" type="button">Reload CLB Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="updateCLBeacon" class="row g-3">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Update CLBeacon</h2>
+                <hr>
+              </div>
+
+            </div>
+
+            <div class="col-md-8 offset-md-2">
+              <legend>New implementation of CLHouse</legend>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptUpBeaconTo">
+                <label for="iptUpBeaconTo">Address</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
+                <button id="btnUpBeaconTo" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
             </div>
           </div>
