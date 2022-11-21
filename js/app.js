@@ -917,8 +917,12 @@ async function ShowCLHouseProperties() {
     const CLHSAFE = await daoCLH.CLHSAFE()
     console.log( "CLHSAFE:" , CLHSAFE );
 
+    const houseOpen = await daoCLH.houseOpen()
+    console.log( "houseOpen:" , houseOpen );
+
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
+    $("#clhPrpOpen").val( houseOpen?"Yes":"No" );
     $("#clhPrpMembers").val( propertiesCLH.numUsers-propertiesCLH.numManagers );
     $("#clhPrpManagers").val( propertiesCLH.numManagers );
     $("#clhPrpUsers").val( propertiesCLH.numUsers );
