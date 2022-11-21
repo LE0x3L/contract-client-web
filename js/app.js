@@ -720,6 +720,11 @@ async function SendOCNewCLH( _onChain = false ) {
     const newHousePrivate = !!+$( 'input[name=ipPrivateNewCLH]:checked' ).val()
     console.log( "newHousePrivate:" , newHousePrivate );
 
+    if( 'undefined' === typeof $( 'input[name=ipOpenNewCLH]:checked' ).val() )
+      throw new Error( "Select Open Yes/No" );
+    const newHouseOpen = !!+$( 'input[name=ipOpenNewCLH]:checked' ).val()
+    console.log( "newHouseOpen:" , newHouseOpen );
+
     if( "0" === $('#sltGovNewCLH').find(":selected").val() ) {
       $( "#sltGovNewCLH" ).addClass( "is-invalid" );
       throw new Error( "Select a Governance type" );
@@ -845,6 +850,7 @@ async function SendOCNewCLH( _onChain = false ) {
     const ethTx = await CLFactory.CreateCLH(
       newHouseName,
       newHousePrivate,
+      newHouseOpen,
       newHouseGov,
       [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
       newHouseWhiteList,
@@ -1026,10 +1032,10 @@ async function ShowCLFCLHList() {
     const payeerWallet = await GetPayeer( w3.ethProvider );
     console.log( "payeerWallet:" , payeerWallet );
 
-    const CLFactory = await InstantiateCLF( factoryAddress, w3.ethProvider );
-    console.log( "CLFactory:", CLFactory );
+    const CLFAPI = await InstantiateCLC( abiCLFApi, appcfg.addrApiCLF, w3.ethProvider );
+    console.log( "CLFAPI:", CLFAPI );
 
-    const clhList = await CLFactory.GetHouseList();
+    const clhList = await CLFAPI.GetHouseList( factoryAddress );
     console.log( "clhList:", clhList );
 
     let tblprp = $( "tbody", "#tblclfclhList")

@@ -140,6 +140,21 @@ function GetPayeer( _ethProvider, _OnChain = false ) {
   });
 }
 
+function InstantiateCLC( _dataFile, _ContractAddress, _signerOrProvider ) {
+  return new Promise( async ( resolve, reject ) => {
+    try {
+      const contractData = await $.getJSON( _dataFile );
+      resolve( new ethers.Contract(
+        _ContractAddress,
+        contractData.abi,
+        _signerOrProvider
+      ) );
+    } catch (error) {
+      console.log(error);
+      reject( { "message": "Can't instance ApiCLH" } );
+    }
+  });
+}
 
 function InstantiateCLH( _houseAddress, _signer ) {
   return new Promise( async ( resolve, reject ) => {
