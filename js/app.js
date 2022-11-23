@@ -688,6 +688,151 @@ async function SendOCVote( _onChain = false ) {
 
 }
 
+async function SendOCBulkVote( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnSendOnChainBulkVote" : "#btnSendOffChainBulkVote", "Sendind..." )
+  try {
+    const OCFunction = "OCBulkVote"
+    console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
+    // $( "#iptSign"+OCFunction ).val( "" )
+    // $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
+    // $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    $( "#iptJustOCBulkVote" ).removeClass( "is-invalid" )
+    $( "#iptPropIdsOCBulkVote" ).removeClass( "is-invalid" )
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    if( 'undefined' === typeof $( 'input[name=iptSupportOCBulkVote]:checked' ).val() )
+      throw new Error( "Select Accept/Reject Vote" );
+    const voteSupport = !!+$( 'input[name=iptSupportOCBulkVote]:checked' ).val()
+    console.log( "voteSupport:" , voteSupport );
+
+    if( 0 === $( "#iptJustOCBulkVote" ).val().length  ) {
+      $( "#iptJustOCBulkVote" ).addClass( "is-invalid" );
+      throw new Error( "Provide a Vote justification" );
+    }
+    const voteJustification = $( "#iptJustOCBulkVote" ).val()
+    console.log( "voteJustification:" , voteJustification );
+
+
+    $( "#iptPropIdsOCBulkVote" ).addClass( "is-invalid" );
+    if( 0 === $( "#iptPropIdsOCBulkVote" ).val().length )
+      throw new Error( "Provide a valid PropIds" );
+    
+    let bulkVotePropIds = $( "#iptPropIdsOCBulkVote" ).val().trim().split( " " )
+    bulkVotePropIds = bulkVotePropIds.map( ( idp ) => { 
+      if( isNaN( idp ) ) 
+        throw new Error( "PropIds" )
+      else 
+        return +idp
+    } )
+    
+    $( "#iptPropIdsOCBulkVote" ).removeClass( "is-invalid" )
+    console.log( "bulkVotePropIds: " , bulkVotePropIds );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+
+    // const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
+    // console.log( "apiCLH: " , apiCLH );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+    console.log( "payeerWallet:" , payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+    // const msgParams = JSON.stringify( { types:
+    //   {
+    //     EIP712Domain:[
+    //       {name:"name",type:"string"},
+    //       {name:"version",type:"string"},
+    //       {name:"chainId",type:"uint256"},
+    //       {name:"verifyingContract",type:"address"}
+    //     ],
+    //     strOCBulkVote:[
+    //       {name:"propId",type:"uint256"},
+    //       {name:"support",type:"bool"},
+    //       {name:"justification", type:"string"}
+    //     ]
+    //   },
+    //   primaryType:"strOCBulkVote",
+    //   domain:{
+    //     name: appcfg.domEIP712Name,
+    //     version: appcfg.domEIP712Version,
+    //     chainId: appcfg.domEIP712IdChain,
+    //     verifyingContract: houseAddress
+    //   },
+    //   message:{
+    //     propId: votePropId,
+    //     support: voteSupport,
+    //     justification: voteJustification
+    //   }
+    // } );
+    // console.log( "msgParams:" , msgParams );
+
+
+    // const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
+    // console.log( 'Signature:' , eip712Signature );
+    
+    // const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCVote(
+    //   votePropId,
+    //   voteSupport,
+    //   voteJustification,
+    //   houseAddress,
+    //   eip712Signature
+    // ); 
+    // console.log( "Signer:" , eip712Signer );
+
+    // if ( !_onChain ) {
+    //   $( "#iptSign"+OCFunction ).val( eip712Signature );
+    //   if( eip712Signer != w3.signerWallet ){
+    //     $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
+    //     logMsg( "Error... The signature can't be verified" )
+    //     return
+    //   }
+    //   else
+    //     $( "#iptSign"+OCFunction ).addClass( "is-valid" );
+    // }
+
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+
+    const ethTx = await daoCLH.bulkVote(
+      bulkVotePropIds,
+      voteSupport,
+      voteJustification
+    );
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx )
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( _onChain ? "#btnSendOnChainBulkVote" : "#btnSendOffChainBulkVote" )
+
+}
+
 // Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCNewCLH( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainNewCLH" : "#btnSendOffChainNewCLH", "Sendind..." )
@@ -777,7 +922,8 @@ async function SendOCNewCLH( _onChain = false ) {
     $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
 
     logMsg( "Creating SAFE" );
-    const newHouseSafe = !develNet ? await gnosis.newSafe( w3.signerWallet, payeerWallet ) : ethers.constants.AddressZero
+    const newHouseSafe = ethers.constants.AddressZero
+    // const newHouseSafe = !develNet ? await gnosis.newSafe( w3.signerWallet, payeerWallet ) : ethers.constants.AddressZero
     console.log( "newHouseSafe:" , newHouseSafe );
     console.log( `https://gnosis-safe.io/app/gor:${newHouseSafe}/home` );
 

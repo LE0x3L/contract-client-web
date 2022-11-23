@@ -31,6 +31,8 @@ $("#btnSendOffChainReqJoin").click( () => { SendOCReqJoin( false ) } );
 $("#btnSendOnChainVote").click( () => { SendOCVote( true ) } );
 $("#btnSendOffChainVote").click( () => { SendOCVote( false ) } );
 
+$("#btnSendOnChainBulkVote").click( () => { SendOCBulkVote( true ) } );
+
 $("#btnGetInfoCLH").click( ShowCLHouseProperties );
 $("#btnGetUserListCLH").click( ShowCLHouseUserList );
 $("#btnGetProposalListCLH").click( ShowCLHouseProposalList );
