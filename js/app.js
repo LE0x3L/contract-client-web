@@ -1185,7 +1185,7 @@ async function ShowCLFCLHList() {
     const CLFAPI = await InstantiateCLC( abiCLFApi, appcfg.addrApiCLF, w3.ethProvider );
     console.log( "CLFAPI:", CLFAPI );
 
-    const clhList = await CLFAPI.GetHouseList( factoryAddress );
+    const clhList = await CLFAPI.GetHousesList( factoryAddress );
     console.log( "clhList:", clhList );
 
     let tblprp = $( "tbody", "#tblclfclhList")
@@ -1222,7 +1222,7 @@ async function ShowCLHouseInvitationList() {
     const arrProposal = await daoCLH.GetProposalList();
     console.log( "arrProposal:" , arrProposal );
 
-    const arrDataNewUser = await daoCLH.GetArrDataPropAddUser();
+    const arrDataNewUser = await daoCLH.GetArrDataPropUser();
     console.log( "arrDataNewUser:" , arrDataNewUser );
 
     let tblprp = $( "tbody", "#tblinvList")
