@@ -7,6 +7,8 @@
   console.log( w3 );
 })()
 
+ethereum.on( 'networkChanged', connectWeb3 );
+ethereum.on( 'accountsChanged', connectWeb3 );
 
 $("#lnkMetamask").click( (event) => {
   event.preventDefault();

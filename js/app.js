@@ -90,7 +90,7 @@ async function SendOCInvit( _onChain = false ) {
     let linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + ethTx.hash
+      appcfg.urlExplorer + '/tx/' + ethTx.hash
     )
     .attr('target',"_blank")
     .text( ethTx.hash );
@@ -102,7 +102,7 @@ async function SendOCInvit( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -248,7 +248,7 @@ async function SendOCNewUser( _onChain = false ) {
     let linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + ethTx.hash
+      appcfg.urlExplorer + '/tx/' + ethTx.hash
     )
     .attr('target',"_blank")
     .text( ethTx.hash );
@@ -260,7 +260,7 @@ async function SendOCNewUser( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -386,7 +386,7 @@ async function SendOCDelUser( _onChain = false ) {
     );
     console.log( "ethTx", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -403,7 +403,7 @@ async function SendOCDelUser( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -517,7 +517,7 @@ async function SendOCReqJoin( _onChain = false ) {
     );
     console.log( "ethTx", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -534,7 +534,7 @@ async function SendOCReqJoin( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -658,7 +658,7 @@ async function SendOCVote( _onChain = false ) {
     );
     console.log( "ethTx:", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -675,7 +675,7 @@ async function SendOCVote( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -803,7 +803,7 @@ async function SendOCBulkVote( _onChain = false ) {
     );
     console.log( "ethTx:", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -820,7 +820,7 @@ async function SendOCBulkVote( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -1006,7 +1006,7 @@ async function SendOCNewCLH( _onChain = false ) {
     );
     console.log( "ethTx:", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -1023,7 +1023,7 @@ async function SendOCNewCLH( _onChain = false ) {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );
@@ -1345,7 +1345,7 @@ async function SetNewCLBeacon() {
     const ethTx = await CLBCLH.upgradeTo( newImplementation );
     console.log( "ethTx:", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = 'https://goerli.etherscan.io/tx/' + ethTx.hash
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );
     linkTx = jQuery('<a>')
     .attr(
@@ -1362,7 +1362,7 @@ async function SetNewCLBeacon() {
     linkTx = jQuery('<a>')
     .attr(
       'href',
-      'https://goerli.etherscan.io/tx/' + resultTx.transactionHash
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
     )
     .attr('target',"_blank")
     .text( "View on block explorer" );

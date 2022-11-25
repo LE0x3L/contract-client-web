@@ -35,13 +35,25 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: appcfg.domEIP712IdChain }]
-      });
-
       chainId = await ethereum.request( { method: 'net_version' } )
       console.log( "chainId:", chainId )
+
+      if( 5 == chainId ){
+        appcfg = cfgGoerli
+        $("#blkChainName").text( "Net: Goerli" )
+      }
+      else if( 80001 == chainId ){
+        appcfg = cfgMumbai
+        $("#blkChainName").text( "Net: Mumbai" )
+      }
+      else {
+        appcfg = cfgLocalNet
+        $("#blkChainName").text( "Net: " + chainId )
+        // await window.ethereum.request({
+        //   method: 'wallet_switchEthereumChain',
+        //   params: [{ chainId: appcfg.domEIP712IdChain }]
+        // });
+      }
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
       logMsg( "signerWallet: " + signerWallet[0] )
@@ -49,14 +61,15 @@ function connectWeb3() {
 
       let blockTimestamp;
       await ethProvider.getBlockNumber()
-      .then( async ( resolve ) => { 
-        console.log( 'getBlockNumber', resolve )
-        let lstTimeStamp = await ethProvider.getBlock( resolve ) 
-        console.log( "lstTimeStamp", lstTimeStamp )
-        blockTimestamp = lstTimeStamp.timestamp
-        lstTimeStamp = new Date( 1000*lstTimeStamp.timestamp ).toUTCString()
-        console.log( "lstTimeStamp", lstTimeStamp )
-        $("#lstTimeStamp").text( lstTimeStamp )
+      .then( async ( blkNumber ) => {
+        console.log( 'getBlockNumber', blkNumber )
+        $("#blkChainNumBlk").text( "Block #" + blkNumber )
+        let blkChainTimeStamp = await ethProvider.getBlock( blkNumber )
+        console.log( "blkChainTimeStamp", blkChainTimeStamp )
+        blockTimestamp = blkChainTimeStamp.timestamp
+        blkChainTimeStamp = new Date( 1000*blkChainTimeStamp.timestamp ).toUTCString()
+        console.log( "blkChainTimeStamp", blkChainTimeStamp )
+        $("#blkChainTimeStamp").text( blkChainTimeStamp )
       } )
       .catch( ( error ) => { console.log( 'getBlockNumber FAIL' , error ) } )
 
