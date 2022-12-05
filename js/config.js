@@ -1,6 +1,7 @@
 const abiCLH = "./abis/CLHouse.json";
 const abiCLFApi = "./abis/CLFactoryApi.json";
 
+
 const cfgLocalNet = {
     urlExplorer : "#",
     addrApiCLH : "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87",
@@ -38,3 +39,5 @@ const cfgMumbai = {
 };
 
 appcfg = cfgGoerli;
+
+ocMode = 1; // 0 = FrontEnd  |  1 = Backend

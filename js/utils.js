@@ -246,3 +246,63 @@ function BtnNormal( idBtn ) {
   $( idBtn ).attr( 'disabled', false )
   $( idBtn ).html( btnOldTxt )
 }
+
+function CreateOffchainTx( variables ){
+  $.ajax({
+    url: "https://devel-api.cryptoleague.org/graphql",
+    contentType: "application/json",
+    type: "POST",
+    data: JSON.stringify({
+      query: `mutation CreateOffchainTransaction($createOffchainTransactionOwnerId: String!, $method: String!, $input: JSON!) {
+        createOffchainTransaction(ownerId: $createOffchainTransactionOwnerId, method: $method, input: $input) {
+          id
+          ownerId
+          status
+          info
+          result
+          createdAt
+          updatedAt
+        }
+      }`,
+      variables: variables
+    }),
+    success: GetOffchainTxInfo
+  })
+}
+
+function GetOffchainTxInfo( result ) {
+  console.log( result )
+  let idTxOC = result.data.createOffchainTransaction ? result.data.createOffchainTransaction.id : result.data.getOffchainTransaction.id
+  console.log( "id", idTxOC )
+  $.ajax({
+    url: "https://devel-api.cryptoleague.org/graphql",
+    contentType: "application/json",
+    type:'POST',
+    data: JSON.stringify({
+        query:`{getOffchainTransaction(transactionId: "${idTxOC}") {id info ownerId result status updatedAt createdAt} }`
+    }),
+    success: checkStatusOCTx
+  });
+}
+
+function checkStatusOCTx( result ) {
+  console.log( result )
+  let statusOCTx = result.data.getOffchainTransaction.status
+  // console.log( "statusOCTx", statusOCTx )
+  logMsg( statusOCTx )
+  if( statusOCTx == "CREATED" || statusOCTx == "PROCESSING")
+    GetOffchainTxInfo( result )
+  else if( statusOCTx == "ERROR")
+    logMsg( "ERROR: " + result.data.getOffchainTransaction.result.details )
+  else if( statusOCTx == "SUCCESS" ) {
+    logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + result.data.getOffchainTransaction.result.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx )
+  }
+}
