@@ -407,43 +407,59 @@ async function SendOCDelUser( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
-    console.log( "daoCLH:", daoCLH );
+    if( ocMode ) {
+      variables = {
+        "createOffchainTransactionOwnerId": w3.signerWallet,
+        "method": "CLHouse.PropRemoveUser",
+        "input": {
+          "__houseAddress": houseAddress,
+          "_walletAddr": delUserWallet,
+          "_description": propDescription,
+          "_delayTime": propDelayTime,
+          "_signature": eip712Signature
+        }
+      }
+      console.log( "variables:" , variables );
+      CreateOffchainTx( variables );
+    } else {
+      const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+      console.log( "daoCLH:", daoCLH );
 
-    const ethTx = await daoCLH.PropRemoveUser(
-      delUserWallet,
-      propDescription,
-      propDelayTime,
-      eip712Signature
-    );
-    console.log( "ethTx", ethTx );
-    logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
-    console.log( "linkTx:" , linkTx );
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      linkTx
-    )
-    .attr('target',"_blank")
-    .text( ethTx.hash );
-    $( "#messages" ).append( linkTx )
-    
-    const resultTx = await ethTx.wait();
-    console.log( "resultTx", resultTx );
-    logMsg( "Successful!!!... " )
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
-    )
-    .attr('target',"_blank")
-    .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx );
+      const ethTx = await daoCLH.PropRemoveUser(
+        delUserWallet,
+        propDescription,
+        propDelayTime,
+        eip712Signature
+      );
+      console.log( "ethTx", ethTx );
+      logMsg( "Sent, Waiting confirmation... " );
+      let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+      console.log( "linkTx:" , linkTx );
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        linkTx
+      )
+      .attr('target',"_blank")
+      .text( ethTx.hash );
+      $( "#messages" ).append( linkTx )
+      
+      const resultTx = await ethTx.wait();
+      console.log( "resultTx", resultTx );
+      logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx );
 
-    const propId = resultTx.events[0].args["propId"]
-    console.log( "propId:" , propId );
-    $( "#iptPropId"+OCFunction ).val( propId )
+      const propId = resultTx.events[0].args["propId"]
+      console.log( "propId:" , propId );
+      $( "#iptPropId"+OCFunction ).val( propId )
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );
@@ -539,42 +555,57 @@ async function SendOCReqJoin( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
-    console.log( "daoCLH:", daoCLH );
+    if( ocMode ) {
+      variables = {
+        "createOffchainTransactionOwnerId": w3.signerWallet,
+        "method": "CLHouse.PropRequestToJoin",
+        "input": {
+          "__houseAddress": houseAddress,
+          "_name": reqUserName,
+          "_description": propDescription,
+          "_signature": eip712Signature
+        }
+      }
+      console.log( "variables:" , variables );
+      CreateOffchainTx( variables );
+    } else {
+      const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+      console.log( "daoCLH:", daoCLH );
 
-    const ethTx = await daoCLH.PropRequestToJoin(
-      reqUserName,
-      propDescription,
-      eip712Signature
-    );
-    console.log( "ethTx", ethTx );
-    logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
-    console.log( "linkTx:" , linkTx );
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      linkTx
-    )
-    .attr('target',"_blank")
-    .text( ethTx.hash );
-    $( "#messages" ).append( linkTx )
-    
-    const resultTx = await ethTx.wait();
-    console.log( "resultTx", resultTx );
-    logMsg( "Successful!!!... " )
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
-    )
-    .attr('target',"_blank")
-    .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx )
+      const ethTx = await daoCLH.PropRequestToJoin(
+        reqUserName,
+        propDescription,
+        eip712Signature
+      );
+      console.log( "ethTx", ethTx );
+      logMsg( "Sent, Waiting confirmation... " );
+      let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+      console.log( "linkTx:" , linkTx );
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        linkTx
+      )
+      .attr('target',"_blank")
+      .text( ethTx.hash );
+      $( "#messages" ).append( linkTx )
+      
+      const resultTx = await ethTx.wait();
+      console.log( "resultTx", resultTx );
+      logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx )
 
-    const propId = resultTx.events[0].args["propId"]
-    console.log( "propId:" , propId );
-    $( "#iptPropId"+OCFunction ).val( propId )
+      const propId = resultTx.events[0].args["propId"]
+      console.log( "propId:" , propId );
+      $( "#iptPropId"+OCFunction ).val( propId )
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );
@@ -679,39 +710,55 @@ async function SendOCVote( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
-    console.log( "daoCLH:", daoCLH );
+    if( ocMode ) {
+      variables = {
+        "createOffchainTransactionOwnerId": w3.signerWallet,
+        "method": "CLHouse.VoteProposal",
+        "input": {
+          "__houseAddress": houseAddress,
+          "_propId": votePropId,
+          "_support": voteSupport,
+          "_justification": voteJustification,
+          "_signature": eip712Signature
+        }
+      }
+      console.log( "variables:" , variables );
+      CreateOffchainTx( variables );
+    } else {
+      const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+      console.log( "daoCLH:", daoCLH );
 
-    const ethTx = await daoCLH.VoteProposal(
-      votePropId,
-      voteSupport,
-      voteJustification,
-      eip712Signature
-    );
-    console.log( "ethTx:", ethTx );
-    logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
-    console.log( "linkTx:" , linkTx );
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      linkTx
-    )
-    .attr('target',"_blank")
-    .text( ethTx.hash );
-    $( "#messages" ).append( linkTx )
-    
-    const resultTx = await ethTx.wait();
-    console.log( "resultTx", resultTx );
-    logMsg( "Successful!!!... " )
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
-    )
-    .attr('target',"_blank")
-    .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx )
+      const ethTx = await daoCLH.VoteProposal(
+        votePropId,
+        voteSupport,
+        voteJustification,
+        eip712Signature
+      );
+      console.log( "ethTx:", ethTx );
+      logMsg( "Sent, Waiting confirmation... " );
+      let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+      console.log( "linkTx:" , linkTx );
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        linkTx
+      )
+      .attr('target',"_blank")
+      .text( ethTx.hash );
+      $( "#messages" ).append( linkTx )
+      
+      const resultTx = await ethTx.wait();
+      console.log( "resultTx", resultTx );
+      logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx )
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );
@@ -1001,6 +1048,7 @@ async function SendOCNewCLH( _onChain = false ) {
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewCLH(
       newHouseName,
       newHousePrivate,
+      newHouseOpen,
       newHouseGov,
       newHouseMaxUsers,
       newHouseMaxManager,
@@ -1022,48 +1070,68 @@ async function SendOCNewCLH( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    const CLFactory = await InstantiateCLF( factoryAddress, payeerWallet );
-    console.log( "CLFactory:", CLFactory );
+    if( ocMode ) {
+      variables = {
+        "createOffchainTransactionOwnerId": w3.signerWallet,
+        "method": "CLFactory.CreateCLH",
+        "input": {
+          "_houseName": newHouseName,
+          "_housePrivate": newHousePrivate,
+          "_houseOpen": newHouseOpen,
+          "_govModel": newHouseGov,
+          "_govRules": [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
+          "_ManagerWallets": newHouseWhiteList,
+          "_gnosisSafe": newHouseSafe,
+          "_signerWallet": w3.signerWallet,
+          "_signature": eip712Signature
+        }
+      }
+      console.log( "variables:" , variables );
+      CreateOffchainTx( variables );
+    } else {
+      const CLFactory = await InstantiateCLF( factoryAddress, payeerWallet );
+      console.log( "CLFactory:", CLFactory );
 
-    const ethTx = await CLFactory.CreateCLH(
-      newHouseName,
-      newHousePrivate,
-      newHouseOpen,
-      newHouseGov,
-      [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
-      newHouseWhiteList,
-      newHouseSafe,
-      ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
-      eip712Signature
-    );
-    console.log( "ethTx:", ethTx );
-    logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
-    console.log( "linkTx:" , linkTx );
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      linkTx
-    )
-    .attr('target',"_blank")
-    .text( ethTx.hash );
-    $( "#messages" ).append( linkTx )
-    
-    const resultTx = await ethTx.wait();
-    console.log( "resultTx", resultTx );
-    logMsg( "Successful!!!... " )
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
-    )
-    .attr('target',"_blank")
-    .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx );
+      const ethTx = await CLFactory.CreateCLH(
+        newHouseName,
+        newHousePrivate,
+        newHouseOpen,
+        newHouseGov,
+        [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
+        newHouseWhiteList,
+        newHouseSafe,
+        ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
+        eip712Signature
+      );
+      console.log( "ethTx:", ethTx );
+      logMsg( "Sent, Waiting confirmation... " );
+      let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+      console.log( "linkTx:" , linkTx );
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        linkTx
+      )
+      .attr('target',"_blank")
+      .text( ethTx.hash );
+      $( "#messages" ).append( linkTx )
+      
+      const resultTx = await ethTx.wait();
+      console.log( "resultTx", resultTx );
+      logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx );
 
-    const AddrNewCLH = resultTx.events[3].args["houseAddr"]
-    console.log( "AddrNewCLH:" , AddrNewCLH );
-    $( "#iptAddr"+OCFunction ).val( AddrNewCLH );
+      const AddrNewCLH = resultTx.events[3].args["houseAddr"]
+      console.log( "AddrNewCLH:" , AddrNewCLH );
+      $( "#iptAddr"+OCFunction ).val( AddrNewCLH );
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );

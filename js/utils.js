@@ -296,13 +296,13 @@ function checkStatusOCTx( result ) {
     logMsg( "ERROR: " + result.data.getOffchainTransaction.result.details )
   else if( statusOCTx == "SUCCESS" ) {
     logMsg( "Successful!!!... " )
-      linkTx = jQuery('<a>')
-      .attr(
-        'href',
-        appcfg.urlExplorer + '/tx/' + result.data.getOffchainTransaction.result.transactionHash
-      )
-      .attr('target',"_blank")
-      .text( "View on block explorer" );
-      $( "#messages" ).append( linkTx )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + result.data.getOffchainTransaction.result.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx )
   }
 }
