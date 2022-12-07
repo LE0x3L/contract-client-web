@@ -39,5 +39,4 @@ const cfgMumbai = {
 };
 
 appcfg = cfgGoerli;
-
-ocMode = 1; // 0 = FrontEnd  |  1 = Backend
+ocBackEnd = true;

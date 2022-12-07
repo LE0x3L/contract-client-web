@@ -28,10 +28,6 @@ async function SendOCInvit( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet: " , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -78,7 +74,7 @@ async function SendOCInvit( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLHouse.AcceptRejectInvitation",
@@ -91,6 +87,10 @@ async function SendOCInvit( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet: " , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH: ", daoCLH );
 
@@ -185,10 +185,6 @@ async function SendOCNewUser( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet: " , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -246,7 +242,7 @@ async function SendOCNewUser( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLHouse.PropInviteUser",
@@ -263,6 +259,10 @@ async function SendOCNewUser( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet: " , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH: ", daoCLH );
 
@@ -352,10 +352,6 @@ async function SendOCDelUser( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet: " , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -407,7 +403,7 @@ async function SendOCDelUser( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLHouse.PropRemoveUser",
@@ -422,6 +418,10 @@ async function SendOCDelUser( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet: " , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+  
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH:", daoCLH );
 
@@ -503,10 +503,6 @@ async function SendOCReqJoin( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet: " , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -555,7 +551,7 @@ async function SendOCReqJoin( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLHouse.PropRequestToJoin",
@@ -569,6 +565,10 @@ async function SendOCReqJoin( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet: " , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+  
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH:", daoCLH );
 
@@ -653,10 +653,6 @@ async function SendOCVote( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet:" , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     const msgParams = JSON.stringify( { types:
       {
         EIP712Domain:[
@@ -710,7 +706,7 @@ async function SendOCVote( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLHouse.VoteProposal",
@@ -725,6 +721,10 @@ async function SendOCVote( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet:" , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+  
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH:", daoCLH );
 
@@ -996,10 +996,6 @@ async function SendOCNewCLH( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet:" , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
-
     logMsg( "Creating SAFE" );
     const newHouseSafe = ethers.constants.AddressZero
     // const newHouseSafe = !develNet ? await gnosis.newSafe( w3.signerWallet, payeerWallet ) : ethers.constants.AddressZero
@@ -1017,10 +1013,11 @@ async function SendOCNewCLH( _onChain = false ) {
         strOCNewCLH:[
           {name:"houseName", type:"string"},
           {name:"housePrivate",type:"bool"},
+          {name:"houseOpen",type:"bool"},
           {name:"govModel",type:"bytes32"},
-          {name:"govRuleMaxUsers",type:"uint8"},
-          {name:"govRuleMaxManagers",type:"uint8"},
-          {name:"govRuleApprovPercentage",type:"uint8"},
+          {name:"govRuleMaxUsers",type:"uint256"},
+          {name:"govRuleMaxManagers",type:"uint256"},
+          {name:"govRuleApprovPercentage",type:"uint256"},
           {name:"whiteListWallets",type:"address"}
         ]
       },
@@ -1034,6 +1031,7 @@ async function SendOCNewCLH( _onChain = false ) {
       message:{
         houseName: newHouseName,
         housePrivate: newHousePrivate,
+        houseOpen: newHouseOpen,
         govModel: newHouseGov,
         govRuleMaxUsers: newHouseMaxUsers,
         govRuleMaxManagers: newHouseMaxManager,
@@ -1070,7 +1068,7 @@ async function SendOCNewCLH( _onChain = false ) {
         $( "#iptSign"+OCFunction ).addClass( "is-valid" );
     }
 
-    if( ocMode ) {
+    if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
         "method": "CLFactory.CreateCLH",
@@ -1089,6 +1087,10 @@ async function SendOCNewCLH( _onChain = false ) {
       console.log( "variables:" , variables );
       CreateOffchainTx( variables );
     } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet:" , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
       const CLFactory = await InstantiateCLF( factoryAddress, payeerWallet );
       console.log( "CLFactory:", CLFactory );
 
