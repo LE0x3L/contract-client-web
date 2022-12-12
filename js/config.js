@@ -10,7 +10,7 @@ const cfgLocalNet = {
     addrCLBeacon : "0xcCB53c9429d32594F404d01fbe9E65ED1DCda8D9",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.0",
+    domEIP712Version: "0.1.1",
     domEIP712IdChain: "0x539",
 };
 
@@ -22,7 +22,7 @@ const cfgGoerli = {
     addrCLBeacon : "0xD35AEb3feCa809BEf32e0e5437ee08C9E3eeA732",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.0",
+    domEIP712Version: "0.1.1",
     domEIP712IdChain: "0x5",
 };
 
@@ -34,7 +34,7 @@ const cfgMumbai = {
     addrCLBeacon : "0xD5b7B69fF59FB2c3A0EF3f5D4F6c84c83fAB149A",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.0",
+    domEIP712Version: "0.1.1",
     domEIP712IdChain: "0x13881",
 };
 
