@@ -772,9 +772,9 @@ async function SendOCBulkVote( _onChain = false ) {
   try {
     const OCFunction = "OCBulkVote"
     console.log("===== " + OCFunction + ( _onChain?" On Chain":" Off Chain" ) + " =====" );
-    // $( "#iptSign"+OCFunction ).val( "" )
-    // $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
-    // $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    $( "#iptSign"+OCFunction ).val( "" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
+    $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
     $( "#iptJustOCBulkVote" ).removeClass( "is-invalid" )
     $( "#iptPropIdsOCBulkVote" ).removeClass( "is-invalid" )
 
@@ -812,98 +812,114 @@ async function SendOCBulkVote( _onChain = false ) {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
-    // const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
-    // console.log( "apiCLH: " , apiCLH );
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
-    console.log( "payeerWallet:" , payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCBulkVote:[
+          {name:"propIds",type:"uint256[]"},
+          {name:"support",type:"bool"},
+          {name:"justification", type:"string"}
+        ]
+      },
+      primaryType:"strOCBulkVote",
+      domain:{
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
+        chainId: appcfg.domEIP712IdChain,
+        verifyingContract: houseAddress
+      },
+      message:{
+        propIds: bulkVotePropIds,
+        support: voteSupport,
+        justification: voteJustification
+      }
+    } );
+    console.log( "msgParams:" , msgParams );
 
-    // const msgParams = JSON.stringify( { types:
-    //   {
-    //     EIP712Domain:[
-    //       {name:"name",type:"string"},
-    //       {name:"version",type:"string"},
-    //       {name:"chainId",type:"uint256"},
-    //       {name:"verifyingContract",type:"address"}
-    //     ],
-    //     strOCBulkVote:[
-    //       {name:"propId",type:"uint256"},
-    //       {name:"support",type:"bool"},
-    //       {name:"justification", type:"string"}
-    //     ]
-    //   },
-    //   primaryType:"strOCBulkVote",
-    //   domain:{
-    //     name: appcfg.domEIP712Name,
-    //     version: appcfg.domEIP712Version,
-    //     chainId: appcfg.domEIP712IdChain,
-    //     verifyingContract: houseAddress
-    //   },
-    //   message:{
-    //     propId: votePropId,
-    //     support: voteSupport,
-    //     justification: voteJustification
-    //   }
-    // } );
-    // console.log( "msgParams:" , msgParams );
-
-
-    // const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
-    // console.log( 'Signature:' , eip712Signature );
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
+    console.log( 'Signature:' , eip712Signature );
     
-    // const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCVote(
-    //   votePropId,
-    //   voteSupport,
-    //   voteJustification,
-    //   houseAddress,
-    //   eip712Signature
-    // ); 
-    // console.log( "Signer:" , eip712Signer );
-
-    // if ( !_onChain ) {
-    //   $( "#iptSign"+OCFunction ).val( eip712Signature );
-    //   if( eip712Signer != w3.signerWallet ){
-    //     $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
-    //     logMsg( "Error... The signature can't be verified" )
-    //     return
-    //   }
-    //   else
-    //     $( "#iptSign"+OCFunction ).addClass( "is-valid" );
-    // }
-
-    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
-    console.log( "daoCLH:", daoCLH );
-
-    const ethTx = await daoCLH.bulkVote(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCBulkVote(
       bulkVotePropIds,
       voteSupport,
-      voteJustification
-    );
-    console.log( "ethTx:", ethTx );
-    logMsg( "Sent, Waiting confirmation... " );
-    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
-    console.log( "linkTx:" , linkTx );
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      linkTx
-    )
-    .attr('target',"_blank")
-    .text( ethTx.hash );
-    $( "#messages" ).append( linkTx )
-    
-    const resultTx = await ethTx.wait();
-    console.log( "resultTx", resultTx );
-    logMsg( "Successful!!!... " )
-    linkTx = jQuery('<a>')
-    .attr(
-      'href',
-      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
-    )
-    .attr('target',"_blank")
-    .text( "View on block explorer" );
-    $( "#messages" ).append( linkTx )
+      voteJustification,
+      houseAddress,
+      eip712Signature
+    ); 
+    console.log( "Signer:" , eip712Signer );
+
+    if ( !_onChain ) {
+      $( "#iptSign"+OCFunction ).val( eip712Signature );
+      if( eip712Signer != w3.signerWallet ){
+        $( "#iptSign"+OCFunction ).addClass( "is-invalid" );
+        logMsg( "Error... The signature can't be verified" )
+        return
+      }
+      else
+        $( "#iptSign"+OCFunction ).addClass( "is-valid" );
+    }
+
+    if( !_onChain && ocBackEnd ) {
+      variables = {
+        "createOffchainTransactionOwnerId": w3.signerWallet,
+        "method": "CLHouse.bulkVote",
+        "input": {
+          "__houseAddress": houseAddress,
+          "_propIds": bulkVotePropIds,
+          "_support": voteSupport,
+          "_justification": voteJustification,
+          "_signature": eip712Signature
+        }
+      }
+      console.log( "variables:" , variables );
+      CreateOffchainTx( variables );
+    } else {
+      const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+      console.log( "payeerWallet:" , payeerWallet );
+      $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+      const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+      console.log( "daoCLH:", daoCLH );
+
+      const ethTx = await daoCLH.bulkVote(
+        bulkVotePropIds,
+        voteSupport,
+        voteJustification,
+        eip712Signature
+      );
+      console.log( "ethTx:", ethTx );
+      logMsg( "Sent, Waiting confirmation... " );
+      let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+      console.log( "linkTx:" , linkTx );
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        linkTx
+      )
+      .attr('target',"_blank")
+      .text( ethTx.hash );
+      $( "#messages" ).append( linkTx )
+      
+      const resultTx = await ethTx.wait();
+      console.log( "resultTx", resultTx );
+      logMsg( "Successful!!!... " )
+      linkTx = jQuery('<a>')
+      .attr(
+        'href',
+        appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+      )
+      .attr('target',"_blank")
+      .text( "View on block explorer" );
+      $( "#messages" ).append( linkTx )
+    }
   } catch( error ) {
     console.log( error );
     ShowError( error );

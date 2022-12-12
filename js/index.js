@@ -7,7 +7,7 @@
   console.log( w3 );
 })()
 
-ethereum.on( 'networkChanged', connectWeb3 );
+ethereum.on( 'chainChanged', connectWeb3 );
 ethereum.on( 'accountsChanged', connectWeb3 );
 
 $("#lnkMetamask").click( (event) => {
@@ -34,6 +34,7 @@ $("#btnSendOnChainVote").click( () => { SendOCVote( true ) } );
 $("#btnSendOffChainVote").click( () => { SendOCVote( false ) } );
 
 $("#btnSendOnChainBulkVote").click( () => { SendOCBulkVote( true ) } );
+$("#btnSendOffChainBulkVote").click( () => { SendOCBulkVote( false ) } );
 
 $("#btnGetInfoCLH").click( ShowCLHouseProperties );
 $("#btnGetUserListCLH").click( ShowCLHouseUserList );
