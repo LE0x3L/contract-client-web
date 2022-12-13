@@ -945,6 +945,7 @@ async function SendOCNewCLH( _onChain = false ) {
     $( "#iptMaxManagerNewCLH" ).removeClass( "is-invalid" )
     $( "#iptMaxUsersNewCLH" ).removeClass( "is-invalid" )
     $( "#iptApprovPercentNewCLH" ).removeClass( "is-invalid" )
+    $( "#iptWhiteListNFTNewCLH" ).removeClass( "is-invalid" )
     $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
 
     const w3 = await connectWeb3();
@@ -1007,6 +1008,14 @@ async function SendOCNewCLH( _onChain = false ) {
       $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
     }
     console.log( "newHouseWhiteList: " , newHouseWhiteList );
+
+    let newHouseNFTWhiteList = ethers.constants.AddressZero
+    if( 0 !== $( "#iptWhiteListNFTNewCLH" ).val().length ){
+      $( "#iptWhiteListNFTNewCLH" ).addClass( "is-invalid" )
+      newHouseNFTWhiteList = await ethers.utils.getAddress( $( "#iptWhiteListNFTNewCLH" ).val() )
+      $( "#iptWhiteListNFTNewCLH" ).removeClass( "is-invalid" )
+    }
+    console.log( "newHouseNFTWhiteList: " , newHouseNFTWhiteList );
     
     const factoryAddress = await ethers.utils.getAddress( appcfg.addrCLFactory );
     console.log( "factoryAddress:" , factoryAddress );
@@ -1069,6 +1078,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseMaxUsers,
       newHouseMaxManager,
       newHouseMinPercent,
+      newHouseNFTWhiteList,
       newHouseWhiteList[0],
       factoryAddress,
       eip712Signature
@@ -1120,6 +1130,7 @@ async function SendOCNewCLH( _onChain = false ) {
         [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
         newHouseWhiteList,
         newHouseSafe,
+        newHouseNFTWhiteList,
         ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
         eip712Signature
       );
