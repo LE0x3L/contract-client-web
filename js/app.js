@@ -1197,6 +1197,9 @@ async function ShowCLHouseProperties() {
     const houseOpen = await daoCLH.houseOpen()
     console.log( "houseOpen:" , houseOpen );
 
+    const whiteListNFT = await daoCLH.whiteListNFT(); 
+    console.log( "whiteListNFT:" , whiteListNFT );
+
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
     $("#clhPrpOpen").val( houseOpen?"Yes":"No" );
@@ -1208,6 +1211,7 @@ async function ShowCLHouseProperties() {
     $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagers );
     $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
     $("#clhPrpSafeAddress").html( `<a target="_blank" href="https://gnosis-safe.io/app/gor:${CLHSAFE}/home">${CLHSAFE}</a>` );
+    $("#clhPrpWhiteListNFT").val( whiteListNFT );
   } catch( error ) {
     console.log( error );
     ShowError( error );    
