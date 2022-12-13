@@ -559,6 +559,7 @@ async function SendOCReqJoin( _onChain = false ) {
           "__houseAddress": houseAddress,
           "_name": reqUserName,
           "_description": propDescription,
+          "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
       }
@@ -575,6 +576,7 @@ async function SendOCReqJoin( _onChain = false ) {
       const ethTx = await daoCLH.PropRequestToJoin(
         reqUserName,
         propDescription,
+        w3.signerWallet,
         eip712Signature
       );
       console.log( "ethTx", ethTx );
