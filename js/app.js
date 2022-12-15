@@ -1045,6 +1045,7 @@ async function SendOCNewCLH( _onChain = false ) {
           {name:"govRuleMaxUsers",type:"uint256"},
           {name:"govRuleMaxManagers",type:"uint256"},
           {name:"govRuleApprovPercentage",type:"uint256"},
+          {name:"whiteListNFT",type:"address"},
           {name:"whiteListWallets",type:"address"}
         ]
       },
@@ -1063,6 +1064,7 @@ async function SendOCNewCLH( _onChain = false ) {
         govRuleMaxUsers: newHouseMaxUsers,
         govRuleMaxManagers: newHouseMaxManager,
         govRuleApprovPercentage: newHouseMinPercent,
+        whiteListNFT: newHouseNFTWhiteList,
         whiteListWallets: newHouseWhiteList[0]
       }
     } );
@@ -1108,6 +1110,7 @@ async function SendOCNewCLH( _onChain = false ) {
           "_govRules": [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
           "_ManagerWallets": newHouseWhiteList,
           "_gnosisSafe": newHouseSafe,
+          "_whiteListNFT": newHouseNFTWhiteList,
           "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
