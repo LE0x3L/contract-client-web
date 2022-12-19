@@ -290,10 +290,23 @@ function checkStatusOCTx( result ) {
   let statusOCTx = result.data.getOffchainTransaction.status
   // console.log( "statusOCTx", statusOCTx )
   logMsg( statusOCTx )
-  if( statusOCTx == "CREATED" || statusOCTx == "PROCESSING")
+  if( statusOCTx == "CREATED" )
     GetOffchainTxInfo( result )
   else if( statusOCTx == "ERROR")
     logMsg( "ERROR: " + result.data.getOffchainTransaction.result.details )
+  else if( statusOCTx == "PROCESSING" ) {
+    // logMsg( "Sent, Waiting confirmation... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + result.data.getOffchainTransaction.result.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx )
+
+    GetOffchainTxInfo( result )
+  }
   else if( statusOCTx == "SUCCESS" ) {
     logMsg( "Successful!!!... " )
     linkTx = jQuery('<a>')
