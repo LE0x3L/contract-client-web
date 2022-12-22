@@ -38,8 +38,8 @@ function connectWeb3() {
       chainId = await ethereum.request( { method: 'net_version' } )
       console.log( "chainId:", chainId )
 
-      if( 5 == chainId && true == goerliTest){
-        appcfg = cfgGoerliTest
+      if( 5 == chainId && true == testConfig){
+        appcfg = cfgGoerli_Test
         $("#blkChainName").text( "Net: Goerli TEST" )
       }
       else if( 5 == chainId ){

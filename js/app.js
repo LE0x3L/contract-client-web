@@ -77,7 +77,7 @@ async function SendOCInvit( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.AcceptRejectInvitation",
+        "method": `${appcfg.prefixOCBE}CLHouse.AcceptRejectInvitation`,
         "input": {
           "__houseAddress": houseAddress,
           "_acceptance": userAcceptance,
@@ -245,7 +245,7 @@ async function SendOCNewUser( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.PropInviteUser",
+        "method": `${appcfg.prefixOCBE}CLHouse.PropInviteUser`,
         "input": {
           "__houseAddress": houseAddress,
           "_walletAddr": newUserWallet,
@@ -406,7 +406,7 @@ async function SendOCDelUser( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.PropRemoveUser",
+        "method": `${appcfg.prefixOCBE}CLHouse.PropRemoveUser`,
         "input": {
           "__houseAddress": houseAddress,
           "_walletAddr": delUserWallet,
@@ -554,7 +554,7 @@ async function SendOCReqJoin( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.PropRequestToJoin",
+        "method": `${appcfg.prefixOCBE}CLHouse.PropRequestToJoin`,
         "input": {
           "__houseAddress": houseAddress,
           "_name": reqUserName,
@@ -711,7 +711,7 @@ async function SendOCVote( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.VoteProposal",
+        "method": `${appcfg.prefixOCBE}CLHouse.VoteProposal`,
         "input": {
           "__houseAddress": houseAddress,
           "_propId": votePropId,
@@ -872,7 +872,7 @@ async function SendOCBulkVote( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLHouse.bulkVote",
+        "method": `${appcfg.prefixOCBE}CLHouse.bulkVote`,
         "input": {
           "__houseAddress": houseAddress,
           "_propIds": bulkVotePropIds,
@@ -1101,7 +1101,7 @@ async function SendOCNewCLH( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": "CLFactory.CreateCLH",
+        "method": `${appcfg.prefixOCBE}CLFactory.CreateCLH`,
         "input": {
           "_houseName": newHouseName,
           "_housePrivate": newHousePrivate,
