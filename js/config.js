@@ -54,6 +54,19 @@ const cfgMumbai = {
     domEIP712IdChain: "0x13881",
 };
 
+const cfgMumbai_Test = {
+    urlExplorer : "https://mumbai.polygonscan.com",
+    prefixOCBE : "mumbai/",
+    addrApiCLH : "0x2A52BDCF5c029028bf61c3fB20D5a0dFe560EF61",
+    addrApiCLF : "0x5153fb835508dAe6B17f9239673843F3a117854e",
+    addrCLFactory : "0xD1231F7F23CF49C01382Df7A3774095F6a346b0a",
+    addrCLBeacon : "0xcbAF5fF547826e5b8e9226db0C87F6eC30Ddc0a8",
+    pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
+    domEIP712Name: "CLHouse",
+    domEIP712Version: "0.1.1",
+    domEIP712IdChain: "0x13881",
+};
+
 appcfg = cfgGoerli;
-ocBackEnd = true;
+ocBackEnd = false;
 testConfig = true
