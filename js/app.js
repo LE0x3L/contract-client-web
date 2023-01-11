@@ -1465,7 +1465,7 @@ async function ShowCLBeaconProperties() {
 }
 
 async function SetNewCLBeacon() {
-  BtnLoading( "#btnGetInfoCLB" )
+  BtnLoading( "#btnUpBeaconTo" )
   try {
     const newImplementation = await ethers.utils.getAddress( $( "#iptUpBeaconTo" ).val() );
     console.log( "newImplementation:" , newImplementation );
@@ -1507,7 +1507,171 @@ async function SetNewCLBeacon() {
     $( "#messages" ).append( linkTx );
   } catch( error ) {
     console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpBeaconTo" );
+}
+
+async function CreateLock( _onChain = false ) {
+  BtnLoading( _onChain ? "#btnNewLockOnChain" : "#btnNewLockOffChain", "Sendind..." )
+  try {
+    $("[id^=iptLockNew]").removeClass( "is-invalid" );
+    $( "#iptLockNewAddress" ).val( "" )
+
+    if( 0 === $( "#iptLockNewName" ).val().length  ) {
+      $( "#iptLockNewName" ).addClass( "is-invalid" );
+      throw new Error( "Provide a Lock name" );
+    }
+    const newLockName = $( "#iptLockNewName" ).val();
+    console.log( "newLockName:" , newLockName );
+
+    if( 0 === $( "#iptLockNewDuration" ).val().length || 
+      isNaN( $( "#iptLockNewDuration" ).val() ) ||
+      +$( "#iptLockNewDuration" ).val() <= 0
+    ) {
+      $( "#iptLockNewDuration" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership duration" );
+    }
+    const newLockDuration = +$( "#iptLockNewDuration" ).val()
+    console.log( "newLockDuration:" , newLockDuration );
+
+    if( 0 === $( "#iptLockNewQuantity" ).val().length || 
+      isNaN( $( "#iptLockNewQuantity" ).val() ) ||
+      parseInt( $( "#iptLockNewQuantity" ).val() ) < 1
+    ) {
+      $( "#iptLockNewQuantity" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership quantity" );
+    }
+    const newLockQuantity = parseInt( $( "#iptLockNewQuantity" ).val() )
+    console.log( "newLockQuantity:" , newLockQuantity );
+    
+    if( 0 === $( "#iptLockNewPrice" ).val().length || 
+      isNaN( $( "#iptLockNewPrice" ).val() ) ||
+      +$( "#iptLockNewPrice" ).val() < 0.01
+    ) {
+      $( "#iptLockNewPrice" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership price ( >= 0.01 ETH)" );
+    }
+    const newLockPrice = ethers.utils.parseUnits( $( "#iptLockNewPrice" ).val(), 18)
+    console.log( "newLockPrice:" , newLockPrice );
+
+    // On goerli address of UnLock Factory is at
+    const aULF = "0x627118a4fB747016911e5cDA82e2E77C531e8206";
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+
+    // Instantiate the Unlock contract
+    // const iULF = new ethers.Contract( aULF, abis.UnlockV11.abi, signer);
+    const iULF = await InstantiateCLC( "./abis/UnlockV11.json", aULF, payeerWallet );
+    console.log( "iULF:", iULF );
+
+    const abiULF = await $.getJSON( "./abis/PublicLockV11.json" );
+    // abiULF = abiULF.abi;
+
+    // Lock params:
+    const lockInterface = new ethers.utils.Interface( abiULF.abi );
+    const params = lockInterface.encodeFunctionData(
+      "initialize(address,uint256,address,uint256,uint256,string)",
+      [
+        payeerWallet.address ? payeerWallet.address : payeerWallet._address,
+        newLockDuration * 60 * 60 * 24, // 30 days in seconds
+        ethers.constants.AddressZero, // We use the base chain currency
+        newLockPrice,
+        newLockQuantity,
+        newLockName,
+      ]
+    );
+
+    const ethTx = await iULF.createUpgradeableLockAtVersion(params, 11);
+    
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+
+    const newLockAddress = resultTx.events[ 7 ].args[ "newLockAddress" ]
+    console.log( "newLockAddress:", newLockAddress );
+    $( "#iptLockNewAddress" ).val( newLockAddress )
+  } catch( error ) {
+    console.log( error );
     ShowError( error );    
   }
-  BtnNormal( "#btnGetInfoCLB" );
+  BtnNormal( _onChain ? "#btnNewLockOnChain" : "#btnNewLockOffChain" )
+}
+
+async function SetWhiteListNFT( _onChain = true ) {
+  BtnLoading( _onChain ? "#btnSetWhiteListNFTOnChain" : "#btnSetWhiteListNFTOffChain", "Sendind..." )
+  try {
+    const newCollection = await ethers.utils.getAddress( $( "#iptNewWhiteListNFT" ).val() );
+    console.log( "newCollection:" , newCollection );
+
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:", houseAddress );
+    
+    const w3 = await connectWeb3();
+    console.log( "w3:", w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+
+    const ethTx = await daoCLH.SetWhitelistCollection( newCollection );
+    console.log( "ethTx:", ethTx );
+
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpBeaconTo" );
 }

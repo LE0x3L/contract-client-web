@@ -36,6 +36,10 @@ $("#btnSendOffChainVote").click( () => { SendOCVote( false ) } );
 $("#btnSendOnChainBulkVote").click( () => { SendOCBulkVote( true ) } );
 $("#btnSendOffChainBulkVote").click( () => { SendOCBulkVote( false ) } );
 
+$("#btnNewLockOnChain").click( () => { CreateLock( true ) } );
+
+$("#btnSetWhiteListNFTOnChain").click( () => { SetWhiteListNFT( true ) } );
+
 $("#btnGetInfoCLH").click( ShowCLHouseProperties );
 $("#btnGetUserListCLH").click( ShowCLHouseUserList );
 $("#btnGetProposalListCLH").click( ShowCLHouseProposalList );

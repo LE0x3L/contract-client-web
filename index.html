@@ -195,6 +195,22 @@
                 </a>
               </li>
             </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>UnLock</span>
+              <a class="link-secondary" href="#" aria-label="Add a new report">
+                <!-- <span data-feather="plus-circle"></span> -->
+              </a>
+            </h6>
+
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#createunlock">
+                  <span data-feather="file-text"></span>
+                  Create Lock
+                </a>
+              </li>
+            </ul>
           </div>
         </nav>
 
@@ -675,6 +691,30 @@
               </div>
             </div>
           </div>
+
+          <!-- Set Whitelist Collection -->
+          <div id="SetWhitelistCollection" class="row g-3">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Set Whitelist Collection</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-8 offset-md-2">
+              <legend>New address for Whitelist Collection</legend>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptNewWhiteListNFT">
+                <label for="iptNewWhiteListNFT">Address</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
+                <button id="btnSetWhiteListNFTOnChain" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+              </div>
+            </div>
+          </div>
           
           <!-- House Properties -->
           <div id="HouseProperties">
@@ -941,7 +981,6 @@
                 <h2 class="alert-heading">Update CLBeacon</h2>
                 <hr>
               </div>
-
             </div>
 
             <div class="col-md-8 offset-md-2">
@@ -955,6 +994,58 @@
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
                 <button id="btnUpBeaconTo" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+              </div>
+            </div>
+          </div>
+
+          <br>
+
+          <div id="createUnlock" class="row g-3">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Create lock</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <!-- <legend>New implementation of CLHouse</legend> -->
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptLockNewName">
+                <label for="iptLockNewName">Name</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptLockNewDuration">
+                <label for="iptLockNewDuration">Memberships duration (days):</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptLockNewQuantity">
+                <label for="iptLockNewQuantity">Memberships quantity:</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptLockNewPrice">
+                <label for="iptLockNewPrice">Memberships Price (ETH):</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
+                <button id="btnNewLockOnChain" class="btn btn-outline-success" type="submit" >Send On Chain</button>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <!-- <div class="form-floating mb-3">
+                <input id="iptLockNewSignature" type="text" class="form-control" disabled>
+                <label for="iptLockNewSignature">Signature</label>
+              </div> -->
+
+              <div class="form-floating mb-3">
+                <input id="iptLockNewAddress" type="text" class="form-control" disabled>
+                <label for="iptLockNewAddress">New Lock Address</label>
               </div>
             </div>
           </div>
