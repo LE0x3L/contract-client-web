@@ -1049,6 +1049,141 @@
               </div>
             </div>
           </div>
+
+          <!-- Lock Properties -->
+          <div id="LockProperties">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Lock Properties</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>Address of Lock</legend>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptLockAddress">
+                <label for="iptLockAddress">Address</label>
+              </div>
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <div class="mb-3">
+                <!-- <label for="basic-url1" class="form-label">Your vanity URL</label> -->
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">Name &nbsp;&nbsp;&nbsp;</span>
+                  <input type="text" class="form-control" id="iptLckPrpName" value="" readonly>
+                  <input type="text" class="form-control" id="iptLckUpgName" placeholder="New name">
+                  <button class="btn btn-outline-success" type="submit" type="button" id="btnUpgLckName">Update</button>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">Symbol &nbsp;</span>
+                  <input type="text" class="form-control" id="iptLckPrpSymbol" value="" readonly>
+                  <input type="text" class="form-control" id="iptLckUpgSymbol" placeholder="New symbol">
+                  <button class="btn btn-outline-success" type="submit" type="button" id="btnUpgLckSymbol">Update</button>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">Duration</span>
+                  <input type="text" class="form-control" id="iptLckPrpDuration" value="" readonly>
+                  <input type="text" class="form-control" id="iptLckUpgDuration" placeholder="New Duration (Days)">
+                  <button class="btn btn-outline-success" type="submit" type="button" id="btnUpgLckDuration">Update</button>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">Quantity</span>
+                  <input type="text" class="form-control" id="iptLckPrpQuantity" value="" readonly>
+                  <input type="text" class="form-control" id="iptLckUpgQuantity" placeholder="New Quantity">
+                  <button class="btn btn-outline-success" type="submit" type="button" id="btnUpgLckQuantity">Update</button>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">Price &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <input type="text" class="form-control" id="iptLckPrpPrice" value="" readonly>
+                  <input type="text" class="form-control" id="iptLckUpgPrice" placeholder="New Price (ETH)">
+                  <button class="btn btn-outline-success" type="submit" type="button" id="btnUpgLckPrice">Update</button>
+                </div>
+                <!-- <div class="form-text">Example help text goes outside the input group.</div> -->
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <!-- <div class="mb-3 row">
+                <label for="lckPrpName" class="col-sm-6 col-form-label form-control-sm text-end"><b>Name :</b></label>
+                <div class="col-sm-6">
+                  <input id="lckPrpName" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="lckPrpSymbol" class="col-sm-6 col-form-label form-control-sm text-end"><b>Ticker Symbol :</b></label>
+                <div class="col-sm-6">
+                  <input id="lckPrpSymbol" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="lckPrpDuration" class="col-sm-6 col-form-label form-control-sm text-end"><b>Duration :</b></label>
+                <div class="col-sm-6">
+                  <input id="lckPrpDuration" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="lckPrpQuantity" class="col-sm-6 col-form-label form-control-sm text-end"><b>Quantity :</b></label>
+                <div class="col-sm-6">
+                  <input id="lckPrpQuantity" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="lckPrpPrice" class="col-sm-6 col-form-label form-control-sm text-end"><b>Price :</b></label>
+                <div class="col-sm-6">
+                  <input id="lckPrpPrice" type="text" class="form-control-plaintext form-control-sm" readonly>
+                </div>
+              </div> -->
+
+              <div class="d-grid gap-2 col-6 mx-auto mb-3">
+                <button id="btnGetInfoLCK" class="btn btn-outline-info" type="button">Load Lock Info</button>
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-12">
+              <form class="row g-3">
+                <div class="col-auto">
+                  <label for="staticEmail2" class="visually-hidden">Email</label>
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+                </div>
+                <div class="col-auto">
+                  <label for="inputPassword2" class="visually-hidden">Password</label>
+                  <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+                </div>
+              </form>
+
+              <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon1">Button</button>
+                <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+              </div>
+              
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+              </div>
+              
+              <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+                <input type="text" class="form-control" placeholder="" aria-label="Example text with two button addons">
+              </div>
+              
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons">
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+              </div>              
+            </div> -->
+          </div>
           <br>
           <br>
           <br>

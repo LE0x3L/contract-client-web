@@ -1673,5 +1673,337 @@ async function SetWhiteListNFT( _onChain = true ) {
     console.log( error );
     ShowError( error );
   }
-  BtnNormal( "#btnUpBeaconTo" );
+  BtnNormal( _onChain ? "#btnSetWhiteListNFTOnChain" : "#btnSetWhiteListNFTOffChain" )
+}
+
+async function ShowPropertiesLCK() {
+  BtnLoading( "#btnGetInfoLCK" )
+  try {
+    $("[id^=iptLckPrp]").val( "" );
+    $("[id^=iptLckUpg]").val( "" );
+    // $("#clbPrpImplementation").html("");
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, w3.ethProvider );
+    console.log( "iLCK:", iLCK );
+
+    $("#iptLckPrpName").val( await iLCK.name() );
+    $("#iptLckPrpSymbol").val( await iLCK.symbol() );
+    $("#iptLckPrpDuration").val( (await iLCK.expirationDuration())/3600/24 );
+    $("#iptLckPrpQuantity").val( await iLCK.maxNumberOfKeys() );
+    $("#iptLckPrpPrice").val( (await iLCK.keyPrice())/1000000000000000000 );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );    
+  }
+  BtnNormal( "#btnGetInfoLCK" );
+}
+
+async function SetNewLckName() {
+  BtnLoading( "#btnUpgLckName", "Updating..." )
+  try {
+    $("[id^=iptLckUpg]").removeClass( "is-invalid" );
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    if( 0 === $( "#iptLckUpgName" ).val().length  ) {
+      $( "#iptLckUpgName" ).addClass( "is-invalid" );
+      throw new Error( "Provide a Lock name" );
+    }
+    const newLckName = $( "#iptLckUpgName" ).val();
+    console.log( "newLckName:" , newLckName );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, payeerWallet );
+    console.log( "iLCK:", iLCK );
+
+    const ethTx = await iLCK.updateLockName( newLckName );
+
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+    ShowPropertiesLCK();
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpgLckName" );
+}
+
+async function SetNewLckSymbol() {
+  BtnLoading( "#btnUpgLckSymbol", "Updating..." )
+  try {
+    $("[id^=iptLckUpg]").removeClass( "is-invalid" );
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    if( 0 === $( "#iptLckUpgSymbol" ).val().length  ) {
+      $( "#iptLckUpgSymbol" ).addClass( "is-invalid" );
+      throw new Error( "Provide a Lock Symbol" );
+    }
+    const newLckSymbol = $( "#iptLckUpgSymbol" ).val();
+    console.log( "newLckSymbol:" , newLckSymbol );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, payeerWallet );
+    console.log( "iLCK:", iLCK );
+
+    const ethTx = await iLCK.updateLockSymbol( newLckSymbol );
+
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+    ShowPropertiesLCK();
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpgLckSymbol" );
+}
+
+async function SetNewLckDuration() {
+  BtnLoading( "#btnUpgLckDuration", "Updating..." )
+  try {
+    $("[id^=iptLckUpg]").removeClass( "is-invalid" );
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    if( 0 === $( "#iptLckUpgDuration" ).val().length || 
+      isNaN( $( "#iptLckUpgDuration" ).val() ) ||
+      +$( "#iptLckUpgDuration" ).val() <= 0
+    ) {
+      $( "#iptLckUpgDuration" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership duration" );
+    }
+    const newLckDuration = +$( "#iptLckUpgDuration" ).val()
+    console.log( "newLckDuration:" , newLckDuration );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, payeerWallet );
+    console.log( "iLCK:", iLCK );
+
+    const ethTx = await iLCK.setExpirationDuration( newLckDuration * 60 * 60 * 24 );
+
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+    ShowPropertiesLCK();
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpgLckDuration" );
+}
+
+async function SetNewLckQuantity() {
+  BtnLoading( "#btnUpgLckQuantity", "Updating..." )
+  try {
+    $("[id^=iptLckUpg]").removeClass( "is-invalid" );
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    if( 0 === $( "#iptLckUpgQuantity" ).val().length || 
+      isNaN( $( "#iptLckUpgQuantity" ).val() ) ||
+      parseInt( $( "#iptLckUpgQuantity" ).val() ) < 1
+    ) {
+      $( "#iptLckUpgQuantity" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership quantity" );
+    }
+    const newLckQuantity = parseInt( $( "#iptLckUpgQuantity" ).val() )
+    console.log( "newLckQuantity:" , newLckQuantity );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, payeerWallet );
+    console.log( "iLCK:", iLCK );
+
+    const ethTx = await iLCK.setMaxNumberOfKeys( newLckQuantity );
+
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+    ShowPropertiesLCK();
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpgLckQuantity" );
+}
+
+async function SetNewLckPrice() {
+  BtnLoading( "#btnUpgLckPrice", "Updating..." )
+  try {
+    $("[id^=iptLckUpg]").removeClass( "is-invalid" );
+
+    const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
+    console.log( "aLCK:" , aLCK );
+
+    if( 0 === $( "#iptLckUpgPrice" ).val().length || 
+      isNaN( $( "#iptLckUpgPrice" ).val() ) ||
+      +$( "#iptLckUpgPrice" ).val() < 0.01
+    ) {
+      $( "#iptLckUpgPrice" ).addClass( "is-invalid" );
+      throw new Error( "Provide a valid membership price ( >= 0.01 ETH)" );
+    }
+    const newLckPrice = ethers.utils.parseUnits( $( "#iptLckUpgPrice" ).val(), 18)
+    console.log( "newLckPrice:" , newLckPrice );
+
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const iLCK = await InstantiateCLC( "./abis/PublicLockV11.json", aLCK, payeerWallet );
+    console.log( "iLCK:", iLCK );
+
+    const ethTx = await iLCK.updateKeyPricing( newLckPrice, ethers.constants.AddressZero );
+
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+    ShowPropertiesLCK();
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnUpgLckPrice" );
 }
