@@ -16,6 +16,7 @@ async function SendOCInvit( _onChain = false ) {
     $( "#iptSign"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
+    
     const w3 = await connectWeb3();
 
     if( 'undefined' === typeof $( 'input[name=iptAcceptOCInvit]:checked' ).val() )
@@ -930,7 +931,6 @@ async function SendOCBulkVote( _onChain = false ) {
 
 }
 
-// Send (Sign & Validate) On/Off Chain Vote to Proposal
 async function SendOCNewCLH( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainNewCLH" : "#btnSendOffChainNewCLH", "Sendind..." )
   try {
@@ -1072,6 +1072,7 @@ async function SendOCNewCLH( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature:' , eip712Signature );
+    
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewCLH(
       newHouseName,
       newHousePrivate,
@@ -1203,6 +1204,9 @@ async function ShowCLHouseProperties() {
     const whiteListNFT = await daoCLH.whiteListNFT(); 
     console.log( "whiteListNFT:" , whiteListNFT );
 
+    const CLHLOCK = await daoCLH.CLHLOCK(); 
+    console.log( "CLHLOCK:" , CLHLOCK );
+
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
     $("#clhPrpOpen").val( houseOpen?"Yes":"No" );
@@ -1215,6 +1219,7 @@ async function ShowCLHouseProperties() {
     $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
     $("#clhPrpSafeAddress").html( `<a target="_blank" href="https://gnosis-safe.io/app/gor:${CLHSAFE}/home">${CLHSAFE}</a>` );
     $("#clhPrpWhiteListNFT").val( whiteListNFT );
+    $("#clhPrpLockAddress").val( CLHLOCK );
   } catch( error ) {
     console.log( error );
     ShowError( error );    
@@ -1555,8 +1560,8 @@ async function CreateLock( _onChain = false ) {
     const newLockPrice = ethers.utils.parseUnits( $( "#iptLockNewPrice" ).val(), 18)
     console.log( "newLockPrice:" , newLockPrice );
 
-    // On goerli address of UnLock Factory is at
-    const aULF = "0x627118a4fB747016911e5cDA82e2E77C531e8206";
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:", houseAddress );
 
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
@@ -1565,29 +1570,16 @@ async function CreateLock( _onChain = false ) {
     console.log( "payeerWallet:", payeerWallet );
     $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
 
-    // Instantiate the Unlock contract
-    // const iULF = new ethers.Contract( aULF, abis.UnlockV11.abi, signer);
-    const iULF = await InstantiateCLC( "./abis/UnlockV11.json", aULF, payeerWallet );
-    console.log( "iULF:", iULF );
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
 
-    const abiULF = await $.getJSON( "./abis/PublicLockV11.json" );
-    // abiULF = abiULF.abi;
-
-    // Lock params:
-    const lockInterface = new ethers.utils.Interface( abiULF.abi );
-    const params = lockInterface.encodeFunctionData(
-      "initialize(address,uint256,address,uint256,uint256,string)",
-      [
-        payeerWallet.address ? payeerWallet.address : payeerWallet._address,
-        newLockDuration * 60 * 60 * 24, // 30 days in seconds
-        ethers.constants.AddressZero, // We use the base chain currency
-        newLockPrice,
-        newLockQuantity,
-        newLockName,
-      ]
+    const ethTx = await daoCLH.CreateLock(
+      newLockDuration * 60 * 60 * 24, // 30 days in seconds
+      newLockPrice,
+      newLockQuantity,
+      newLockName  
     );
-
-    const ethTx = await iULF.createUpgradeableLockAtVersion(params, 11);
+    console.log( "ethTx:", ethTx );
     
     console.log( "ethTx:", ethTx );
     logMsg( "Sent, Waiting confirmation... " );
