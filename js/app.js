@@ -1537,7 +1537,7 @@ async function CreateLock( _onChain = false ) {
       $( "#iptLockNewDuration" ).addClass( "is-invalid" );
       throw new Error( "Provide a valid membership duration" );
     }
-    const newLockDuration = +$( "#iptLockNewDuration" ).val()
+    const newLockDuration = +$( "#iptLockNewDuration" ).val() * 60 * 60 * 24; // days in seconds
     console.log( "newLockDuration:" , newLockDuration );
 
     if( 0 === $( "#iptLockNewQuantity" ).val().length || 
@@ -1566,22 +1566,80 @@ async function CreateLock( _onChain = false ) {
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
 
-    const payeerWallet = await GetPayeer( w3.ethProvider, true );
-    console.log( "payeerWallet:", payeerWallet );
-    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
+    console.log( "apiCLH: " , apiCLH );
 
-    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
-    console.log( "daoCLH:", daoCLH );
+    const msgParams = JSON.stringify( { types:
+      {
+        EIP712Domain:[
+          {name:"name",type:"string"},
+          {name:"version",type:"string"},
+          {name:"chainId",type:"uint256"},
+          {name:"verifyingContract",type:"address"}
+        ],
+        strOCNewLock:[
+          {name:"expirationDuration",type:"uint256"},
+          {name:"keyPrice",type:"uint256"},
+          {name:"maxNumberOfKeys",type:"uint256"},
+          {name:"lockName", type:"string"}
+        ]
+      },
+      primaryType:"strOCNewLock",
+      domain:{
+        name: appcfg.domEIP712Name,
+        version: appcfg.domEIP712Version,
+        chainId: appcfg.domEIP712IdChain,
+        verifyingContract: houseAddress
+      },
+      message:{
+        expirationDuration: newLockDuration,
+        keyPrice: newLockPrice.toString(),
+        maxNumberOfKeys: newLockQuantity,
+        lockName: newLockName
+      }
+    } );
+    console.log( "msgParams:" , msgParams );
 
-    const ethTx = await daoCLH.CreateLock(
-      newLockDuration * 60 * 60 * 24, // 30 days in seconds
+    const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
+    console.log( 'Signature:' , eip712Signature );
+
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewLock(
+      newLockDuration,
       newLockPrice,
       newLockQuantity,
-      newLockName  
+      newLockName,
+      houseAddress,
+      eip712Signature
+    );
+    console.log( "Signer:" , eip712Signer );
+
+    if ( !_onChain ) {
+      $( "#iptLockNewSignature" ).val( eip712Signature );
+      if( eip712Signer != w3.signerWallet ){
+        $( "#iptLockNewSignature" ).addClass( "is-invalid" );
+        logMsg( "Error... The signature can't be verified" )
+        return
+      }
+      else
+      $( "#iptLockNewSignature" ).addClass( "is-valid" );
+    }
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, _onChain );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+    
+    const ethTx = await daoCLH.CreateLock(
+      newLockDuration, // days in seconds
+      newLockPrice,
+      newLockQuantity,
+      newLockName,
+      eip712Signature
     );
     console.log( "ethTx:", ethTx );
-    
-    console.log( "ethTx:", ethTx );
+
     logMsg( "Sent, Waiting confirmation... " );
     let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
     console.log( "linkTx:" , linkTx );

@@ -114,30 +114,30 @@
     "absolutePath": "contracts/CLProxy/CLBeacon.sol",
     "exportedSymbols": {
       "Address": [
-        11440
+        11553
       ],
       "CLBeacon": [
-        5082
+        5187
       ],
       "Context": [
-        12094
+        12207
       ],
       "IBeacon": [
-        11832
+        11945
       ],
       "Ownable": [
-        8215
+        8320
       ],
       "UpgradeableBeacon": [
-        7695
+        7800
       ]
     },
-    "id": 5083,
+    "id": 5188,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5069,
+        "id": 5174,
         "literals": [
           "solidity",
           "^",
@@ -150,11 +150,11 @@
       {
         "absolutePath": "/home/trecetp/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.7.3/contracts/proxy/beacon/UpgradeableBeacon.sol",
         "file": "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol",
-        "id": 5070,
+        "id": 5175,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 5083,
-        "sourceUnit": 7696,
+        "scope": 5188,
+        "sourceUnit": 7801,
         "src": "58:68:55",
         "symbolAliases": [],
         "unitAlias": ""
@@ -164,13 +164,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 5071,
+              "id": 5176,
               "name": "UpgradeableBeacon",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 7695,
+              "referencedDeclaration": 7800,
               "src": "149:17:55"
             },
-            "id": 5072,
+            "id": 5177,
             "nodeType": "InheritanceSpecifier",
             "src": "149:17:55"
           }
@@ -179,13 +179,13 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 5082,
+        "id": 5187,
         "linearizedBaseContracts": [
-          5082,
-          7695,
-          8215,
-          12094,
-          11832
+          5187,
+          7800,
+          8320,
+          12207,
+          11945
         ],
         "name": "CLBeacon",
         "nameLocation": "137:8:55",
@@ -193,23 +193,23 @@
         "nodes": [
           {
             "body": {
-              "id": 5080,
+              "id": 5185,
               "nodeType": "Block",
               "src": "295:2:55",
               "statements": []
             },
-            "id": 5081,
+            "id": 5186,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 5077,
+                    "id": 5182,
                     "name": "_CLLogicContract",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 5074,
+                    "referencedDeclaration": 5179,
                     "src": "264:16:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -217,13 +217,13 @@
                     }
                   }
                 ],
-                "id": 5078,
+                "id": 5183,
                 "kind": "baseConstructorSpecifier",
                 "modifierName": {
-                  "id": 5076,
+                  "id": 5181,
                   "name": "UpgradeableBeacon",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 7695,
+                  "referencedDeclaration": 7800,
                   "src": "233:17:55"
                 },
                 "nodeType": "ModifierInvocation",
@@ -234,17 +234,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5075,
+              "id": 5180,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5074,
+                  "id": 5179,
                   "mutability": "mutable",
                   "name": "_CLLogicContract",
                   "nameLocation": "202:16:55",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5081,
+                  "scope": 5186,
                   "src": "194:24:55",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -253,7 +253,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5073,
+                    "id": 5178,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "194:7:55",
@@ -269,19 +269,19 @@
               "src": "184:40:55"
             },
             "returnParameters": {
-              "id": 5079,
+              "id": 5184,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "295:0:55"
             },
-            "scope": 5082,
+            "scope": 5187,
             "src": "173:124:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 5083,
+        "scope": 5188,
         "src": "128:171:55",
         "usedErrors": []
       }

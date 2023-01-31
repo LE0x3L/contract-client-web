@@ -37,6 +37,7 @@ $("#btnSendOnChainBulkVote").click( () => { SendOCBulkVote( true ) } );
 $("#btnSendOffChainBulkVote").click( () => { SendOCBulkVote( false ) } );
 
 $("#btnNewLockOnChain").click( () => { CreateLock( true ) } );
+$("#btnNewLockOffChain").click( () => { CreateLock( false ) } );
 
 $("#btnSetWhiteListNFTOnChain").click( () => { SetWhiteListNFT( true ) } );
 

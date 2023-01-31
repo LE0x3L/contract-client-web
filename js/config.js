@@ -31,7 +31,7 @@ const cfgGoerli = {
 const cfgGoerli_Test = {
     urlExplorer : "https://goerli.etherscan.io",
     prefixOCBE : "",
-    addrApiCLH : "0x07310835E32bB69Fa1ca66056B2F090BD901BBDF",
+    addrApiCLH : "0x58A7028EE348A72deF39735B45cb395Fe19a301c",
     addrApiCLF : "0xb389f76D62857181824394833e60567E801D86a5",
     addrCLFactory : "0x9C12575645457804303F1fD1DeB24AD6A47Bd896",
     addrCLBeacon : "0xbd969a9Efc5ccf9e6007a5Ab4AF616322a71FA98",
@@ -69,4 +69,4 @@ const cfgMumbai_Test = {
 
 appcfg = cfgGoerli;
 ocBackEnd = false;
-testConfig = true
+testConfig = false;
