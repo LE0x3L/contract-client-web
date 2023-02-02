@@ -577,7 +577,7 @@ async function SendOCReqJoin( _onChain = false ) {
       const ethTx = await daoCLH.PropRequestToJoin(
         reqUserName,
         propDescription,
-        w3.signerWallet,
+        // w3.signerWallet,
         eip712Signature
       );
       console.log( "ethTx", ethTx );
@@ -1045,7 +1045,7 @@ async function SendOCNewCLH( _onChain = false ) {
           {name:"govRuleMaxUsers",type:"uint256"},
           {name:"govRuleMaxManagers",type:"uint256"},
           {name:"govRuleApprovPercentage",type:"uint256"},
-          {name:"whiteListNFT",type:"address"},
+          // {name:"whiteListNFT",type:"address"},
           {name:"whiteListWallets",type:"address"}
         ]
       },
@@ -1064,7 +1064,7 @@ async function SendOCNewCLH( _onChain = false ) {
         govRuleMaxUsers: newHouseMaxUsers,
         govRuleMaxManagers: newHouseMaxManager,
         govRuleApprovPercentage: newHouseMinPercent,
-        whiteListNFT: newHouseNFTWhiteList,
+        // whiteListNFT: newHouseNFTWhiteList,
         whiteListWallets: newHouseWhiteList[0]
       }
     } );
@@ -1081,7 +1081,7 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseMaxUsers,
       newHouseMaxManager,
       newHouseMinPercent,
-      newHouseNFTWhiteList,
+      // newHouseNFTWhiteList,
       newHouseWhiteList[0],
       factoryAddress,
       eip712Signature
@@ -1134,7 +1134,7 @@ async function SendOCNewCLH( _onChain = false ) {
         [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
         newHouseWhiteList,
         newHouseSafe,
-        newHouseNFTWhiteList,
+        // newHouseNFTWhiteList,
         ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
         eip712Signature
       );
@@ -1201,11 +1201,11 @@ async function ShowCLHouseProperties() {
     const houseOpen = await daoCLH.houseOpen()
     console.log( "houseOpen:" , houseOpen );
 
-    const whiteListNFT = await daoCLH.whiteListNFT(); 
-    console.log( "whiteListNFT:" , whiteListNFT );
+    // const whiteListNFT = await daoCLH.whiteListNFT(); 
+    // console.log( "whiteListNFT:" , whiteListNFT );
 
-    const CLHLOCK = await daoCLH.CLHLOCK(); 
-    console.log( "CLHLOCK:" , CLHLOCK );
+    // const CLHLOCK = await daoCLH.CLHLOCK(); 
+    // console.log( "CLHLOCK:" , CLHLOCK );
 
     $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
     $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
@@ -1218,8 +1218,8 @@ async function ShowCLHouseProperties() {
     $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagers );
     $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
     $("#clhPrpSafeAddress").html( `<a target="_blank" href="https://gnosis-safe.io/app/gor:${CLHSAFE}/home">${CLHSAFE}</a>` );
-    $("#clhPrpWhiteListNFT").val( whiteListNFT );
-    $("#clhPrpLockAddress").val( CLHLOCK );
+    // $("#clhPrpWhiteListNFT").val( whiteListNFT );
+    // $("#clhPrpLockAddress").val( CLHLOCK );
   } catch( error ) {
     console.log( error );
     ShowError( error );    

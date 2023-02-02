@@ -68,5 +68,5 @@ const cfgMumbai_Test = {
 };
 
 appcfg = cfgGoerli;
-ocBackEnd = false;
+ocBackEnd = true;
 testConfig = false;
