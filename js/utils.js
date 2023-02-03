@@ -257,7 +257,7 @@ function BtnNormal( idBtn ) {
 
 function CreateOffchainTx( variables ){
   $.ajax({
-    url: "https://devel-api.cryptoleague.org/graphql",
+    url: appcfg.urlGraphQL,
     contentType: "application/json",
     type: "POST",
     data: JSON.stringify({
@@ -283,7 +283,7 @@ function GetOffchainTxInfo( result ) {
   let idTxOC = result.data.createOffchainTransaction ? result.data.createOffchainTransaction.id : result.data.getOffchainTransaction.id
   console.log( "id", idTxOC )
   $.ajax({
-    url: "https://devel-api.cryptoleague.org/graphql",
+    url: appcfg.urlGraphQL,
     contentType: "application/json",
     type:'POST',
     data: JSON.stringify({
