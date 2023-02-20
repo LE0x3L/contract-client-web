@@ -301,37 +301,37 @@
               
               <br>
 
-              <select id="sltGovNewCLH" class="form-select mb-3" aria-label="Governance">
+              <!-- <select id="sltGovNewCLH" class="form-select mb-3" aria-label="Governance">
                 <option value="0"selected>Select Governance Type</option>
                 <option value="__GOV_DICTATORSHIP__">Dictatorship</option>
                 <option value="__GOV_COMMITTEE__">Committee</option>
                 <option value="__GOV_SIMPLE_MAJORITY__">Simple Majority</option>
-              </select>
+              </select> -->
 
-              <div class="form-floating mb-3">
+              <!-- <div class="form-floating mb-3">
                 <input id="iptMaxManagerNewCLH" type="text" class="form-control">
                 <label for="iptMaxManagerNewCLH">max Managers</label>
-              </div>
+              </div> -->
 
               <div class="form-floating mb-3">
                 <input id="iptMaxUsersNewCLH" type="text" class="form-control">
                 <label for="iptMaxUsersNewCLH">max Users</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <!-- <div class="form-floating mb-3">
                 <input id="iptApprovPercentNewCLH" type="text" class="form-control">
                 <label for="iptApprovPercentNewCLH">min Quorum Percentage</label>
-              </div>
+              </div> -->
 
               <div class="form-floating mb-3">
                 <input id="iptWhiteListNFTNewCLH" type="text" class="form-control">
                 <label for="iptWhiteListNFTNewCLH">WhiteList NFT contract address</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <!-- <div class="form-floating mb-3">
                 <textarea id="txtWhiteListNewCLH" class="form-control" style="height: 100px"></textarea>
                 <label for="txtWhiteListNewCLH">WhiteList Wallets</label>
-              </div>
+              </div> -->
 
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button id="btnSendOffChainNewCLH" class="btn btn-outline-warning me-md-2" type="button" >Send Off Chain</button>
@@ -373,7 +373,7 @@
 
               <div class="form-floating mb-3">
                 <input id="iptNewUsrName" type="text" class="form-control">
-                <label for="iptNewUsrName">User Name</label>
+                <label for="iptNewUsrName">Nickname</label>
               </div>
 
               <div class="form-floating mb-3">
@@ -480,17 +480,23 @@
               </div>
             </div>
 
+            
             <div class="col-lg-6 offset-md-3">
               Accept Invitation:
-
+              
               <div class="form-check form-check-inline mb-3">
                 <input name="iptAcceptOCInvit" id="AcceptOCInvit" class="form-check-input" type="radio" value="1">
                 <label class="form-check-label" for="AcceptOCInvit">Yes</label>
               </div>
-
+              
               <div class="form-check form-check-inline mb-3">
                 <input name="iptAcceptOCInvit" id="RejectOCInvit" class="form-check-input" type="radio" value="0">
                 <label class="form-check-label" for="RejectOCInvit">No</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input id="iptAccIvnNickname" type="text" class="form-control">
+                <label for="iptAccIvnNickname">Nickname</label>
               </div>
 
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -523,7 +529,7 @@
 
               <div class="form-floating mb-3">
                 <input id="iptReqJoinName" type="text" class="form-control">
-                <label for="iptReqJoinName">User Name</label>
+                <label for="iptReqJoinName">Nickname</label>
               </div>
 
               <div class="form-floating mb-3">
@@ -656,7 +662,7 @@
           <br>
 
           <!-- send ETH -->
-          <div id="sendETH" class="row g-3">
+          <!-- <div id="sendETH" class="row g-3">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Send ETH</h2>
@@ -690,10 +696,10 @@
                 <label for="iptSignOCTxETH">Signature</label>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Set Whitelist Collection -->
-          <div id="SetWhitelistCollection" class="row g-3">
+          <!-- <div id="SetWhitelistCollection" class="row g-3">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">Set Whitelist Collection</h2>
@@ -710,11 +716,11 @@
               </div>
               
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
+                <button id="btnSetWhiteListNFTOffChain" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button>
                 <button id="btnSetWhiteListNFTOnChain" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
             </div>
-          </div>
+          </div> -->
           
           <!-- House Properties -->
           <div id="HouseProperties">
@@ -796,11 +802,11 @@
                 </div>
               </div>
 
-              <div class="mb-3 row">
+              <!-- <div class="mb-3 row">
                 <label for="clhPrpSafeAddress" class="col-sm-6 col-form-label form-control-sm text-end"><b>Safe Address :</b></label>
                 <div class="col-sm-6" id="clhPrpSafeAddress">
                 </div>
-              </div>
+              </div> -->
 
               <div class="mb-3 row">
                 <label for="clhPrpWhiteListNFT" class="col-sm-6 col-form-label form-control-sm text-end"><b>WhiteList NFT :</b></label>
@@ -809,12 +815,12 @@
                 </div>
               </div>
 
-              <div class="mb-3 row">
+              <!-- <div class="mb-3 row">
                 <label for="clhPrpLockAddress" class="col-sm-6 col-form-label form-control-sm text-end"><b>Lock Address :</b></label>
                 <div class="col-sm-6">
                   <input id="clhPrpLockAddress" type="text" class="form-control-plaintext form-control-sm" readonly>
                 </div>
-              </div>
+              </div> -->
 
               <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetInfoCLH" class="btn btn-outline-info" type="button">Reload CLH Info</button>
@@ -886,7 +892,7 @@
             </div>
           </div>
 
-          <div id="HouseInvitationList">
+          <!-- <div id="HouseInvitationList">
             <div class="col-lg-12">
               <div class="alert alert-info" role="alert">
                 <h2 class="alert-heading">House Invitation List</h2>
@@ -899,7 +905,7 @@
                 <thead>
                   <tr>
                     <th scope="col">propId</th>
-                    <th scope="col">User Name</th>
+                    <th scope="col">Nickname</th>
                     <th scope="col">Wallet</th>
                     <th scope="col">Role</th>
                     <th scope="col">Expired</th>
@@ -916,7 +922,7 @@
                 <button id="btnGetInvitationListCLH" class="btn btn-outline-info" type="button">Reload Invitation list</button>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div id="CLFHousesList">
             <div class="col-lg-12">
