@@ -7,7 +7,7 @@ const proposalType = [ "new User", "remove User", "requestJoin", "changeGovRules
 if( 0 == $("#txtPayeerPKey").val().length )
   $("#txtPayeerPKey").val( appcfg.pKeyPayeer );
 
-// Send (Sign & Validate) On/Off Chain Invitation acceptance
+/** Send (Sign & Validate) On/Off Chain Invitation acceptance */
 async function SendOCInvit( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit", "Sendind..." )
   try {
@@ -16,12 +16,20 @@ async function SendOCInvit( _onChain = false ) {
     $( "#iptSign"+OCFunction ).val( "" )
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
-    
+    $( "#iptAccIvnNickname" ).removeClass( "is-invalid" )
+
     const w3 = await connectWeb3();
 
     if( 'undefined' === typeof $( 'input[name=iptAcceptOCInvit]:checked' ).val() )
       throw new Error( "Select Yes/No Acceptance" );
     const userAcceptance = !!+$( 'input[name=iptAcceptOCInvit]:checked' ).val()
+
+    if( 0 === $( "#iptAccIvnNickname" ).val().length  ) {
+      $( "#iptAccIvnNickname" ).addClass( "is-invalid" );
+      throw new Error( "Provide a Nickname" );
+    }
+    const newNickame = $( "#iptAccIvnNickname" ).val()
+    console.log( "newNickame:" , newNickame );
 
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress: " , houseAddress );
@@ -38,7 +46,8 @@ async function SendOCInvit( _onChain = false ) {
           {name:"verifyingContract",type:"address"}
         ],
         strOCInvit:[
-          {name:"acceptance",type:"bool"}
+          {name:"acceptance",type:"bool"},
+          {name:"nickname",type:"string"}
         ]
       },
       primaryType:"strOCInvit",
@@ -49,7 +58,8 @@ async function SendOCInvit( _onChain = false ) {
         verifyingContract: houseAddress
       },
       message:{
-        acceptance: userAcceptance
+        acceptance: userAcceptance,
+        nickname: newNickame
       }
     } );
     console.log( "msgParams: " , msgParams );
@@ -59,6 +69,7 @@ async function SendOCInvit( _onChain = false ) {
 
     const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCInvit(
       userAcceptance,
+      newNickame,
       houseAddress,
       eip712Signature
     ); 
@@ -97,6 +108,7 @@ async function SendOCInvit( _onChain = false ) {
 
       const ethTx = await daoCLH.AcceptRejectInvitation(
         userAcceptance,
+        newNickame,
         eip712Signature
       );
       console.log( "ethTx", ethTx );
@@ -129,7 +141,7 @@ async function SendOCInvit( _onChain = false ) {
   BtnNormal( _onChain ? "#btnSendOnChainInvit" : "#btnSendOffChainInvit" )
 }
 
-// Send (Sign & Validate) On/Off Chain Proposal to add new User
+/** Send (Sign & Validate) On/Off Chain Proposal to add new User */
 async function SendOCNewUser( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainNewUser" : "#btnSendOffChainNewUser", "Sendind..." )
   try {
@@ -221,7 +233,7 @@ async function SendOCNewUser( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
-    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCNewUser(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCInvitUser(
       newUserWallet,
       newUserName,
       newPropDescription,
@@ -246,7 +258,7 @@ async function SendOCNewUser( _onChain = false ) {
     if( !_onChain && ocBackEnd ) {
       variables = {
         "createOffchainTransactionOwnerId": w3.signerWallet,
-        "method": `CLHouse.PropInviteUser`,
+        "method": `CLHouse.PropInvitUser`,
         "input": {
           "__houseAddress": houseAddress,
           "_walletAddr": newUserWallet,
@@ -267,7 +279,7 @@ async function SendOCNewUser( _onChain = false ) {
       const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
       console.log( "daoCLH: ", daoCLH );
 
-      const ethTx = await daoCLH.PropInviteUser(
+      const ethTx = await daoCLH.PropInvitUser(
         newUserWallet,
         newUserName,
         newPropDescription,
@@ -309,7 +321,7 @@ async function SendOCNewUser( _onChain = false ) {
   BtnNormal( _onChain ? "#btnSendOnChainNewUser" : "#btnSendOffChainNewUser" )
 }
 
-// Send (Sign & Validate) On/Off Chain Proposal to remove a user
+/** Send (Sign & Validate) On/Off Chain Proposal to remove a user */
 async function SendOCDelUser( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainDelUser" : "#btnSendOffChainDelUser", "Sendind..." )
   try {
@@ -384,7 +396,7 @@ async function SendOCDelUser( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
-    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCDelUser(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCRemoveUser(
       delUserWallet,
       propDescription,
       propDelayTime,
@@ -468,7 +480,7 @@ async function SendOCDelUser( _onChain = false ) {
   BtnNormal( _onChain ? "#btnSendOnChainDelUser" : "#btnSendOffChainDelUser" )
 }
 
-// Send (Sign & Validate) On/Off Chain Proposal to Request to Join
+/** Send (Sign & Validate) On/Off Chain Proposal to Request to Join */
 async function SendOCReqJoin( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainReqJoin" : "#btnSendOffChainReqJoin", "Sendind..." )
   try {
@@ -533,7 +545,7 @@ async function SendOCReqJoin( _onChain = false ) {
 
     const eip712Signature = _onChain ? "0x00" : await EIP712Sign( w3.signerWallet, msgParams );
     console.log( 'Signature: ' , eip712Signature );
-    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCRequest(
+    const eip712Signer = _onChain ? "0x00" : await apiCLH.SignerOCRequestToJoin(
       reqUserName,
       propDescription,
       houseAddress,
@@ -560,7 +572,6 @@ async function SendOCReqJoin( _onChain = false ) {
           "__houseAddress": houseAddress,
           "_name": reqUserName,
           "_description": propDescription,
-          // "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
       }
@@ -577,7 +588,7 @@ async function SendOCReqJoin( _onChain = false ) {
       const ethTx = await daoCLH.PropRequestToJoin(
         reqUserName,
         propDescription,
-        // w3.signerWallet,
+        w3.signerWallet,
         eip712Signature
       );
       console.log( "ethTx", ethTx );
@@ -616,7 +627,7 @@ async function SendOCReqJoin( _onChain = false ) {
   BtnNormal( _onChain ? "#btnSendOnChainReqJoin" : "#btnSendOffChainReqJoin" )
 }
 
-// Send (Sign & Validate) On/Off Chain Vote to Proposal
+/**  Send (Sign & Validate) On/Off Chain Vote to Proposal */
 async function SendOCVote( _onChain = false ) {
   BtnLoading( _onChain ? "#btnSendOnChainVote" : "#btnSendOffChainVote", "Sendind..." )
   try {
@@ -941,12 +952,8 @@ async function SendOCNewCLH( _onChain = false ) {
     $( "#iptSign"+OCFunction ).removeClass( "is-invalid" )
     $( "#iptSign"+OCFunction ).removeClass( "is-valid" )
     $( "#iptNameNewCLH" ).removeClass( "is-invalid" )
-    $( "#sltGovNewCLH" ).removeClass( "is-invalid" )
-    $( "#iptMaxManagerNewCLH" ).removeClass( "is-invalid" )
     $( "#iptMaxUsersNewCLH" ).removeClass( "is-invalid" )
-    $( "#iptApprovPercentNewCLH" ).removeClass( "is-invalid" )
     $( "#iptWhiteListNFTNewCLH" ).removeClass( "is-invalid" )
-    $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
 
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
@@ -968,46 +975,16 @@ async function SendOCNewCLH( _onChain = false ) {
     const newHouseOpen = !!+$( 'input[name=ipOpenNewCLH]:checked' ).val()
     console.log( "newHouseOpen:" , newHouseOpen );
 
-    if( "0" === $('#sltGovNewCLH').find(":selected").val() ) {
-      $( "#sltGovNewCLH" ).addClass( "is-invalid" );
-      throw new Error( "Select a Governance type" );
-    }
-    console.log( "selectGov:" , $( "#sltGovNewCLH" ).val() );
-    const newHouseGov = ethers.utils.id( $( "#sltGovNewCLH" ).val() )
-    console.log( "newHouseGov:" , newHouseGov );
 
-    if( 0 === $( "#iptMaxManagerNewCLH" ).val().length || isNaN( $( "#iptMaxManagerNewCLH" ).val() ) ) {
-      $( "#iptMaxManagerNewCLH" ).addClass( "is-invalid" );
-      throw new Error( "Provide a valid Max Manager number" );
-    }
-    const newHouseMaxManager = +$( "#iptMaxManagerNewCLH" ).val()
-    console.log( "newHouseMaxManager:" , newHouseMaxManager );
 
-    if( 0 === $( "#iptMaxUsersNewCLH" ).val().length || isNaN( $( "#iptMaxUsersNewCLH" ).val() ) ) {
+    if( 0 === $( "#iptMaxUsersNewCLH" ).val().length || isNaN( $( "#iptMaxUsersNewCLH" ).val() ) || $( "#iptMaxUsersNewCLH" ).val() <= 0 ) {
       $( "#iptMaxUsersNewCLH" ).addClass( "is-invalid" );
       throw new Error( "Provide a valid Max user number" );
     }
     const newHouseMaxUsers = +$( "#iptMaxUsersNewCLH" ).val()
     console.log( "newHouseMaxUsers:" , newHouseMaxUsers );
 
-    if( 0 === $( "#iptApprovPercentNewCLH" ).val().length || 
-      isNaN( $( "#iptApprovPercentNewCLH" ).val() ) ||
-      +$( "#iptApprovPercentNewCLH" ).val() > 100
-    ) {
-      $( "#iptApprovPercentNewCLH" ).addClass( "is-invalid" );
-      throw new Error( "Provide a valid min Quorum Percentaje" );
-    }
-    const newHouseMinPercent = +$( "#iptApprovPercentNewCLH" ).val()
-    console.log( "newHouseMinPercent:" , newHouseMinPercent );
 
-    let newHouseWhiteList = [ ethers.constants.AddressZero ]
-    if( 0 !== $( "#txtWhiteListNewCLH" ).val().length ){
-      $( "#txtWhiteListNewCLH" ).addClass( "is-invalid" )
-      newHouseWhiteList = $( "#txtWhiteListNewCLH" ).val().split( "\n" )
-      newHouseWhiteList = newHouseWhiteList.map( ( v ) => { return ethers.utils.getAddress( v ) } )
-      $( "#txtWhiteListNewCLH" ).removeClass( "is-invalid" )
-    }
-    console.log( "newHouseWhiteList: " , newHouseWhiteList );
 
     let newHouseNFTWhiteList = ethers.constants.AddressZero
     if( 0 !== $( "#iptWhiteListNFTNewCLH" ).val().length ){
@@ -1023,11 +1000,6 @@ async function SendOCNewCLH( _onChain = false ) {
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
-    logMsg( "Creating SAFE" );
-    const newHouseSafe = ethers.constants.AddressZero
-    // const newHouseSafe = !develNet ? await gnosis.newSafe( w3.signerWallet, payeerWallet ) : ethers.constants.AddressZero
-    console.log( "newHouseSafe:" , newHouseSafe );
-    console.log( `https://gnosis-safe.io/app/gor:${newHouseSafe}/home` );
 
     const msgParams = JSON.stringify( { types:
       {
@@ -1041,12 +1013,8 @@ async function SendOCNewCLH( _onChain = false ) {
           {name:"houseName", type:"string"},
           {name:"housePrivate",type:"bool"},
           {name:"houseOpen",type:"bool"},
-          {name:"govModel",type:"bytes32"},
           {name:"govRuleMaxUsers",type:"uint256"},
-          {name:"govRuleMaxManagers",type:"uint256"},
-          {name:"govRuleApprovPercentage",type:"uint256"},
-          // {name:"whiteListNFT",type:"address"},
-          {name:"whiteListWallets",type:"address"}
+          {name:"whiteListNFT",type:"address"},
         ]
       },
       primaryType:"strOCNewCLH",
@@ -1060,12 +1028,8 @@ async function SendOCNewCLH( _onChain = false ) {
         houseName: newHouseName,
         housePrivate: newHousePrivate,
         houseOpen: newHouseOpen,
-        govModel: newHouseGov,
         govRuleMaxUsers: newHouseMaxUsers,
-        govRuleMaxManagers: newHouseMaxManager,
-        govRuleApprovPercentage: newHouseMinPercent,
-        // whiteListNFT: newHouseNFTWhiteList,
-        whiteListWallets: newHouseWhiteList[0]
+        whiteListNFT: newHouseNFTWhiteList
       }
     } );
     console.log( "msgParams:" , msgParams );
@@ -1077,12 +1041,8 @@ async function SendOCNewCLH( _onChain = false ) {
       newHouseName,
       newHousePrivate,
       newHouseOpen,
-      newHouseGov,
       newHouseMaxUsers,
-      newHouseMaxManager,
-      newHouseMinPercent,
-      // newHouseNFTWhiteList,
-      newHouseWhiteList[0],
+      newHouseNFTWhiteList,
       factoryAddress,
       eip712Signature
     ); 
@@ -1107,11 +1067,9 @@ async function SendOCNewCLH( _onChain = false ) {
           "_houseName": newHouseName,
           "_housePrivate": newHousePrivate,
           "_houseOpen": newHouseOpen,
-          "_govModel": newHouseGov,
-          "_govRules": [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
+          "_govRuleMaxUsers": [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
           "_ManagerWallets": newHouseWhiteList,
           "_gnosisSafe": newHouseSafe,
-          "_whiteListNFT": newHouseNFTWhiteList,
           "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
@@ -1130,11 +1088,8 @@ async function SendOCNewCLH( _onChain = false ) {
         newHouseName,
         newHousePrivate,
         newHouseOpen,
-        newHouseGov,
-        [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
-        newHouseWhiteList,
-        newHouseSafe,
-        // newHouseNFTWhiteList,
+        newHouseMaxUsers,
+        newHouseNFTWhiteList,
         ( _onChain ) ? ethers.constants.AddressZero : w3.signerWallet,
         eip712Signature
       );
@@ -1163,7 +1118,7 @@ async function SendOCNewCLH( _onChain = false ) {
       .text( "View on block explorer" );
       $( "#messages" ).append( linkTx );
 
-      const AddrNewCLH = resultTx.events[3].args["houseAddr"]
+      const AddrNewCLH = resultTx.events[4].args["houseAddr"]
       console.log( "AddrNewCLH:" , AddrNewCLH );
       $( "#iptAddr"+OCFunction ).val( AddrNewCLH );
     }
@@ -1186,40 +1141,23 @@ async function ShowCLHouseProperties() {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
-    const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
-    console.log( "apiCLH: " , apiCLH );
-
     const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
     console.log( "daoCLH: " , daoCLH );
 
-    const propertiesCLH = await apiCLH.GetHouseProperties( houseAddress ); 
+    const propertiesCLH = await daoCLH.HouseProperties(); 
     console.log( "propertiesCLH:" , propertiesCLH );
 
-    const CLHSAFE = await daoCLH.CLHSAFE()
-    console.log( "CLHSAFE:" , CLHSAFE );
-
-    const houseOpen = await daoCLH.houseOpen()
-    console.log( "houseOpen:" , houseOpen );
-
-    // const whiteListNFT = await daoCLH.whiteListNFT(); 
-    // console.log( "whiteListNFT:" , whiteListNFT );
-
-    // const CLHLOCK = await daoCLH.CLHLOCK(); 
-    // console.log( "CLHLOCK:" , CLHLOCK );
-
-    $("#clhPrpName").val( propertiesCLH.HOUSE_NAME );
-    $("#clhPrpPrivate").val( propertiesCLH.housePrivate?"Yes":"No" );
-    $("#clhPrpOpen").val( houseOpen?"Yes":"No" );
-    $("#clhPrpMembers").val( propertiesCLH.numUsers-propertiesCLH.numManagers );
-    $("#clhPrpManagers").val( propertiesCLH.numManagers );
-    $("#clhPrpUsers").val( propertiesCLH.numUsers );
-    $("#clhPrpGovModel").val( dictGovModel[ propertiesCLH.HOUSE_GOVERNANCE_MODEL ] );
-    $("#clhPrpGovMaxUsers").val( propertiesCLH.govRuleMaxUsers );
-    $("#clhPrpGovMaxManagers").val( propertiesCLH.govRuleMaxManagers );
-    $("#clhPrpGovMinApproval").val( propertiesCLH.govRuleApprovPercentage );
-    $("#clhPrpSafeAddress").html( `<a target="_blank" href="https://gnosis-safe.io/app/gor:${CLHSAFE}/home">${CLHSAFE}</a>` );
-    // $("#clhPrpWhiteListNFT").val( whiteListNFT );
-    // $("#clhPrpLockAddress").val( CLHLOCK );
+    $("#clhPrpName").val( propertiesCLH[0] );
+    $("#clhPrpPrivate").val( propertiesCLH[1][0]?"Yes":"No" );
+    $("#clhPrpOpen").val( propertiesCLH[1][1]?"Yes":"No" );
+    $("#clhPrpUsers").val( propertiesCLH[2][0] );
+    $("#clhPrpManagers").val( propertiesCLH[2][1] );
+    $("#clhPrpMembers").val( propertiesCLH[2][0]-propertiesCLH[2][1] );
+    $("#clhPrpGovModel").val( dictGovModel[ propertiesCLH[4] ] );
+    $("#clhPrpGovMaxUsers").val( propertiesCLH[2][3] );
+    $("#clhPrpGovMaxManagers").val( propertiesCLH[2][4] );
+    $("#clhPrpGovMinApproval").val( propertiesCLH[2][2] );
+    $("#clhPrpWhiteListNFT").val( propertiesCLH[3][5] );
   } catch( error ) {
     console.log( error );
     ShowError( error );    
@@ -1238,6 +1176,9 @@ async function ShowCLHouseUserList() {
     const houseAddress = await GetCLHAddress();
     console.log( "houseAddress:" , houseAddress );
 
+    const daoCLH = await InstantiateCLH( houseAddress, w3.ethProvider );
+    console.log( "daoCLH: " , daoCLH );
+
     const apiCLH = await InstantiateCLHApi( appcfg.addrApiCLH, w3.ethProvider );
     console.log( "apiCLH: " , apiCLH );
 
@@ -1249,10 +1190,10 @@ async function ShowCLHouseUserList() {
     for( var i = 0 ; i < usersListCLH.length ; i++ ) {
       let tbltr = $( '<tr>' )
       .append(
-        $('<th>').attr( "scope", "col" ).text( usersListCLH[ i ].name )
+        $('<th>').attr( "scope", "col" ).text( usersListCLH[ i ].nickname )
       )
       .append(
-        $('<td>').text( usersListCLH[ i ].walletAddr )
+        $('<td>').text( await daoCLH.arrUsers( usersListCLH[ i ].userID.toNumber() ) )
       )
       .append(
         $('<td>').text( usersListCLH[ i ].isManager?"Manager":"User" )
@@ -1267,7 +1208,7 @@ async function ShowCLHouseUserList() {
   BtnNormal( "#btnGetUserListCLH" );
 }
 
-// Get and show Proposal list in the house
+/** Get and show Proposal list in the house */
 async function ShowCLHouseProposalList() {
   BtnLoading( "#btnGetProposalListCLH" )
   try {
@@ -1310,7 +1251,7 @@ async function ShowCLHouseProposalList() {
   BtnNormal( "#btnGetProposalListCLH" );
 }
 
-// Get and show House list in the house
+/** Get and show House list in the house */
 async function ShowCLFCLHList() {
   BtnLoading( "#btnGetCLFCLHList" )
   try {
@@ -1347,7 +1288,7 @@ async function ShowCLFCLHList() {
   BtnNormal( "#btnGetCLFCLHList" );
 }
 
-// Get and show Invitation list in the house
+/** Get and show Invitation list in the house */
 async function ShowCLHouseInvitationList() {
   BtnLoading( "#btnGetInvitationListCLH" )
   try {
@@ -1374,9 +1315,7 @@ async function ShowCLHouseInvitationList() {
       let propId = await daoCLH.mapInvitationUser( arrDataNewUser[ i ].walletAddr );
       console.log( "propId:" , propId );
 
-      // if( propId && w3.timestamp < +arrProposal[ propId ].deadline) {
       if( 0 != propId ) {
-        // console.log( "timestamp", w3.timestamp , +arrProposal[ propId ].deadline )
         let dateTime = new Date( 1000*arrProposal[ propId ].deadline )
         
         let tbltr = $( '<tr>' )
@@ -1450,7 +1389,7 @@ async function ShowCLBeaconProperties() {
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
 
-    const CLBCLH = await InstantiateCLB( appcfg.addrCLBeacon, w3.ethProvider );
+    const CLBCLH = await InstantiateCLB( appcfg.addrCLHBeacon, w3.ethProvider );
     console.log( "CLBCLH: " , CLBCLH );
 
     const CLBAdmin = await CLBCLH.owner(); 
@@ -1460,7 +1399,6 @@ async function ShowCLBeaconProperties() {
     console.log( "CLBImplementation:" , CLBImplementation );
 
     $("#clbPrpAdmin").val( CLBAdmin );
-    // $("#clbPrpImplementation").val( CLBImplementation );
     $("#clbPrpImplementation").html( `<a target="_blank" href="https://goerli.etherscan.io/address/${CLBImplementation}#code">${CLBImplementation}</a>` );
   } catch( error ) {
     console.log( error );
@@ -1482,7 +1420,7 @@ async function SetNewCLBeacon() {
     console.log( "payeerWallet:", payeerWallet );
     $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
     
-    const CLBCLH = await InstantiateCLB( appcfg.addrCLBeacon, payeerWallet );
+    const CLBCLH = await InstantiateCLB( appcfg.addrCLHBeacon, payeerWallet );
     console.log( "CLBCLH:", CLBCLH );
 
     const ethTx = await CLBCLH.upgradeTo( newImplementation );
@@ -1537,7 +1475,7 @@ async function CreateLock( _onChain = false ) {
       $( "#iptLockNewDuration" ).addClass( "is-invalid" );
       throw new Error( "Provide a valid membership duration" );
     }
-    const newLockDuration = +$( "#iptLockNewDuration" ).val() * 60 * 60 * 24; // days in seconds
+    const newLockDuration = +$( "#iptLockNewDuration" ).val() * 60 * 60 * 24; /** days in seconds */
     console.log( "newLockDuration:" , newLockDuration );
 
     if( 0 === $( "#iptLockNewQuantity" ).val().length || 
@@ -1632,7 +1570,7 @@ async function CreateLock( _onChain = false ) {
     console.log( "daoCLH:", daoCLH );
     
     const ethTx = await daoCLH.CreateLock(
-      newLockDuration, // days in seconds
+      newLockDuration, /** days in seconds */
       newLockPrice,
       newLockQuantity,
       newLockName,
@@ -1731,7 +1669,6 @@ async function ShowPropertiesLCK() {
   try {
     $("[id^=iptLckPrp]").val( "" );
     $("[id^=iptLckUpg]").val( "" );
-    // $("#clbPrpImplementation").html("");
 
     const aLCK = await ethers.utils.getAddress( $( "#iptLockAddress" ).val() );
     console.log( "aLCK:" , aLCK );
