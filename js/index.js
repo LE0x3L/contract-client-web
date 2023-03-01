@@ -55,3 +55,4 @@ $("#btnUpgLckSymbol").click( SetNewLckSymbol );
 $("#btnUpgLckDuration").click( SetNewLckDuration );
 $("#btnUpgLckQuantity").click( SetNewLckQuantity );
 $("#btnUpgLckPrice").click( SetNewLckPrice );
+$("#btnOnChnNewHouseName").click( SetNewHouseName );

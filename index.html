@@ -139,6 +139,13 @@
                   House Properties
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#updateHouseName">
+                  <span data-feather="file-text"></span>
+                  Edit House Name
+                </a>
+              </li>
               
               <li class="nav-item">
                 <a class="nav-link" href="#HouseUserList">
@@ -829,6 +836,30 @@
 
               <div class="d-grid gap-2 col-6 mx-auto mb-3">
                 <button id="btnGetInfoCLH" class="btn btn-outline-info" type="button">Reload CLH Info</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit House Properties -->
+          <div id="updateHouseName" class="row g-3">
+            <div class="col-lg-12">
+              <div class="alert alert-info" role="alert">
+                <h2 class="alert-heading">Update CL House Name</h2>
+                <hr>
+              </div>
+            </div>
+
+            <div class="col-md-6 offset-md-3">
+              <legend>New name of CLHouse</legend>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="iptNewHouseName">
+                <label for="iptNewHouseName">New name</label>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <!-- <button id="btnSendOffChainTxETH" class="btn btn-outline-warning me-md-2" type="button" disabled>Send Off Chain</button> -->
+                <button id="btnOnChnNewHouseName" class="btn btn-outline-success" type="submit" >Send On Chain</button>
               </div>
             </div>
           </div>

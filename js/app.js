@@ -1994,3 +1994,59 @@ async function SetNewLckPrice() {
   }
   BtnNormal( "#btnUpgLckPrice" );
 }
+
+async function SetNewHouseName( _onChain = true ) {
+  BtnLoading( "#btnOnChnNewHouseName" )
+  try {
+    $( "#iptNewHouseName" ).removeClass( "is-invalid" )
+    if( 0 === $( "#iptNewHouseName" ).val().length  ) {
+      $( "#iptNewHouseName" ).addClass( "is-invalid" );
+      throw new Error( "Provide a new house name" );
+    }
+    const newHouseName = $( "#iptNewHouseName" ).val();
+    console.log( "newHouseName:" , newHouseName );
+    
+    const houseAddress = await GetCLHAddress();
+    console.log( "houseAddress:" , houseAddress );
+    
+    const w3 = await connectWeb3();
+    console.log( "w3:" , w3 );
+
+    const payeerWallet = await GetPayeer( w3.ethProvider, true );
+    console.log( "payeerWallet:", payeerWallet );
+    $("#txtPayeerWallet").val( payeerWallet.address ? payeerWallet.address : payeerWallet._address )
+    
+    const daoCLH = await InstantiateCLH( houseAddress, payeerWallet );
+    console.log( "daoCLH:", daoCLH );
+
+    const ethTx = await daoCLH.UpdateHouseName( newHouseName );
+    console.log( "ethTx:", ethTx );
+    logMsg( "Sent, Waiting confirmation... " );
+    let linkTx = appcfg.urlExplorer + '/tx/' + ethTx.hash
+    console.log( "linkTx:" , linkTx );
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      linkTx
+    )
+    .attr('target',"_blank")
+    .text( ethTx.hash );
+    $( "#messages" ).append( linkTx )
+    
+    const resultTx = await ethTx.wait();
+    console.log( "resultTx", resultTx );
+    logMsg( "Successful!!!... " )
+    linkTx = jQuery('<a>')
+    .attr(
+      'href',
+      appcfg.urlExplorer + '/tx/' + resultTx.transactionHash
+    )
+    .attr('target',"_blank")
+    .text( "View on block explorer" );
+    $( "#messages" ).append( linkTx );
+  } catch( error ) {
+    console.log( error );
+    ShowError( error );
+  }
+  BtnNormal( "#btnOnChnNewHouseName" );
+}
