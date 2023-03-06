@@ -38,30 +38,27 @@ function connectWeb3() {
       chainId = await ethereum.request( { method: 'net_version' } )
       console.log( "chainId:", chainId )
 
-      if( 5 == chainId && true == testConfig ){
-        appcfg = cfgGoerli_Test
-        $("#blkChainName").text( "Net: Goerli TEST" )
+      if( 80001 == chainId ){
+        if( "test" == enviroment )
+          appcfg = cfgMumbai_test
+        else  if( "dev" == enviroment )
+          appcfg = cfgMumbai_dev
+        else  if( "qa" == enviroment )
+          appcfg = cfgMumbai_qa
       }
-      else if( 5 == chainId ){
-        appcfg = cfgGoerli
-        $("#blkChainName").text( "Net: Goerli" )
-      }
-      else if( 80001 == chainId && true == testConfig ){
-        appcfg = cfgMumbai_Test
-        $("#blkChainName").text( "Net: Mumbai TEST" )
-      }
-      else if( 80001 == chainId ){
-        appcfg = cfgMumbai
-        $("#blkChainName").text( "Net: Mumbai" )
+      else if( 1337 == chainId ){
+        appcfg = cfgGanache
       }
       else {
-        appcfg = cfgLocalNet
-        $("#blkChainName").text( "Net: " + chainId )
+        $("#blkChainName").text( `Net: UNSUPPORTED` )
+        throw new Error( "Unsupported chain" );
         // await window.ethereum.request({
         //   method: 'wallet_switchEthereumChain',
         //   params: [{ chainId: appcfg.domEIP712IdChain }]
         // });
       }
+
+      $("#blkChainName").text( `Net: ${appcfg.netName}` )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
       logMsg( "signerWallet: " + signerWallet[0] )

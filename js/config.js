@@ -2,46 +2,22 @@ const abiCLH = "./abis/CLHouse.json";
 const abiCLFApi = "./abis/CLFactoryApi.json";
 
 
-const cfgLocalNet = {
+const cfgGanache = {
+    netName : "Ganache",
     urlGraphQL : "#",
     urlExplorer : "#",
-    addrApiCLH : "0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87",
-    addrApiCLF : "0x602C71e4DAC47a042Ee7f46E0aee17F94A3bA0B6",
-    addrCLFactory : "0x7a3d735ee6873f17Dbdcab1d51B604928dc10d92",
-    addrCLBeacon : "0xcCB53c9429d32594F404d01fbe9E65ED1DCda8D9",
+    addrApiCLH : "0xE7eD6747FaC5360f88a2EFC03E00d25789F69291",
+    addrApiCLF : "0xe0aA552A10d7EC8760Fc6c246D391E698a82dDf9",
+    addrCLFactory : "0xa3B53dDCd2E3fC28e8E130288F2aBD8d5EE37472",
+    addrCLHBeacon : "0xed00238F9A0F7b4d93842033cdF56cCB32C781c2",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.1",
-    domEIP712IdChain: "0x539",
+    domEIP712Version: "0.2.0",
+    domEIP712IdChain: "0x539"
 };
 
-const cfgGoerli = {
-    urlGraphQL : "https://devel-api.cryptoleague.org/graphql",
-    urlExplorer : "https://goerli.etherscan.io",
-    addrApiCLH : "0x7f13cCA000f7Ee9bC05bdB2B0756871aA0483600",
-    addrApiCLF : "0x3d2196559a368615BE407b4086EB95D014BcFE8a",
-    addrCLFactory : "0x644f05Fb0aaA2554de936357e4085969A329191d",
-    addrCLBeacon : "0xD35AEb3feCa809BEf32e0e5437ee08C9E3eeA732",
-    pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
-    domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.0",
-    domEIP712IdChain: "0x5",
-};
-
-const cfgGoerli_Test = {
-    urlGraphQL : "https://devel-api.cryptoleague.org/graphql",
-    urlExplorer : "https://goerli.etherscan.io",
-    addrApiCLH : "0x58A7028EE348A72deF39735B45cb395Fe19a301c",
-    addrApiCLF : "0xb389f76D62857181824394833e60567E801D86a5",
-    addrCLFactory : "0x9C12575645457804303F1fD1DeB24AD6A47Bd896",
-    addrCLBeacon : "0xbd969a9Efc5ccf9e6007a5Ab4AF616322a71FA98",
-    pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
-    domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.1",
-    domEIP712IdChain: "0x5",
-};
-
-const cfgMumbai = {
+const cfgMumbai_test = {
+    netName : "Mumbai TEST",
     urlGraphQL : "https://qa-api.cryptoleague.org/graphql",
     urlExplorer : "https://mumbai.polygonscan.com",
     addrApiCLH : "0x98a106Ed52E735aF0E32191038eB8706b6e2Af7C",
@@ -50,11 +26,12 @@ const cfgMumbai = {
     addrCLBeacon : "0xD5b7B69fF59FB2c3A0EF3f5D4F6c84c83fAB149A",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.0",
-    domEIP712IdChain: "0x13881",
+    domEIP712Version: "0.2.0",
+    domEIP712IdChain: "0x13881"
 };
 
-const cfgMumbai_Test = {
+const cfgMumbai_dev = {
+    netName : "Mumbai DEV",
     urlGraphQL : "https://qa-api.cryptoleague.org/graphql",
     urlExplorer : "https://mumbai.polygonscan.com",
     addrApiCLH : "0x2A52BDCF5c029028bf61c3fB20D5a0dFe560EF61",
@@ -63,10 +40,10 @@ const cfgMumbai_Test = {
     addrCLBeacon : "0xcbAF5fF547826e5b8e9226db0C87F6eC30Ddc0a8",
     pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
     domEIP712Name: "CLHouse",
-    domEIP712Version: "0.1.1",
-    domEIP712IdChain: "0x13881",
+    domEIP712Version: "0.2.0",
+    domEIP712IdChain: "0x13881"
 };
 
-appcfg = cfgGoerli;
-ocBackEnd = true;
-testConfig = false;
+appcfg = cfgGanache;
+ocBackEnd = false;
+enviroment = "dev"; // test - dev - qa - prod
