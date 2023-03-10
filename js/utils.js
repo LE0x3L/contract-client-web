@@ -169,7 +169,7 @@ function InstantiateCLC( _dataFile, _ContractAddress, _signerOrProvider ) {
       ) );
     } catch (error) {
       console.log(error);
-      reject( { "message": "Can't instance ApiCLH" } );
+      reject( { "message": `Can't instance ${_dataFile} at ${_ContractAddress}` } );
     }
   });
 }

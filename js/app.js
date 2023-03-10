@@ -161,7 +161,7 @@ async function SendOCNewUser( _onChain = false ) {
 
     if( 42 !== $( "#iptNewUsrAddr" ).val().length  ) {
       $( "#iptNewUsrAddr" ).addClass( "is-invalid" );
-      throw new Error( "Invalig Address length" );
+      throw new Error( "Invalid Address length" );
     }
     const newUserWallet = await ethers.utils.getAddress( $( "#iptNewUsrAddr" ).val() )
     console.log( "newUserWallet:" , newUserWallet );
@@ -340,7 +340,7 @@ async function SendOCDelUser( _onChain = false ) {
 
     if( 42 !== $( "#iptDelMmrAddr" ).val().length  ) {
       $( "#iptDelMmrAddr" ).addClass( "is-invalid" );
-      throw new Error( "Invalig Address length" );
+      throw new Error( "Invalid Address length" );
     }
     const delUserWallet = await ethers.utils.getAddress( $( "#iptDelMmrAddr" ).val() )
     console.log( "delUserWallet:" , delUserWallet );
@@ -1342,7 +1342,7 @@ async function safeSendETH() {
 
   if( 42 !== $( "#iptToOCTxETH" ).val().length  ) {
     $( "#iptToOCTxETH" ).addClass( "is-invalid" );
-    throw new Error( "Invalig Address length" );
+    throw new Error( "Invalid Address length" );
   }
   const toWallet = await ethers.utils.getAddress( $( "#iptToOCTxETH" ).val() )
   console.log( "toWallet:" , toWallet );
