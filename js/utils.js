@@ -35,6 +35,11 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: appcfg.domEIP712IdChain }]
+      });
+
       chainId = await ethereum.request( { method: 'net_version' } )
       console.log( "chainId:", chainId )
 
@@ -52,10 +57,6 @@ function connectWeb3() {
       else {
         $("#blkChainName").text( `Net: UNSUPPORTED` )
         throw new Error( "Unsupported chain" );
-        // await window.ethereum.request({
-        //   method: 'wallet_switchEthereumChain',
-        //   params: [{ chainId: appcfg.domEIP712IdChain }]
-        // });
       }
 
       $("#blkChainName").text( `Net: ${appcfg.netName}` )
@@ -77,6 +78,8 @@ function connectWeb3() {
         $("#blkChainTimeStamp").text( blkChainTimeStamp )
       } )
       .catch( ( error ) => { console.log( 'getBlockNumber FAIL' , error ) } )
+
+      // await checkAccessNFT( ethers.utils.getAddress( signerWallet[0] ), ethProvider );
 
       resolve( { 
         "ethProvider" : ethProvider,
@@ -323,4 +326,24 @@ function checkStatusOCTx( result ) {
     .text( "View on block explorer" );
     $( "#messages" ).append( linkTx )
   }
+}
+
+function checkAccessNFT( _walletAddr, _ethProvider ) {
+  return new Promise( async ( resolve, reject ) => {
+    try {
+      const CLANFT = await InstantiateCLC( abiCLANFT, appcfg.addrCLANFT, _ethProvider );
+      console.log( "CLANFT:", CLANFT );
+
+      const numNFTA = await CLANFT.balanceOf( _walletAddr );
+      console.log( "numNFTA:", numNFTA );
+
+      if( 0 == numNFTA )
+        reject( { "message": "The user hasn't an Access NFT" } );
+
+      resolve( true );
+    } catch (error) {
+      console.log(error);
+      reject( error );
+    }
+  });
 }

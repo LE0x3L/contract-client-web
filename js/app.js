@@ -19,6 +19,9 @@ async function SendOCInvit( _onChain = false ) {
     $( "#iptAccIvnNickname" ).removeClass( "is-invalid" )
 
     const w3 = await connectWeb3();
+    console.log( "w3: " , w3 );
+
+    await checkAccessNFT( w3.signerWallet, w3.ethProvider );
 
     if( 'undefined' === typeof $( 'input[name=iptAcceptOCInvit]:checked' ).val() )
       throw new Error( "Select Yes/No Acceptance" );
@@ -158,6 +161,8 @@ async function SendOCNewUser( _onChain = false ) {
 
     const w3 = await connectWeb3();
     console.log( "w3: " , w3 );
+
+    await checkAccessNFT( w3.signerWallet, w3.ethProvider );
 
     if( 42 !== $( "#iptNewUsrAddr" ).val().length  ) {
       $( "#iptNewUsrAddr" ).addClass( "is-invalid" );
@@ -338,6 +343,8 @@ async function SendOCDelUser( _onChain = false ) {
     const w3 = await connectWeb3();
     console.log( "w3: " , w3 );
 
+    await checkAccessNFT( w3.signerWallet, w3.ethProvider );
+
     if( 42 !== $( "#iptDelMmrAddr" ).val().length  ) {
       $( "#iptDelMmrAddr" ).addClass( "is-invalid" );
       throw new Error( "Invalid Address length" );
@@ -496,6 +503,8 @@ async function SendOCReqJoin( _onChain = false ) {
     const w3 = await connectWeb3();
     console.log( "w3: " , w3 );
 
+    await checkAccessNFT( w3.signerWallet, w3.ethProvider );
+
     if( 0 === $( "#iptReqJoinName" ).val().length  ) {
       $( "#iptReqJoinName" ).addClass( "is-invalid" );
       throw new Error( "Provide an user Name" );
@@ -641,6 +650,8 @@ async function SendOCVote( _onChain = false ) {
 
     const w3 = await connectWeb3();
     console.log( "w3:" , w3 );
+
+    await checkAccessNFT( w3.signerWallet, w3.ethProvider );
 
     if( 'undefined' === typeof $( 'input[name=iptSupportOCVote]:checked' ).val() )
       throw new Error( "Select Accept/Reject Vote" );
