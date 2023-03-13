@@ -35,7 +35,7 @@ const cfgMumbai_test = {
 
 const cfgMumbai_dev = {
     netName : "Mumbai DEV",
-    urlGraphQL : "https://qa-api.cryptoleague.org/graphql",
+    urlGraphQL : "https://devel-api.cryptoleague.org/graphql",
     urlExplorer : "https://mumbai.polygonscan.com",
     addrApiCLH : "0x6b41bC24282E4BB8484B287854e75C8792ef7386",
     addrApiCLF : "0xa0ccC5f57812E699929C53B2A5C536Da12CD54e3",
@@ -48,6 +48,6 @@ const cfgMumbai_dev = {
     domEIP712IdChain: "0x13881"
 };
 
-ocBackEnd = false;
 appcfg = cfgMumbai_dev;
+ocBackEnd = true;
 enviroment = "dev"; // test - dev - qa - prod

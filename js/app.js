@@ -96,6 +96,7 @@ async function SendOCInvit( _onChain = false ) {
         "input": {
           "__houseAddress": houseAddress,
           "_acceptance": userAcceptance,
+          "_nickname": newNickame,
           "_signature": eip712Signature
         }
       }
@@ -267,7 +268,7 @@ async function SendOCNewUser( _onChain = false ) {
         "input": {
           "__houseAddress": houseAddress,
           "_walletAddr": newUserWallet,
-          "_name": newUserName,
+          "_nickname": newUserName,
           "_description": newPropDescription,
           "_isManager": newUserIsManager,
           "_delayTime": newPropDelayTime,
@@ -581,6 +582,7 @@ async function SendOCReqJoin( _onChain = false ) {
           "__houseAddress": houseAddress,
           "_name": reqUserName,
           "_description": propDescription,
+          "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
       }
@@ -1078,9 +1080,8 @@ async function SendOCNewCLH( _onChain = false ) {
           "_houseName": newHouseName,
           "_housePrivate": newHousePrivate,
           "_houseOpen": newHouseOpen,
-          "_govRuleMaxUsers": [ newHouseMaxUsers, newHouseMaxManager, newHouseMinPercent ],
-          "_ManagerWallets": newHouseWhiteList,
-          "_gnosisSafe": newHouseSafe,
+          "_govRuleMaxUsers": newHouseMaxUsers,
+          "_whiteListNFT": newHouseNFTWhiteList,
           "_signerWallet": w3.signerWallet,
           "_signature": eip712Signature
         }
