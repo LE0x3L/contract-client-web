@@ -48,6 +48,21 @@ const cfgMumbai_dev = {
     domEIP712IdChain: "0x13881"
 };
 
-appcfg = cfgMumbai_dev;
+const cfgMumbai_qa = {
+    netName : "Mumbai QA",
+    urlGraphQL : "https://qa-api.cryptoleague.org/graphql",
+    urlExplorer : "https://mumbai.polygonscan.com",
+    addrApiCLH : "0x0aF7903Ba2Df4359B1BFa4EbfECd81375959136B",
+    addrApiCLF : "0x64e165A55E43ebddeC5000D1BE4aE35E17cB7bfD",
+    addrCLFactory : "0xE6Dae3458BEC9d70ACB9ca93068349F8491593F7",
+    addrCLHBeacon : "0xF6Ff4D17CF8Ac49Ce37aDB077f65FDA5F18c594D",
+    addrCLANFT : "0x6603E31400E214619b73af6B8813b96D625ea328",
+    pKeyPayeer : "0x840bdb63e4e065597a3f5d5e5a3eed7b6b858400f2e262e83065bcec77049194", //BRW#99
+    domEIP712Name: "CLHouse",
+    domEIP712Version: "0.2.0",
+    domEIP712IdChain: "0x13881"
+};
+
+appcfg = cfgGanache;
 ocBackEnd = true;
-enviroment = "dev"; // test - dev - qa - prod
+enviroment = "qa"; // local - test - dev - qa - prod

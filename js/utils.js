@@ -35,6 +35,24 @@ function connectWeb3() {
 
       const ethProvider = new ethers.providers.Web3Provider( window.ethereum )
 
+      if( "local" == enviroment )
+        appcfg = cfgGanache
+      else if( "test" == enviroment )
+        appcfg = cfgMumbai_test
+      else  if( "dev" == enviroment )
+        appcfg = cfgMumbai_dev
+      else  if( "qa" == enviroment )
+        appcfg = cfgMumbai_qa
+      else {
+        $("#blkChainName").text( `Net: UNSUPPORTED` )
+        throw new Error( "Unsupported chain" );
+      }
+      
+      $("#blkChainName").text( `Net: ${appcfg.netName}` )
+      
+      chainId = await ethereum.request( { method: 'net_version' } )
+      console.log( "chainId:", chainId )
+
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: appcfg.domEIP712IdChain }]
@@ -42,24 +60,6 @@ function connectWeb3() {
 
       chainId = await ethereum.request( { method: 'net_version' } )
       console.log( "chainId:", chainId )
-
-      if( 80001 == chainId ){
-        if( "test" == enviroment )
-          appcfg = cfgMumbai_test
-        else  if( "dev" == enviroment )
-          appcfg = cfgMumbai_dev
-        else  if( "qa" == enviroment )
-          appcfg = cfgMumbai_qa
-      }
-      else if( 1337 == chainId ){
-        appcfg = cfgGanache
-      }
-      else {
-        $("#blkChainName").text( `Net: UNSUPPORTED` )
-        throw new Error( "Unsupported chain" );
-      }
-
-      $("#blkChainName").text( `Net: ${appcfg.netName}` )
 
       const signerWallet = await ethereum.request( { method: 'eth_requestAccounts' } )
       logMsg( "signerWallet: " + signerWallet[0] )
