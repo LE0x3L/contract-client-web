@@ -65,4 +65,4 @@ const cfgMumbai_qa = {
 
 appcfg = cfgGanache;
 ocBackEnd = true;
-enviroment = "qa"; // local - test - dev - qa - prod
+enviroment = "dev"; // local - test - dev - qa - prod
